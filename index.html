@@ -1,889 +1,131 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon Miroir — IA & MNA · Tribunal pour Enfants de Toulouse</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Mon Miroir — Toulouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0f2744;
-    --navy-light: #1a3a5c;
-    --gold: #c8922a;
-    --gold-light: #e8b84b;
-    --cream: #f9f5ee;
-    --cream-dark: #ede8de;
-    --text: #2a2a2a;
-    --text-light: #666;
-    --white: #ffffff;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    line-height: 1.7;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(15,39,68,0.97);
-    backdrop-filter: blur(10px);
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 60px;
-    border-bottom: 1px solid rgba(200,146,42,0.3);
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    color: var(--white); font-size: 1.2rem; letter-spacing: 0.02em;
-  }
-  .nav-logo span { color: var(--gold-light); font-style: italic; }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: rgba(255,255,255,0.75); text-decoration: none;
-    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em;
-    text-transform: uppercase; transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold-light); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-light) 60%, #0d3320 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 8rem 2rem 4rem;
-    position: relative; overflow: hidden;
-  }
-  .hero::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(200,146,42,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(200,146,42,0.05) 0%, transparent 50%);
-  }
-  .hero-label {
-    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold-light); margin-bottom: 1.5rem;
-    border: 1px solid rgba(200,146,42,0.4); padding: 0.4rem 1.2rem; border-radius: 2rem;
-    display: inline-block;
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 7vw, 5.5rem);
-    color: var(--white); line-height: 1.1; margin-bottom: 1.5rem;
-  }
-  .hero h1 em { color: var(--gold-light); font-style: italic; }
-  .hero p {
-    font-size: 1.1rem; color: rgba(255,255,255,0.7);
-    max-width: 620px; margin: 0 auto 2.5rem;
-    font-weight: 300; line-height: 1.8;
-  }
-  .hero-cta {
-    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
-  }
-  .btn-primary {
-    background: var(--gold); color: var(--navy);
-    padding: 0.9rem 2rem; border-radius: 0.4rem;
-    font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em;
-    text-transform: uppercase; text-decoration: none; border: none; cursor: pointer;
-    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
-  }
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-  .btn-outline {
-    background: transparent; color: var(--white);
-    padding: 0.9rem 2rem; border-radius: 0.4rem;
-    font-weight: 500; font-size: 0.9rem; letter-spacing: 0.05em;
-    text-transform: uppercase; text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.35); cursor: pointer;
-    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
-  }
-  .btn-outline:hover { border-color: var(--gold-light); color: var(--gold-light); }
-  .hero-stats {
-    display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center;
-  }
-  .stat { text-align: center; }
-  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold-light); }
-  .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
-
-  /* SECTIONS */
-  section { padding: 6rem 2rem; }
-  .container { max-width: 1100px; margin: 0 auto; }
-  .section-label {
-    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 0.8rem; font-weight: 500;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: var(--navy); line-height: 1.2; margin-bottom: 1.2rem;
-  }
-  .section-title em { color: var(--gold); font-style: italic; }
-  .section-sub { font-size: 1rem; color: var(--text-light); max-width: 560px; line-height: 1.8; }
-
-  /* AGENTS */
-  .agents-section { background: var(--navy); }
-  .agents-section .section-title { color: var(--white); }
-  .agents-section .section-sub { color: rgba(255,255,255,0.6); }
-  .agents-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem; margin-top: 3rem;
-  }
-  .agent-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(200,146,42,0.2);
-    border-radius: 1rem; padding: 2rem;
-    transition: all 0.3s;
-  }
-  .agent-card:hover { background: rgba(255,255,255,0.1); border-color: var(--gold); transform: translateY(-3px); }
-  .agent-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .agent-title { font-weight: 600; color: var(--gold-light); font-size: 1rem; margin-bottom: 0.5rem; }
-  .agent-desc { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.7; }
-
-  /* DEMO */
-  .demo-section { background: var(--cream-dark); }
-  .demo-wrapper {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem;
-  }
-  .demo-phone {
-    background: var(--navy);
-    border-radius: 2rem; padding: 1.5rem;
-    box-shadow: 0 30px 80px rgba(15,39,68,0.3);
-    max-width: 360px; margin: 0 auto;
-  }
-  .demo-header {
-    display: flex; align-items: center; gap: 0.7rem;
-    padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem;
-  }
-  .demo-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
-  .demo-title-bar { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
-  .demo-lang {
-    display: flex; gap: 0.5rem; margin-left: auto;
-  }
-  .lang-btn {
-    font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem;
-    border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);
-    cursor: pointer; background: transparent; transition: all 0.2s;
-  }
-  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 600; }
-  .chat-area { min-height: 280px; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
-  .msg {
-    padding: 0.8rem 1rem; border-radius: 1rem; font-size: 0.85rem; line-height: 1.6; max-width: 90%;
-    animation: fadeIn 0.4s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .msg-ai { background: rgba(200,146,42,0.15); color: var(--white); border-bottom-left-radius: 0.3rem; align-self: flex-start; border: 1px solid rgba(200,146,42,0.2); }
-  .msg-user { background: var(--gold); color: var(--navy); font-weight: 500; border-bottom-right-radius: 0.3rem; align-self: flex-end; }
-  .msg-typing { color: rgba(255,255,255,0.4); font-style: italic; font-size: 0.78rem; }
-  .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
-  .choice-btn {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.8); padding: 0.6rem 0.8rem;
-    border-radius: 0.6rem; font-size: 0.78rem; cursor: pointer;
-    transition: all 0.2s; font-family: inherit; text-align: left;
-  }
-  .choice-btn:hover { background: rgba(200,146,42,0.2); border-color: var(--gold); color: var(--white); }
-  .demo-note {
-    font-size: 0.72rem; color: rgba(255,255,255,0.35);
-    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.8rem; margin-top: 0.5rem;
-    line-height: 1.5;
-  }
-  .demo-info h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 1rem; }
-  .demo-info p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.8; }
-  .demo-steps { display: flex; flex-direction: column; gap: 1rem; }
-  .demo-step { display: flex; gap: 1rem; align-items: flex-start; }
-  .step-num {
-    width: 32px; height: 32px; border-radius: 50%; background: var(--navy);
-    color: var(--white); font-size: 0.8rem; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .step-text { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
-  .step-text strong { color: var(--navy); }
-
-  /* CAS TESTS */
-  .cas-section { background: var(--white); }
-  .cas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
-  .cas-card {
-    border: 1px solid var(--cream-dark); border-radius: 1.2rem; overflow: hidden;
-    transition: all 0.3s; cursor: pointer;
-  }
-  .cas-card:hover { box-shadow: 0 20px 60px rgba(15,39,68,0.12); transform: translateY(-4px); }
-  .cas-header { padding: 2rem; background: var(--navy); }
-  .cas-num { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
-  .cas-name { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 0.3rem; }
-  .cas-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
-  .cas-body { padding: 1.8rem; }
-  .cas-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.2rem; }
-  .tag {
-    font-size: 0.72rem; padding: 0.3rem 0.8rem; border-radius: 2rem;
-    font-weight: 500; letter-spacing: 0.05em;
-  }
-  .tag-blue { background: #dbeafe; color: #1e40af; }
-  .tag-amber { background: #fef3c7; color: #92400e; }
-  .tag-red { background: #fee2e2; color: #991b1b; }
-  .tag-green { background: #dcfce7; color: #166534; }
-  .cas-quote {
-    font-size: 0.88rem; color: var(--text-light); font-style: italic;
-    border-left: 3px solid var(--gold); padding-left: 1rem; margin: 1rem 0; line-height: 1.7;
-  }
-  .cas-outcome {
-    background: var(--cream); border-radius: 0.6rem; padding: 1rem;
-    font-size: 0.85rem; color: var(--navy); font-weight: 500;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-
-  /* DÉPLOIEMENT */
-  .deploy-section { background: var(--cream-dark); }
-  .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
-  .phase {
-    background: var(--white); border-radius: 1rem; padding: 2rem;
-    border-top: 4px solid var(--navy); position: relative;
-  }
-  .phase:nth-child(2) { border-top-color: var(--gold); }
-  .phase:nth-child(3) { border-top-color: #166534; }
-  .phase-num { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.5rem; }
-  .phase-title { font-weight: 700; color: var(--navy); font-size: 1rem; margin-bottom: 1rem; }
-  .phase-items { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-  .phase-items li { font-size: 0.85rem; color: var(--text-light); padding-left: 1.2rem; position: relative; line-height: 1.5; }
-  .phase-items li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
-
-  /* TÉLÉCHARGEMENT */
-  .download-section { background: var(--navy); text-align: center; }
-  .download-section .section-title { color: var(--white); }
-  .download-section .section-sub { color: rgba(255,255,255,0.6); margin: 0 auto 3rem; }
-  .download-cards { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
-  .download-card {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(200,146,42,0.25);
-    border-radius: 1rem; padding: 2rem 2.5rem;
-    display: flex; flex-direction: column; align-items: center; gap: 1rem;
-    min-width: 200px; transition: all 0.3s;
-  }
-  .download-card:hover { background: rgba(255,255,255,0.12); border-color: var(--gold); transform: translateY(-3px); }
-  .dl-icon { font-size: 2.5rem; }
-  .dl-title { font-weight: 600; color: var(--white); font-size: 0.95rem; }
-  .dl-desc { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-align: center; }
-  .btn-dl {
-    background: var(--gold); color: var(--navy);
-    padding: 0.6rem 1.4rem; border-radius: 0.4rem;
-    font-weight: 600; font-size: 0.82rem; text-decoration: none;
-    transition: all 0.2s; letter-spacing: 0.05em; text-transform: uppercase;
-  }
-  .btn-dl:hover { background: var(--gold-light); }
-
-  /* FOOTER */
-  footer {
-    background: #070f1a; padding: 3rem 2rem; text-align: center;
-    border-top: 1px solid rgba(200,146,42,0.2);
-  }
-  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem; }
-  .footer-logo span { color: var(--gold-light); font-style: italic; }
-  .footer-sub { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; }
-  .footer-contact { font-size: 0.88rem; color: rgba(255,255,255,0.6); }
-  .footer-contact a { color: var(--gold); text-decoration: none; }
-  .footer-quote {
-    margin-top: 2rem; font-style: italic; font-size: 0.9rem;
-    color: rgba(255,255,255,0.35); max-width: 500px; margin: 2rem auto 0;
-    line-height: 1.7;
-  }
-
-  /* BOUTONS FLOTTANTS CONTACT */
-  .contact-float {
-    position: fixed; bottom: 2rem; right: 1.5rem; z-index: 200;
-    display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-end;
-  }
-  .contact-btn {
-    display: flex; align-items: center; gap: 0.6rem;
-    padding: 0.7rem 1.2rem; border-radius: 2rem;
-    font-size: 0.85rem; font-weight: 600; text-decoration: none;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    transition: all 0.25s; white-space: nowrap;
-  }
-  .contact-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
-  .contact-btn-label {
-    max-width: 0; overflow: hidden; transition: max-width 0.3s ease;
-    display: inline-block;
-  }
-  .contact-btn:hover .contact-btn-label { max-width: 160px; }
-  .btn-whatsapp { background: #25D366; color: #fff; }
-  .btn-whatsapp:hover { background: #1ebe5d; }
-  .btn-email { background: var(--gold); color: var(--navy); }
-  .btn-email:hover { background: var(--gold-light); }
-  .contact-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-
-  /* FORMULAIRE DE CONTACT */
-  .contact-section { background: var(--white); }
-  .contact-section .section-title { color: var(--navy); }
-  .contact-wrapper {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start;
-  }
-  .contact-info h3 {
-    font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 1rem;
-  }
-  .contact-info p { font-size: 0.95rem; color: var(--text-light); line-height: 1.8; margin-bottom: 1.5rem; }
-  .contact-detail {
-    display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;
-    font-size: 0.9rem; color: var(--text);
-  }
-  .contact-detail a { color: var(--gold); text-decoration: none; font-weight: 500; }
-  .contact-detail a:hover { color: var(--gold-light); }
-  .contact-icon { font-size: 1.2rem; width: 24px; text-align: center; }
-  .contact-form {
-    background: var(--cream); border-radius: 1.2rem; padding: 2.5rem;
-    border: 1px solid var(--cream-dark);
-  }
-  .form-group { margin-bottom: 1.4rem; }
-  .form-group label {
-    display: block; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--navy); margin-bottom: 0.5rem;
-  }
-  .form-group input, .form-group textarea {
-    width: 100%; padding: 0.85rem 1rem;
-    border: 1px solid var(--cream-dark); border-radius: 0.5rem;
-    font-family: 'DM Sans', sans-serif; font-size: 0.93rem; color: var(--text);
-    background: var(--white); transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-  }
-  .form-group input:focus, .form-group textarea:focus {
-    border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,146,42,0.12);
-  }
-  .form-group textarea { resize: vertical; min-height: 130px; }
-  .form-submit {
-    width: 100%; padding: 1rem; background: var(--navy); color: var(--white);
-    border: none; border-radius: 0.5rem; font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .form-submit:hover { background: var(--navy-light); transform: translateY(-1px); }
-  .form-success {
-    display: none; text-align: center; padding: 1.5rem;
-    background: #dcfce7; border-radius: 0.5rem; color: #166534;
-    font-weight: 500; font-size: 0.95rem; margin-top: 1rem;
-  }
-
-  /* CHATBOT */
-  .chatbot-toggle {
-    position: fixed; bottom: 2rem; left: 1.5rem; z-index: 300;
-    width: 56px; height: 56px; border-radius: 50%;
-    background: #6d28d9; color: #fff; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 20px rgba(109,40,217,0.4); font-size: 1.4rem;
-    transition: all 0.25s;
-  }
-  .chatbot-toggle:hover { background: #7c3aed; transform: scale(1.07); }
-  .chatbot-panel {
-    position: fixed; bottom: 5.5rem; left: 1.5rem; z-index: 299;
-    width: 340px; max-height: 480px;
-    background: var(--navy); border-radius: 1.2rem;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    display: none; flex-direction: column;
-    border: 1px solid rgba(200,146,42,0.25);
-    overflow: hidden;
-  }
-  .chatbot-panel.open { display: flex; }
-  .chatbot-head {
-    padding: 1rem 1.2rem; background: rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center; gap: 0.7rem;
-  }
-  .chatbot-head-dot { width: 8px; height: 8px; border-radius: 50%; background: #a78bfa; }
-  .chatbot-head-title { font-size: 0.85rem; color: #fff; font-weight: 600; flex: 1; }
-  .chatbot-head-sub { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
-  .chatbot-messages {
-    flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.7rem;
-    min-height: 200px; max-height: 300px;
-  }
-  .cb-msg { padding: 0.7rem 0.9rem; border-radius: 0.9rem; font-size: 0.84rem; line-height: 1.6; max-width: 88%; }
-  .cb-msg-bot { background: rgba(167,139,250,0.15); color: #fff; border: 1px solid rgba(167,139,250,0.2); align-self: flex-start; border-bottom-left-radius: 0.2rem; }
-  .cb-msg-user { background: #6d28d9; color: #fff; align-self: flex-end; border-bottom-right-radius: 0.2rem; }
-  .chatbot-input-row {
-    display: flex; gap: 0.5rem; padding: 0.8rem 1rem;
-    border-top: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.15);
-  }
-  .chatbot-input {
-    flex: 1; padding: 0.6rem 0.9rem; border-radius: 0.6rem;
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
-    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; outline: none;
-    transition: border-color 0.2s;
-  }
-  .chatbot-input::placeholder { color: rgba(255,255,255,0.35); }
-  .chatbot-input:focus { border-color: #a78bfa; }
-  .chatbot-send {
-    padding: 0.6rem 1rem; background: #6d28d9; color: #fff; border: none;
-    border-radius: 0.6rem; font-size: 0.85rem; cursor: pointer; transition: background 0.2s;
-    font-weight: 600;
-  }
-  .chatbot-send:hover { background: #7c3aed; }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    .demo-wrapper { grid-template-columns: 1fr; }
-    .cas-grid { grid-template-columns: 1fr; }
-    .phases { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .hero-stats { gap: 1.5rem; }
-    .contact-wrapper { grid-template-columns: 1fr; }
-    .chatbot-panel { width: calc(100vw - 3rem); }
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: linear-gradient(135deg, #0F2338 0%, #1A3A5C 50%, #234E7A 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; color: #fff; }
+.hero { text-align: center; padding: 40px 20px; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin-bottom: 10px; }
+.hero p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.7; max-width: 420px; margin: 0 auto; }
+.divider { width: 40px; height: 3px; background: #C0392B; border-radius: 2px; margin: 16px auto; }
+#mm-toggle { position: fixed; bottom: 28px; right: 28px; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #1A3A5C, #234E7A); border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(15,35,56,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 26px; z-index: 9999; animation: pulse 3s infinite; }
+@keyframes pulse { 0%,100% { box-shadow: 0 8px 32px rgba(15,35,56,0.5), 0 0 0 0 rgba(192,57,43,0.4); } 50% { box-shadow: 0 8px 32px rgba(15,35,56,0.5), 0 0 0 10px rgba(192,57,43,0); } }
+#mm-chat { position: fixed; bottom: 104px; right: 28px; width: 360px; height: 520px; background: #F5F8FC; border-radius: 24px; box-shadow: 0 24px 80px rgba(15,35,56,0.4); display: flex; flex-direction: column; z-index: 9998; overflow: hidden; transform: scale(0.85) translateY(20px); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(.34,1.2,.64,1); transform-origin: bottom right; }
+#mm-chat.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+.mm-header { background: linear-gradient(135deg, #0F2338, #1A3A5C); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.mm-avatar { width: 40px; height: 40px; border-radius: 14px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.mm-header-title { font-family: 'Playfair Display', serif; font-size: 16px; color: #fff; font-weight: 700; }
+.mm-header-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+.mm-online { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.5); margin-left: auto; }
+.mm-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ECC71; animation: blink 2s infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+.mm-close { background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.6); cursor: pointer; border-radius: 10px; width: 30px; height: 30px; font-size: 16px; margin-left: 8px; }
+.mm-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.mm-msg { display: flex; gap: 8px; max-width: 88%; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.mm-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.mm-msg.bot { align-self: flex-start; }
+.mm-bubble { padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.55; }
+.mm-msg.bot .mm-bubble { background: #fff; color: #0F2338; border: 1px solid #D4E0ED; border-bottom-left-radius: 6px; }
+.mm-msg.user .mm-bubble { background: linear-gradient(135deg, #1A3A5C, #234E7A); color: #fff; border-bottom-right-radius: 6px; }
+.mm-msg-icon { width: 28px; height: 28px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; background: #E8EEF5; }
+.mm-typing { display: flex; gap: 4px; align-items: center; padding: 12px 14px; background: #fff; border: 1px solid #D4E0ED; border-radius: 18px; border-bottom-left-radius: 6px; width: fit-content; }
+.mm-typing span { width: 6px; height: 6px; background: #94AABF; border-radius: 50%; animation: bounce 1.2s infinite; }
+.mm-typing span:nth-child(2) { animation-delay: 0.2s; }
+.mm-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+.mm-suggestions { padding: 0 14px 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+.mm-chip { background: #E8EEF5; border: 1px solid #D4E0ED; color: #1A3A5C; border-radius: 20px; padding: 5px 12px; font-size: 11.5px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+.mm-chip:hover { background: #1A3A5C; color: #fff; }
+.mm-input-area { padding: 12px 14px 14px; border-top: 1px solid #E8EEF5; background: #fff; display: flex; gap: 8px; align-items: flex-end; }
+.mm-input { flex: 1; border: 1.5px solid #D4E0ED; border-radius: 14px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: #0F2338; background: #F5F8FC; outline: none; resize: none; max-height: 100px; }
+.mm-input:focus { border-color: #1A3A5C; }
+.mm-send { width: 40px; height: 40px; border-radius: 13px; background: linear-gradient(135deg, #1A3A5C, #234E7A); border: none; color: #fff; cursor: pointer; font-size: 17px; }
+.mm-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.mm-footer { text-align: center; padding: 4px; font-size: 10px; color: #B5C5D5; background: #fff; }
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Mon <span>Miroir</span></div>
-  <ul class="nav-links">
-    <li><a href="#projet">Le projet</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="démo.html" style="color:var(--navy);background:var(--gold);padding:0.35rem 1rem;border-radius:0.4rem;font-weight:700;">▶ Démo interactive</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
 <div class="hero">
-  <div class="hero-label">Tribunal pour Enfants de Toulouse · Février 2026</div>
-  <h1>Mon <em>Miroir</em></h1>
-  <p>L'intelligence artificielle au service de la subjectivation des Mineurs Non Accompagnés — restaurer l'identité, construire l'avenir.</p>
-  <div class="hero-cta">
-    <a href="#projet" class="btn-primary">Découvrir le projet</a>
-    <a href="#contact" class="btn-outline">Nous contacter</a>
-  </div>
+  <div style="font-size:56px;margin-bottom:16px">🪞</div>
+  <h1>Mon Miroir</h1>
+  <div class="divider"></div>
+  <p>L'Intelligence Artificielle au service de la subjectivation des Mineurs Non Accompagnés</p>
+  <p style="margin-top:12px;font-size:13px">Tribunal pour Enfants de Toulouse · Février 2026</p>
 </div>
 
-<!-- AGENTS -->
-<section class="agents-section" id="projet">
-  <div class="container">
-    <div class="section-label">01 — Architecture</div>
-    <h2 class="section-title">Les 3 agents <em>IA</em></h2>
-    <p class="section-sub">Trois intelligences complémentaires, supervisées par un Pilote humain garant de la dimension clinique, culturelle et éthique.</p>
-    <div class="agents-grid">
-      <div class="agent-card">
-        <div class="agent-icon">🎨</div>
-        <div class="agent-title">IA Designer</div>
-        <div class="agent-desc">Valorise l'image de soi du jeune. Portrait numérique, dignité visuelle, identité graphique personnelle. Premier contact doux.</div>
-      </div>
-      <div class="agent-card">
-        <div class="agent-icon">📖</div>
-        <div class="agent-title">IA Scénariste</div>
-        <div class="agent-desc">Guide la construction du récit de vie. Transforme les fragments du trauma en narration structurée. Projection vers l'avenir.</div>
-      </div>
-      <div class="agent-card">
-        <div class="agent-icon">📅</div>
-        <div class="agent-title">IA Pilote</div>
-        <div class="agent-desc">Gère l'agenda institutionnel. Audiences, santé, foyer, formation — le jeune reste visible et joignable dans le réseau.</div>
-      </div>
-      <div class="agent-card" style="border-color: rgba(200,146,42,0.5);">
-        <div class="agent-icon">👤</div>
-        <div class="agent-title" style="color: var(--gold-light);">Le Pilote Humain</div>
-        <div class="agent-desc">Oriente et supervise les 3 agents. Garant de la dimension clinique, culturelle et éthique. L'IA est un outil, jamais un substitut.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<button id="mm-toggle" onclick="toggleChat()">🪞</button>
 
-<!-- FORMULAIRE DE CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="container">
-    <div class="section-label">02 — Contact</div>
-    <h2 class="section-title">Nous <em>contacter</em></h2>
-    <p class="section-sub">Une question sur le projet Mon Miroir ? Une proposition de partenariat ? Écrivez-nous directement.</p>
-    <div style="max-width:560px; margin:3rem auto 0;">
-      <div class="contact-form">
-        <form id="contactForm" onsubmit="handleFormSubmit(event)">
-          <div class="form-group">
-            <label for="contactNom">Nom complet</label>
-            <input type="text" id="contactNom" name="nom" placeholder="Votre nom" required>
-          </div>
-          <div class="form-group">
-            <label for="contactEmail">Adresse email</label>
-            <input type="email" id="contactEmail" name="email" placeholder="votre@email.fr" required>
-          </div>
-          <div class="form-group">
-            <label for="contactMessage">Message</label>
-            <textarea id="contactMessage" name="message" placeholder="Décrivez votre demande, votre institution, votre question sur Mon Miroir…" required></textarea>
-          </div>
-          <button type="submit" class="form-submit">Envoyer le message →</button>
-          <div class="form-success" id="formSuccess">
-            ✅ Message envoyé. Nous vous répondrons dans les plus brefs délais.
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CHATBOT MON MIROIR -->
-<button class="chatbot-toggle" id="chatbotToggle" aria-label="Chatbot Mon Miroir" title="Questions sur Mon Miroir & MNA">🪞</button>
-<div class="chatbot-panel" id="chatbotPanel">
-  <div class="chatbot-head">
-    <div class="chatbot-head-dot"></div>
+<div id="mm-chat">
+  <div class="mm-header">
+    <div class="mm-avatar">🪞</div>
     <div>
-      <div class="chatbot-head-title">Chatbot Mon Miroir</div>
-      <div class="chatbot-head-sub">Questions sur le projet & les MNA</div>
+      <div class="mm-header-title">Mon Miroir</div>
+      <div class="mm-header-sub">Assistant IA</div>
     </div>
+    <div class="mm-online"><div class="mm-dot"></div> En ligne</div>
+    <button class="mm-close" onclick="toggleChat()">✕</button>
   </div>
-  <div class="chatbot-messages" id="cbMessages"></div>
-  <div class="chatbot-input-row">
-    <input class="chatbot-input" id="cbInput" type="text" placeholder="Posez votre question…" autocomplete="off">
-    <button class="chatbot-send" onclick="cbSend()">→</button>
+  <div class="mm-messages" id="messages"></div>
+  <div class="mm-suggestions" id="suggestions">
+    <div class="mm-chip" onclick="sendChip(this)">C'est quoi Mon Miroir ?</div>
+    <div class="mm-chip" onclick="sendChip(this)">Les 3 agents IA</div>
+    <div class="mm-chip" onclick="sendChip(this)">Pour les magistrats</div>
   </div>
+  <div class="mm-input-area">
+    <textarea id="userInput" class="mm-input" placeholder="Posez votre question…" rows="1" onkeydown="handleKey(event)"></textarea>
+    <button class="mm-send" id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+  <div class="mm-footer">Propulsé par Claude · Anthropic</div>
 </div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Mon <span>Miroir</span></div>
-  <div class="footer-sub">IA & Mineurs Non Accompagnés · Tribunal pour Enfants de Toulouse · 2026</div>
-  <div class="footer-quote">« Ces jeunes ne manquent pas de capacités. Ils manquent d'un miroir qui leur renvoie une image d'eux-mêmes dans laquelle ils peuvent se reconnaître et à partir de laquelle ils peuvent construire. »</div>
-</footer>
 
 <script>
-const sessions = {
-  fr: [
-    { role: 'ai', text: 'Bonjour. Je suis ton Miroir — un espace rien que pour toi. Personne ne te jugera ici.\n\nCommençons doucement. <strong>Qu\'est-ce que tu aimais faire avant de partir ?</strong>' },
-  ],
-  ar: [
-    { role: 'ai', text: 'مرحبا. هادا "المرآة" ديالك — بلاصة غير ديالك. ما كاين حد غادي يحكم عليك هنا.\n\n<strong>اشنو كنت تحب دير فبلادك؟</strong>' },
-  ]
-};
+const API_KEY = 'VOTRE_CLE_API_ICI';
+const SYSTEM = `Tu es l'assistant de Mon Miroir, projet porté par Si Mohamed ANAYA, interprète judiciaire-psychologue au Tribunal pour Enfants de Toulouse. Mon Miroir utilise l'IA pour aider les Mineurs Non Accompagnés (MNA) à travers 3 agents : IA Designer (image et dignité), IA Scénariste (récit de vie), IA CV (insertion institutionnelle). Réponds en français, avec bienveillance et professionnalisme, en 3-5 phrases max.`;
+let msgs = [], loading = false, open = false;
 
-const flows = {
-  fr: [
-    {
-      choices: ['⚽ Je jouais au foot', '👨‍👩‍👦 J\'aidais ma famille', '📚 J\'étais à l\'école', '🔧 Je travaillais'],
-      responses: {
-        0: { user: 'Je jouais au foot', ai: 'Le foot... c\'est beau ça. Tu jouais où ? Dans ton quartier, dans une équipe ?\n\n<strong>Tu t\'en souviens bien de ces moments-là ?</strong>', next: 1 },
-        1: { user: 'J\'aidais ma famille', ai: 'Tu avais des responsabilités, ça se voit. C\'est une force ça.\n\n<strong>Tu veux me parler de ta famille ? Juste ce que tu veux bien partager.</strong>', next: 1 },
-        2: { user: 'J\'étais à l\'école', ai: 'L\'école... tu aimais quoi comme matières ? Les maths ? Le dessin ?\n\n<strong>Qu\'est-ce qui t\'intéressait le plus ?</strong>', next: 1 },
-        3: { user: 'Je travaillais', ai: 'Tu travaillais déjà. Tu as appris des choses importantes comme ça.\n\n<strong>C\'était quel type de travail ? Tu aimais ça ?</strong>', next: 1 },
-      }
-    },
-    {
-      choices: ['Oui, je m\'en souviens bien', 'C\'est flou maintenant', 'Je préfère pas en parler', '🏠 Je peux parler de mon quartier'],
-      responses: {
-        0: { user: 'Oui, je m\'en souviens bien', ai: 'Ces souvenirs sont précieux. Ils font partie de toi — personne ne peut te les prendre.\n\n<strong>Si tu devais me décrire ton quartier en un mot, tu dirais quoi ?</strong>', next: 2 },
-        1: { user: 'C\'est flou maintenant', ai: 'C\'est normal. Le voyage efface parfois les contours.\n\nMais tu sais quoi ? Ce que tu as vécu là-bas, ça reste en toi. <strong>Dis-moi juste une chose que tu n\'oublies jamais.</strong>', next: 2 },
-        2: { user: 'Je préfère pas en parler', ai: 'Pas de problème. On n\'a pas besoin d\'aller là où ça fait mal.\n\n<strong>Dis-moi plutôt — qu\'est-ce que tu voudrais faire ici, en France ?</strong>', next: 2 },
-        3: { user: 'Je peux parler de mon quartier', ai: 'Je t\'écoute. Un quartier c\'est une histoire, une identité.\n\n<strong>C\'était comment là-bas ?</strong>', next: 2 },
-      }
-    },
-    {
-      choices: ['🔨 Apprendre un métier', '📖 Continuer l\'école', '⚽ Le sport', '🎵 La musique ou l\'art'],
-      responses: {
-        0: { user: 'Apprendre un métier', ai: '✨ Voilà quelque chose de concret. Un projet.\n\nTu as des compétences, une histoire, et maintenant une direction. <strong>C\'est exactement ça que Mon Miroir va aider à montrer au juge et à tes éducateurs.</strong>\n\n<em>— Fin de la démonstration —</em>', next: -1 },
-        1: { user: 'Continuer l\'école', ai: '✨ La connaissance, ça ne s\'efface pas.\n\nTu as une histoire, des ressources, et l\'envie d\'apprendre. <strong>C\'est ce récit-là que Mon Miroir va construire avec toi — pour te rendre visible devant les institutions.</strong>\n\n<em>— Fin de la démonstration —</em>', next: -1 },
-        2: { user: 'Le sport', ai: '✨ Le sport, c\'est la discipline, le collectif, le dépassement.\n\nTon histoire et tes valeurs méritent d\'être entendues. <strong>Mon Miroir va tisser tout ça en un récit digne — pour toi et pour ceux qui décident de ton avenir.</strong>\n\n<em>— Fin de la démonstration —</em>', next: -1 },
-        3: { user: 'La musique ou l\'art', ai: '✨ L\'art, c\'est une façon de dire ce que les mots ne suffisent pas à exprimer.\n\nCette sensibilité, c\'est une ressource. <strong>Mon Miroir va aider à la rendre visible — pour le Tribunal, pour tes éducateurs, pour ton avenir.</strong>\n\n<em>— Fin de la démonstration —</em>', next: -1 },
-      }
-    }
-  ],
-  ar: [
-    {
-      choices: ['⚽ كنت نلعب الكرة', '👨‍👩‍👦 كنت نعاون العيلة', '📚 كنت فالمدرسة', '🔧 كنت خدام'],
-      responses: {
-        0: { user: 'كنت نلعب الكرة', ai: 'الكرة... هادا شي مزيان. كنت تلعب فين؟ فالحومة؟ فالفريق؟\n\n<strong>واش كاين ناس تفتكرهم من هداك الوقت؟</strong>', next: 1 },
-        1: { user: 'كنت نعاون العيلة', ai: 'كنت عندك مسؤوليات. هادا قوة مو ضعف.\n\n<strong>تقدر تحكيلي على العيلة ديالك؟ غير اللي بغيت تشارك.</strong>', next: 1 },
-        2: { user: 'كنت فالمدرسة', ai: 'المدرسة... اشنو كنت تحب؟ الرياضيات؟ الرسم؟\n\n<strong>اشنو كان يعجبك أكثر؟</strong>', next: 1 },
-        3: { user: 'كنت خدام', ai: 'كنت تخدم. تعلمت حوايج مهمة بهاد الطريقة.\n\n<strong>اشنو نوع الخدمة؟ كانت تعجبك؟</strong>', next: 1 },
-      }
-    },
-    {
-      choices: ['إيه، تفكرتهم مزيان', 'ما بقاشي واضح', 'ما بغيتش نحكي', '🏠 نقدر نحكي على الحومة'],
-      responses: {
-        0: { user: 'إيه، تفكرتهم مزيان', ai: 'هاد الذكريات غالية. هي جزء منك — ما قادر حد ياخدهم منك.\n\n<strong>لو خصصرت تصف الحومة ديالك بكلمة واحدة، اشنو تقول؟</strong>', next: 2 },
-        1: { user: 'ما بقاشي واضح', ai: 'هادا عادي. السفر ساعات يمحي الخطوط.\n\n<strong>قولي غير حاجة واحدة ما تنساها أبدا.</strong>', next: 2 },
-        2: { user: 'ما بغيتش نحكي', ai: 'لا بأس. ما خصناش نمشيو لين كيدير.\n\n<strong>قولي — اشنو تبغي دير هنا فرنسا؟</strong>', next: 2 },
-        3: { user: 'نقدر نحكي على الحومة', ai: 'سامعك. الحومة هي هوية وتاريخ.\n\n<strong>كيفاش كانت هناك؟</strong>', next: 2 },
-      }
-    },
-    {
-      choices: ['🔨 نتعلم حرفة', '📖 نكمل الدراسة', '⚽ الرياضة', '🎵 الموسيقى أو الفن'],
-      responses: {
-        0: { user: 'نتعلم حرفة', ai: '✨ هادا مشروع ملموس.\n\nعندك مهارات وتاريخ واتجاه. <strong>هادا بالضبط اللي Mon Miroir غادي يعاون يبينه للقاضي والمربين ديالك.</strong>\n\n<em>— نهاية العرض —</em>', next: -1 },
-        1: { user: 'نكمل الدراسة', ai: '✨ المعرفة ما تمحيش.\n\nعندك تاريخ وموارد ورغبة فالتعلم. <strong>Mon Miroir غادي يبني هاد القصة معاك.</strong>\n\n<em>— نهاية العرض —</em>', next: -1 },
-        2: { user: 'الرياضة', ai: '✨ الرياضة هي الانضباط والجماعة والتجاوز.\n\nقصتك وقيمك تستاهلو يتسمعو. <strong>Mon Miroir غادي ينسج كل هادا.</strong>\n\n<em>— نهاية العرض —</em>', next: -1 },
-        3: { user: 'الموسيقى أو الفن', ai: '✨ الفن هو طريقة تقول بيها اللي الكلام ما يكفيش.\n\nهاد الحساسية هي مورد. <strong>Mon Miroir غادي يبينها للمحكمة والمربين.</strong>\n\n<em>— نهاية العرض —</em>', next: -1 },
-      }
-    }
-  ]
-};
-
-let currentLang = 'fr';
-let currentStep = 0;
-let isTyping = false;
-
-function setLang(lang, btn) {
-  currentLang = lang;
-  currentStep = 0;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  initChat();
+function toggleChat() {
+  open = !open;
+  document.getElementById('mm-chat').classList.toggle('open', open);
+  document.getElementById('mm-toggle').textContent = open ? '✕' : '🪞';
+  document.getElementById('mm-toggle').style.background = open ? 'linear-gradient(135deg,#C0392B,#A93226)' : 'linear-gradient(135deg,#1A3A5C,#234E7A)';
+  if (open && msgs.length === 0) addBot("Bonjour 👋 Je suis l'assistant de **Mon Miroir**. Comment puis-je vous aider ?");
 }
 
-function addMsg(role, text, delay = 0) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const area = document.getElementById('chatArea');
-      const msg = document.createElement('div');
-      msg.className = `msg msg-${role}`;
-      msg.innerHTML = text.replace(/\n/g, '<br>');
-      area.appendChild(msg);
-      area.scrollTop = area.scrollHeight;
-      resolve();
-    }, delay);
-  });
+function addBot(text) { msgs.push({role:'assistant',content:text}); render(); }
+function render() {
+  const c = document.getElementById('messages');
+  c.innerHTML = msgs.map(m => `<div class="mm-msg ${m.role==='user'?'user':'bot'}"><div class="mm-msg-icon">${m.role==='user'?'👤':'🪞'}</div><div class="mm-bubble">${m.content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div></div>`).join('');
+  c.scrollTop = c.scrollHeight;
 }
+function sendChip(el) { document.getElementById('userInput').value=el.textContent; document.getElementById('suggestions').style.display='none'; sendMessage(); }
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
 
-function showChoices(step) {
-  const area = document.getElementById('choicesArea');
-  area.innerHTML = '';
-  const flow = flows[currentLang][step];
-  if (!flow) return;
-  const grid = document.createElement('div');
-  grid.className = 'choices-grid';
-  flow.choices.forEach((choice, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = choice;
-    btn.onclick = () => handleChoice(i, flow.responses[i]);
-    grid.appendChild(btn);
-  });
-  area.appendChild(grid);
-}
-
-async function handleChoice(idx, response) {
-  if (isTyping) return;
-  isTyping = true;
-  document.getElementById('choicesArea').innerHTML = '';
-  await addMsg('user', response.user);
-  const area = document.getElementById('chatArea');
-  const typing = document.createElement('div');
-  typing.className = 'msg msg-typing';
-  typing.textContent = '…';
-  area.appendChild(typing);
-  await new Promise(r => setTimeout(r, 900));
-  typing.remove();
-  await addMsg('ai', response.ai);
-  isTyping = false;
-  if (response.next >= 0 && response.next < flows[currentLang].length) {
-    currentStep = response.next;
-    setTimeout(() => showChoices(currentStep), 400);
-  }
-}
-
-async function initChat() {
-  document.getElementById('chatArea').innerHTML = '';
-  document.getElementById('choicesArea').innerHTML = '';
-  currentStep = 0;
-  isTyping = true;
-  const intro = sessions[currentLang][0];
-  const area = document.getElementById('chatArea');
-  const typing = document.createElement('div');
-  typing.className = 'msg msg-typing';
-  typing.textContent = '…';
-  area.appendChild(typing);
-  await new Promise(r => setTimeout(r, 800));
-  typing.remove();
-  await addMsg('ai', intro.text);
-  isTyping = false;
-  showChoices(0);
-}
-
-window.addEventListener('load', initChat);
-
-/* ===== FORMULAIRE DE CONTACT ===== */
-function handleFormSubmit(e) {
-  e.preventDefault();
-  document.getElementById('formSuccess').style.display = 'block';
-  e.target.reset();
-}
-
-/* ===== CHATBOT MON MIROIR ===== */
-const cbKnowledge = [
-  {
-    keys: ['qu\'est-ce que', 'c\'est quoi', 'présente', 'présentation', 'mon miroir', 'projet'],
-    answer: "Mon Miroir est un projet d'IA au service des Mineurs Non Accompagnés (MNA). Il utilise 3 agents IA — Designer, Scénariste, Pilote — supervisés par un Pilote humain, pour restaurer l'identité et construire un récit de vie digne, transmissible au Tribunal pour Enfants de Toulouse."
-  },
-  {
-    keys: ['mna', 'mineur non accompagné', 'mineurs non accompagnés', 'qui sont'],
-    answer: "Les MNA (Mineurs Non Accompagnés) sont des jeunes étrangers de moins de 18 ans arrivés en France sans représentant légal. Souvent traumatisés par un long exil, ils sont pris en charge par l'Aide Sociale à l'Enfance (ASE) et la Protection Judiciaire de la Jeunesse (PJJ), et comparaissent devant le Tribunal pour Enfants."
-  },
-  {
-    keys: ['ia designer', 'designer', 'image', 'portrait', 'visuel'],
-    answer: "L'IA Designer valorise l'image de soi du jeune. Elle crée un portrait numérique personnel — un premier contact doux qui travaille l'estime de soi et la dignité visuelle. C'est souvent la porte d'entrée la plus douce dans le dispositif Mon Miroir."
-  },
-  {
-    keys: ['ia scénariste', 'scénariste', 'récit', 'narration', 'histoire', 'vie'],
-    answer: "L'IA Scénariste guide la construction du récit de vie. Elle pose des questions douces et progressives, collecte les fragments d'identité, et tisse un portrait narratif cohérent — utilisable comme argument devant le juge des enfants."
-  },
-  {
-    keys: ['ia pilote', 'pilote', 'agenda', 'audience', 'coordin'],
-    answer: "L'IA Pilote gère l'agenda institutionnel du jeune : audiences, santé, foyer, formation. Elle s'assure que le MNA reste visible et joignable dans le réseau d'acteurs (ASE, PJJ, éducateurs, magistrats)."
-  },
-  {
-    keys: ['pilote humain', 'interprète', 'psychologue', 'superviseur'],
-    answer: "Le Pilote humain de Mon Miroir est un Interprète Expert Judiciaire et Conseiller d'Orientation et Psychologue. Il oriente et supervise les 3 agents IA, garant de la dimension clinique, culturelle et éthique. Pour le contacter, utilisez le formulaire de contact en bas de page."
-  },
-  {
-    keys: ['déploiement', 'phase', 'semaine', 'pilote', 'calendrier', 'délai', 'démarrer'],
-    answer: "Le déploiement se fait en 3 phases sur 12 semaines :\n• Phase 1 (sem. 1–4) : Accord institutionnel, sélection de 3–5 MNA volontaires, IA Designer.\n• Phase 2 (sem. 5–8) : IA Scénariste, sessions guidées, coordination PJJ/ASE, CV Interactif.\n• Phase 3 (sem. 9–12) : Présentation aux magistrats, mesure d'impact, propositions de déploiement élargi.\nLa phase pilote peut démarrer en 30 jours, sans financement externe."
-  },
-  {
-    keys: ['financement', 'coût', 'budget', 'argent', 'gratuit'],
-    answer: "Mon Miroir peut démarrer sa phase pilote sans financement externe. L'approche est de prouver d'abord, puis de demander des financements institutionnels après démonstration de l'impact."
-  },
-  {
-    keys: ['tribunal', 'juge', 'judiciaire', 'audience', 'justice'],
-    answer: "Mon Miroir est conçu pour le Tribunal pour Enfants de Toulouse. Le portrait narratif produit par l'IA Scénariste constitue un outil d'aide à la décision judiciaire : il rend le jeune visible, humain, sujet — et pas seulement un dossier administratif devant le Juge des Enfants."
-  },
-  {
-    keys: ['cv', 'interactif', 'livrable', 'document', 'résultat'],
-    answer: "Le CV Interactif est le livrable principal de Mon Miroir : un portrait narratif structuré, transmissible aux magistrats, éducateurs et partenaires institutionnels. Il peut être accompagné d'une vidéo-portrait — un court film narratif qui rend le jeune humain et visible."
-  },
-  {
-    keys: ['darija', 'arabe', 'langue', 'traduction', 'marocain'],
-    answer: "Mon Miroir est bilingue français / darija (arabe marocain). Le Pilote humain, interprète expert judiciaire, garantit la médiation culturelle et linguistique. La démonstration interactive de la page propose les deux langues."
-  },
-  {
-    keys: ['contact', 'appeler', 'téléphone', 'email', 'mail', 'joindre', 'partenariat'],
-    answer: "Pour contacter l'équipe Mon Miroir, utilisez le formulaire de contact disponible en bas de cette page (section Contact). Nous vous répondrons dans les plus brefs délais."
-  },
-  {
-    keys: ['ase', 'aide sociale', 'enfance', 'pjj', 'protection', 'institution'],
-    answer: "Mon Miroir travaille en coordination avec l'ASE (Aide Sociale à l'Enfance), la PJJ (Protection Judiciaire de la Jeunesse), les éducateurs des foyers MNA, et le Tribunal pour Enfants de Toulouse. L'IA Pilote facilite cette coordination multi-acteurs autour du jeune."
-  },
-  {
-    keys: ['éthique', 'sécurité', 'données', 'confidentialité', 'rgpd', 'risque'],
-    answer: "L'éthique est au cœur de Mon Miroir. Le Pilote humain supervise chaque IA. L'outil ne remplace jamais le professionnel. Les données des jeunes sont traitées avec la confidentialité requise par le cadre judiciaire. L'IA est un outil, jamais un substitut au jugement humain."
-  },
-  {
-    keys: ['ordonnance', '1945', 'ordonnance de 1945', 'texte fondateur', 'droit pénal mineur'],
-    answer: "L'ordonnance du 2 février 1945 est le texte fondateur de la justice des mineurs en France. Elle pose le principe de primauté éducative sur la répression : avant de sanctionner, le juge doit chercher à comprendre et à accompagner. Elle a été intégrée dans le Code de la Justice Pénale des Mineurs (CJPM) entré en vigueur en septembre 2021, qui maintient cette philosophie tout en modernisant les procédures. Mon Miroir s'inscrit pleinement dans cet esprit : rendre le mineur acteur de son parcours plutôt que simple objet d'une décision."
-  },
-  {
-    keys: ['aemo', 'action éducative milieu ouvert', 'milieu ouvert'],
-    answer: "L'AEMO (Action Éducative en Milieu Ouvert) est une mesure judiciaire ordonnée par le juge des enfants. Un éducateur de la PJJ ou de l'ASE intervient régulièrement auprès du jeune et de sa famille, sans le retirer de son environnement. L'objectif est de soutenir les parents et d'accompagner le mineur tout en le maintenant dans son cadre de vie. Mon Miroir peut enrichir le suivi AEMO en fournissant un portrait narratif qui aide l'éducateur à mieux cerner les ressources et vulnérabilités du jeune."
-  },
-  {
-    keys: ['mjie', 'mesure judiciaire investigation éducative', 'investigation', 'évaluation judiciaire'],
-    answer: "La MJIE (Mesure Judiciaire d'Investigation Éducative) remplace l'ancienne IOE (Investigation et Orientation Éducative). Ordonnée par le juge, elle permet à la PJJ ou au secteur associatif habilité d'évaluer la situation d'un mineur : personnalité, environnement familial, besoins éducatifs. Elle débouche sur un rapport remis au juge. Mon Miroir peut compléter une MJIE en apportant la dimension narrative et subjective que les outils d'évaluation classiques capturent rarement."
-  },
-  {
-    keys: ['liberté surveillée', 'ls', 'suivi liberté surveillée'],
-    answer: "La liberté surveillée est une mesure éducative qui permet au mineur de rester en liberté tout en étant placé sous le contrôle d'un délégué à la liberté surveillée (DLS) ou d'un éducateur PJJ. Elle implique des obligations de présentation régulière, de scolarisation ou de formation. C'est une mesure de soutien éducatif dans le milieu naturel. Mon Miroir peut renforcer l'adhésion du jeune à ce suivi en lui donnant une vision positive de son parcours."
-  },
-  {
-    keys: ['suivi éducatif', 'suivi éducatif judiciaire', 'sej', 'mesure éducative judiciaire'],
-    answer: "Le Suivi Éducatif Judiciaire (ou mesure éducative judiciaire) désigne l'ensemble des interventions de la PJJ ou du secteur associatif habilité auprès d'un mineur sous main de justice. Il peut inclure des modules de responsabilisation, de réparation, d'insertion. Mon Miroir s'articule idéalement avec ce suivi en produisant un récit de vie qui ancre le jeune dans une identité positive et un projet d'avenir — deux leviers essentiels pour la sortie de la délinquance."
-  },
-  {
-    keys: ['foyer', 'foyer éducatif', 'placement', 'hébergement', 'mecs', 'structure'],
-    answer: "Les foyers éducatifs (ou MECS — Maisons d'Enfants à Caractère Social) accueillent les mineurs placés par décision judiciaire ou administrative. Pour les MNA, ce sont souvent les premiers lieux d'ancrage en France. Mon Miroir peut intervenir directement en foyer : l'IA Designer crée un premier lien doux, l'IA Scénariste accompagne la construction identitaire, et l'IA Pilote coordonne les rendez-vous institutionnels depuis le foyer."
-  },
-  {
-    keys: ['contrôle judiciaire', 'cj', 'obligation pointage', 'assignation'],
-    answer: "Le contrôle judiciaire est une mesure alternative à la détention provisoire. Le mineur reste libre mais doit respecter des obligations strictes : pointage régulier au commissariat, interdiction de rencontrer certaines personnes, obligation de résidence, interdiction de sortie du territoire. Toute violation peut entraîner la détention provisoire. Mon Miroir peut aider un jeune sous contrôle judiciaire à mieux comprendre les enjeux de son dossier et à construire un projet crédible pour l'audience."
-  },
-  {
-    keys: ['mise à l\'épreuve', 'mae', 'sursis mise à l\'épreuve', 'probation'],
-    answer: "La mise à l'épreuve (ou sursis avec mise à l'épreuve) est une modalité d'exécution de la peine : le mineur ne va pas en détention si il respecte des obligations (suivi éducatif, travail, indemnisation des victimes, soins). Tout manquement peut entraîner la révocation du sursis. C'est une chance de démontrer sa capacité à changer. Mon Miroir peut constituer une preuve tangible de cette évolution devant le juge, via le CV Interactif et le portrait narratif."
-  },
-  {
-    keys: ['tig', 'travail intérêt général', 'travail d\'intérêt général', 'sanction éducative', 'réparation'],
-    answer: "Le TIG (Travail d'Intérêt Général) pour mineurs est une peine alternative permettant au jeune condamné d'effectuer un travail non rémunéré au profit de la collectivité (associations, collectivités locales). Il vise à responsabiliser le mineur tout en lui évitant la prison. Le TIG peut être une occasion de découvrir un secteur professionnel, de valoriser des compétences. Mon Miroir peut capitaliser sur cette expérience pour enrichir le CV Interactif du jeune."
-  },
-  {
-    keys: ['cjpm', 'code justice pénale mineurs', 'réforme 2021', 'nouveau code'],
-    answer: "Le CJPM (Code de la Justice Pénale des Mineurs) est entré en vigueur le 30 septembre 2021, remplaçant l'ordonnance de 1945. Il introduit une présomption d'irresponsabilité pénale pour les moins de 13 ans, une procédure en deux temps (culpabilité puis sanction), et renforce les mesures éducatives. L'esprit reste celui de 1945 : éduquer avant de punir. Mon Miroir s'inscrit dans ce cadre en produisant des outils qui enrichissent la phase éducative de la procédure."
-  },
-  {
-    keys: ['détention provisoire', 'dep', 'prison', 'incarcération', 'mineur détenu', 'epm', 'quartier mineur'],
-    answer: "La détention provisoire des mineurs est strictement encadrée : elle ne peut être ordonnée que pour les mineurs de plus de 13 ans (sous conditions d'âge et de gravité des faits). Les mineurs détenus sont placés en EPM (Établissement Pénitentiaire pour Mineurs) ou en Quartier Mineur (QM) d'une maison d'arrêt, où la PJJ assure un suivi éducatif. Mon Miroir peut intervenir même en détention : restituer une identité positive à un jeune incarcéré est souvent le premier pas vers une réinsertion réussie."
-  },
-  {
-    keys: ['administrateur ad hoc', 'représentant légal', 'tuteur', 'administrateur'],
-    answer: "L'administrateur ad hoc est un représentant légal désigné par le juge pour un mineur isolé (comme les MNA) qui n'a pas de représentant légal en France. Il accompagne le mineur dans les procédures judiciaires et administratives, signe les actes en son nom. C'est un acteur clé pour les MNA. Mon Miroir dispose d'un document dédié sur ce rôle, téléchargeable dans la section Documents du site."
-  },
-
-  /* ── ADDICTIONS ── */
-  {
-    keys: ['addiction', 'addictions', 'dépendance', 'produit', 'substance', 'consommation', 'usage'],
-    answer: "Les MNA présentent une vulnérabilité particulière aux addictions : isolement, trauma, rupture familiale, précarité. Les produits les plus rencontrés sont le cannabis, l'alcool, les solvants/inhalants, et la prégabaline (Lyrica). Chaque substance a ses propres signes d'alerte, risques et réponses éducatives. Posez-moi une question spécifique (ex. : « cannabis », « Lyrica », « solvants ») pour une réponse détaillée utile pour un juge, un éducateur ou une famille. Mon Miroir peut identifier ces signaux via l'IA Scénariste et orienter vers les soins adaptés."
-  },
-  {
-    keys: ['cannabis', 'shit', 'résine', 'weed', 'beuh', 'joint', 'pétard', 'thc'],
-    answer: "CANNABIS chez les MNA\n\n▌ Signes comportementaux\n→ Repli social progressif, démotivation scolaire ou professionnelle\n→ Yeux rouges, odeur caractéristique, rires inappropriés ou apathie\n→ Paranoïa, suspicion, irritabilité au manque\n→ Dépenses inexpliquées, petits trafics pour financer la consommation\n→ Sommeil inversé, absentéisme aux rendez-vous institutionnels\n\n▌ Risques spécifiques aux MNA\n→ Risque psychotique accru si usage précoce et intensif (THC élevé)\n→ Automédication d'un état de stress post-traumatique (PTSD)\n→ Porte d'entrée vers d'autres substances ou réseaux de trafic\n→ Impact sur la procédure judiciaire : incohérence des auditions, fugues\n\n▌ Réponse éducative\n→ Ne pas stigmatiser : comprendre la fonction du produit (apaisement, appartenance)\n→ Orienter vers une consultation jeune consommateur (CJC) — anonyme et gratuit\n→ Différencier usage expérimental, usage problématique, dépendance\n→ Impliquer le foyer et l'éducateur référent dans le suivi\n\n▌ Lien Mon Miroir\nL'IA Scénariste détecte les signaux de repli et peut alerter le Pilote humain. Le portrait narratif permet d'identifier si le cannabis remplace une relation, un projet ou une sécurité absente — et d'y répondre autrement."
-  },
-  {
-    keys: ['alcool', 'bière', 'vodka', 'ivresse', 'alcoolisation', 'biture', 'cuite', 'alcoolisme'],
-    answer: "ALCOOL chez les MNA\n\n▌ Signes comportementaux\n→ Odeur d'alcool en journée, démarche instable, élocution pâteuse\n→ Agressivité ou désinhibition marquée, puis abattement\n→ Consommation solitaire ou en groupe comme rite d'appartenance\n→ Cachettes de bouteilles en foyer, achats dissimulés\n→ Absentéisme, déscolarisation, rendez-vous médicaux ou judiciaires manqués\n\n▌ Risques spécifiques aux MNA\n→ Alcoolisations aiguës massives (binge drinking) fréquentes chez les adolescents isolés\n→ Interactions dangereuses avec d'autres produits (Lyrica, médicaments)\n→ Violence auto ou hétéro-agressive lors des états d'ivresse\n→ Complications médicales rapides si malnutrition préexistante (fréquente chez les MNA)\n→ Risque de passage à l'acte délictueux sous emprise\n\n▌ Réponse éducative\n→ Évaluer la fréquence et le contexte (seul ? en groupe ? après un événement traumatique ?)\n→ Orienter vers le médecin du foyer ou un addictologue dès les premiers signes\n→ Proposer des activités alternatives structurantes (sport, art, projet professionnel)\n→ En cas d'ivresse aiguë : protocole urgence foyer, ne jamais laisser seul\n\n▌ Lien Mon Miroir\nL'alcool chez un MNA est rarement une addiction au sens classique : c'est souvent une gestion du vide. Mon Miroir travaille précisément ce vide — en reconstruisant une identité narrative, un projet, des appartenances positives qui réduisent le besoin de l'alcool comme anesthésiant."
-  },
-  {
-    keys: ['solvant', 'inhalant', 'colle', 'essence', 'gaz', 'poppers', 'sniff', 'aérosol', 'protoxyde', 'proto'],
-    answer: "SOLVANTS & INHALANTS chez les MNA\n\n▌ Produits concernés\n→ Colles, diluants, essence, déodorants en spray, gaz briquet, protoxyde d'azote (N₂O)\n→ Produits bon marché, légaux, accessibles — particulièrement dangereux\n\n▌ Signes comportementaux\n→ Odeur chimique persistante (vêtements, haleine, chambre)\n→ Taches sur le visage, autour de la bouche ou du nez\n→ Yeux vitreux, confusion, désorientation soudaine et brève\n→ Sachets plastique, chiffons imprégnés cachés dans la chambre\n→ Maux de tête fréquents, nausées, somnolence chronique\n\n▌ Risques spécifiques — ALERTE GRAVE\n→ Mort subite par arrêt cardiaque : peut survenir dès la première inhalation (Sudden Sniffing Death)\n→ Neurotoxicité : dommages irréversibles sur le cerveau, la moelle épinière (pour le N₂O)\n→ Brûlures chimiques des voies respiratoires\n→ Hallucinations, états dissociatifs pouvant mener à des comportements dangereux\n→ Dépendance psychologique rapide malgré l'absence de dépendance physique classique\n\n▌ Réponse éducative\n→ Urgence : tout signe de consommation de solvants justifie une prise en charge médicale immédiate\n→ Ne jamais minimiser : « c'est que de la colle » est une erreur fatale\n→ Signalement systématique à l'équipe pluridisciplinaire et au médecin référent\n→ Comprendre le contexte : souvent lié à une détresse extrême, une absence de projet, une errance\n\n▌ Lien Mon Miroir\nLes inhalants sont le signe d'une détresse identitaire maximale. Mon Miroir intervient en amont : restaurer une image de soi, un récit, un futur — pour que le produit ne soit plus le seul moyen de « partir ailleurs »."
-  },
-  {
-    keys: ['lyrica', 'prégabaline', 'pregabaline', 'gabapentine', 'rivotril', 'antiépileptique', 'détourné', 'détournement'],
-    answer: "PRÉGABALINE (Lyrica) & GÉNÉRIQUES — ALERTE PRIORITAIRE\n\n▌ Qu'est-ce que c'est ?\nLa prégabaline (Lyrica®, Biogaran®, génériques) est un médicament antiépileptique et antidouleur légal, de plus en plus détourné de son usage thérapeutique. Très présente dans les réseaux de rue fréquentés par les MNA, vendue quelques euros la boîte, parfois fournie gratuitement pour créer la dépendance.\n\n▌ Signes comportementaux\n→ Euphorie rapide, désinhibition intense, sentiment de « planer » sans odeur détectable\n→ Somnolence profonde, élocution ralentie, gestuelles ralenties\n→ Oublis, confusion, incohérence dans les récits (impact sur les auditions judiciaires)\n→ Recherche compulsive de médicaments, ordonnances falsifiées ou obtenues par multiple prescripteurs\n→ Agressivité violente lors du manque, états d'agitation incontrôlables\n\n▌ Risques — DANGER LÉTAL\n→ Dépendance physique et psychique installée en quelques semaines seulement\n→ Syndrome de sevrage GRAVE : anxiété extrême, convulsions, hallucinations, insomnie totale\n→ Le sevrage sans encadrement médical peut être MORTEL\n→ Surdosage fréquent par prise de doses massives pour retrouver l'effet (tolérance rapide)\n→ Interactions létales avec alcool, opiacés, benzodiazépines (dépression respiratoire)\n→ Risque de passage à l'acte violent ou suicidaire lors des épisodes de manque\n\n▌ Pourquoi les MNA sont particulièrement exposés\n→ Médicament légal = perception du risque minimisée\n→ Disponible dans les réseaux communautaires de certaines diasporas\n→ Automédication de douleurs chroniques, d'insomnies post-traumatiques\n→ Absence de médecin référent ou de suivi régulier pour détecter la dépendance\n\n▌ Réponse éducative & judiciaire\n→ URGENCE MÉDICALE : tout sevrage doit être encadré par un médecin (hospitalisation possible)\n→ Signalement immédiat au médecin du foyer dès suspicion\n→ Pour le juge : la dépendance à la prégabaline altère le discernement et la responsabilité — à intégrer dans l'évaluation\n→ Orienter vers CSAPA (Centre de Soins, d'Accompagnement et de Prévention en Addictologie)\n→ Ne jamais interrompre brutalement sans avis médical\n\n▌ Lien Mon Miroir\nLa prégabaline détruit le récit de soi : le jeune qui en est dépendant n'a plus de passé cohérent ni de futur imaginable. Mon Miroir peut être un outil de reconstruction post-sevrage — redonner une identité narrative quand la substance a tout effacé. Le Pilote humain peut coordonner l'orientation vers les soins spécialisés."
-  },
-  {
-    keys: ['csapa', 'consultation jeune consommateur', 'cjc', 'soin addiction', 'addictologue', 'sevrage'],
-    answer: "Les CSAPA (Centres de Soins, d'Accompagnement et de Prévention en Addictologie) et les CJC (Consultations Jeunes Consommateurs) sont les structures de référence pour la prise en charge des addictions chez les mineurs.\n\n▌ CJC (Consultation Jeune Consommateur)\n→ Gratuit, anonyme, sans ordonnance\n→ Pour les moins de 25 ans et leur entourage\n→ Évaluation, écoute, orientation — pas uniquement pour les cas graves\n→ À contacter dès les premiers signes, sans attendre la dépendance installée\n\n▌ CSAPA\n→ Prise en charge médicale, psychologique et sociale des addictions\n→ Peuvent assurer le suivi de sevrage (notamment prégabaline, alcool)\n→ Travaillent en lien avec les foyers MNA, la PJJ et les juges des enfants\n\n▌ Lien Mon Miroir\nMon Miroir peut articuler le suivi éducatif avec ces structures : l'IA Pilote intègre les rendez-vous CSAPA dans l'agenda du jeune, et le portrait narratif peut être partagé (avec accord) pour informer les soignants du contexte de vie du mineur."
-  }
-];
-
-const cbFallbacks = [
-  "Je ne suis pas sûr de bien comprendre votre question. Essayez des mots-clés comme : cannabis, alcool, Lyrica, solvants, CSAPA — ou : AEMO, MJIE, liberté surveillée, TIG, contrôle judiciaire, mise à l'épreuve, foyer, CJPM, ordonnance 1945, MNA, PJJ, ASE, Mon Miroir.",
-  "Bonne question ! Pour y répondre précisément, utilisez le formulaire de contact en bas de page.",
-  "Ce sujet mérite une réponse personnalisée. Utilisez le formulaire de contact disponible en bas de page."
-];
-let cbFallbackIdx = 0;
-
-function cbMatch(text) {
-  const lower = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  for (const item of cbKnowledge) {
-    for (const key of item.keys) {
-      const normKey = key.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (lower.includes(normKey)) return item.answer;
-    }
-  }
-  return null;
-}
-
-function cbAddMsg(text, type) {
-  const area = document.getElementById('cbMessages');
-  const div = document.createElement('div');
-  div.className = 'cb-msg cb-msg-' + type;
-  div.textContent = text;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-}
-
-function cbSend() {
-  const input = document.getElementById('cbInput');
+async function sendMessage() {
+  const input = document.getElementById('userInput');
   const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  cbAddMsg(text, 'user');
-  setTimeout(() => {
-    const answer = cbMatch(text) || cbFallbacks[cbFallbackIdx++ % cbFallbacks.length];
-    cbAddMsg(answer, 'bot');
-  }, 350);
+  if (!text || loading) return;
+  msgs.push({role:'user',content:text});
+  input.value = ''; render();
+  document.getElementById('suggestions').style.display='none';
+  loading = true; document.getElementById('sendBtn').disabled = true;
+  const c = document.getElementById('messages');
+  const t = document.createElement('div'); t.className='mm-msg bot'; t.id='typing';
+  t.innerHTML='<div class="mm-msg-icon">🪞</div><div class="mm-typing"><span></span><span></span><span></span></div>';
+  c.appendChild(t); c.scrollTop=c.scrollHeight;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:SYSTEM,messages:msgs})});
+    const data = await res.json();
+    document.getElementById('typing')?.remove();
+    if(data.content?.[0]) addBot(data.content[0].text);
+  } catch(e) { document.getElementById('typing')?.remove(); addBot("Erreur de connexion. Veuillez réessayer."); }
+  loading=false; document.getElementById('sendBtn').disabled=false;
 }
-
-document.getElementById('cbInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') cbSend();
-});
-
-document.getElementById('chatbotToggle').addEventListener('click', function() {
-  const panel = document.getElementById('chatbotPanel');
-  const isOpen = panel.classList.toggle('open');
-  if (isOpen && document.getElementById('cbMessages').children.length === 0) {
-    cbAddMsg("Bonjour ! Je suis le chatbot Mon Miroir. Posez-moi vos questions sur :\n→ Le projet Mon Miroir et les agents IA\n→ Les MNA et leur prise en charge\n→ Les mesures éducatives : AEMO, MJIE, liberté surveillée, TIG, contrôle judiciaire, mise à l'épreuve, foyers, CJPM, ordonnance de 1945\n→ Les institutions : PJJ, ASE, Tribunal pour Enfants\n→ Addictions : cannabis, alcool, solvants, Lyrica/prégabaline, CSAPA\n→ Le déploiement et les partenariats", 'bot');
-  }
-});
 </script>
 </body>
 </html>
+
