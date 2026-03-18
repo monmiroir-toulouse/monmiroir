@@ -1,131 +1,32 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon Miroir — Toulouse</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: linear-gradient(135deg, #0F2338 0%, #1A3A5C 50%, #234E7A 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; color: #fff; }
-.hero { text-align: center; padding: 40px 20px; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin-bottom: 10px; }
-.hero p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.7; max-width: 420px; margin: 0 auto; }
-.divider { width: 40px; height: 3px; background: #C0392B; border-radius: 2px; margin: 16px auto; }
-#mm-toggle { position: fixed; bottom: 28px; right: 28px; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #1A3A5C, #234E7A); border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(15,35,56,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 26px; z-index: 9999; animation: pulse 3s infinite; }
-@keyframes pulse { 0%,100% { box-shadow: 0 8px 32px rgba(15,35,56,0.5), 0 0 0 0 rgba(192,57,43,0.4); } 50% { box-shadow: 0 8px 32px rgba(15,35,56,0.5), 0 0 0 10px rgba(192,57,43,0); } }
-#mm-chat { position: fixed; bottom: 104px; right: 28px; width: 360px; height: 520px; background: #F5F8FC; border-radius: 24px; box-shadow: 0 24px 80px rgba(15,35,56,0.4); display: flex; flex-direction: column; z-index: 9998; overflow: hidden; transform: scale(0.85) translateY(20px); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(.34,1.2,.64,1); transform-origin: bottom right; }
-#mm-chat.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-.mm-header { background: linear-gradient(135deg, #0F2338, #1A3A5C); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
-.mm-avatar { width: 40px; height: 40px; border-radius: 14px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.mm-header-title { font-family: 'Playfair Display', serif; font-size: 16px; color: #fff; font-weight: 700; }
-.mm-header-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
-.mm-online { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.5); margin-left: auto; }
-.mm-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ECC71; animation: blink 2s infinite; }
-@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-.mm-close { background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.6); cursor: pointer; border-radius: 10px; width: 30px; height: 30px; font-size: 16px; margin-left: 8px; }
-.mm-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-.mm-msg { display: flex; gap: 8px; max-width: 88%; animation: fadeUp 0.3s ease; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.mm-msg.user { align-self: flex-end; flex-direction: row-reverse; }
-.mm-msg.bot { align-self: flex-start; }
-.mm-bubble { padding: 10px 14px; border-radius: 18px; font-size: 13.5px; line-height: 1.55; }
-.mm-msg.bot .mm-bubble { background: #fff; color: #0F2338; border: 1px solid #D4E0ED; border-bottom-left-radius: 6px; }
-.mm-msg.user .mm-bubble { background: linear-gradient(135deg, #1A3A5C, #234E7A); color: #fff; border-bottom-right-radius: 6px; }
-.mm-msg-icon { width: 28px; height: 28px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; background: #E8EEF5; }
-.mm-typing { display: flex; gap: 4px; align-items: center; padding: 12px 14px; background: #fff; border: 1px solid #D4E0ED; border-radius: 18px; border-bottom-left-radius: 6px; width: fit-content; }
-.mm-typing span { width: 6px; height: 6px; background: #94AABF; border-radius: 50%; animation: bounce 1.2s infinite; }
-.mm-typing span:nth-child(2) { animation-delay: 0.2s; }
-.mm-typing span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
-.mm-suggestions { padding: 0 14px 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-.mm-chip { background: #E8EEF5; border: 1px solid #D4E0ED; color: #1A3A5C; border-radius: 20px; padding: 5px 12px; font-size: 11.5px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; }
-.mm-chip:hover { background: #1A3A5C; color: #fff; }
-.mm-input-area { padding: 12px 14px 14px; border-top: 1px solid #E8EEF5; background: #fff; display: flex; gap: 8px; align-items: flex-end; }
-.mm-input { flex: 1; border: 1.5px solid #D4E0ED; border-radius: 14px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: #0F2338; background: #F5F8FC; outline: none; resize: none; max-height: 100px; }
-.mm-input:focus { border-color: #1A3A5C; }
-.mm-send { width: 40px; height: 40px; border-radius: 13px; background: linear-gradient(135deg, #1A3A5C, #234E7A); border: none; color: #fff; cursor: pointer; font-size: 17px; }
-.mm-send:disabled { opacity: 0.4; cursor: not-allowed; }
-.mm-footer { text-align: center; padding: 4px; font-size: 10px; color: #B5C5D5; background: #fff; }
-</style>
-</head>
-<body>
-<div class="hero">
-  <div style="font-size:56px;margin-bottom:16px">🪞</div>
-  <h1>Mon Miroir</h1>
-  <div class="divider"></div>
-  <p>L'Intelligence Artificielle au service de la subjectivation des Mineurs Non Accompagnés</p>
-  <p style="margin-top:12px;font-size:13px">Tribunal pour Enfants de Toulouse · Février 2026</p>
-</div>
-
-<button id="mm-toggle" onclick="toggleChat()">🪞</button>
-
-<div id="mm-chat">
-  <div class="mm-header">
-    <div class="mm-avatar">🪞</div>
-    <div>
-      <div class="mm-header-title">Mon Miroir</div>
-      <div class="mm-header-sub">Assistant IA</div>
-    </div>
-    <div class="mm-online"><div class="mm-dot"></div> En ligne</div>
-    <button class="mm-close" onclick="toggleChat()">✕</button>
-  </div>
-  <div class="mm-messages" id="messages"></div>
-  <div class="mm-suggestions" id="suggestions">
-    <div class="mm-chip" onclick="sendChip(this)">C'est quoi Mon Miroir ?</div>
-    <div class="mm-chip" onclick="sendChip(this)">Les 3 agents IA</div>
-    <div class="mm-chip" onclick="sendChip(this)">Pour les magistrats</div>
-  </div>
-  <div class="mm-input-area">
-    <textarea id="userInput" class="mm-input" placeholder="Posez votre question…" rows="1" onkeydown="handleKey(event)"></textarea>
-    <button class="mm-send" id="sendBtn" onclick="sendMessage()">➤</button>
-  </div>
-  <div class="mm-footer">Propulsé par Claude · Anthropic</div>
-</div>
-
-<script>
-const API_KEY = 'VOTRE_CLE_API_ICI';
-const SYSTEM = `Tu es l'assistant de Mon Miroir, projet porté par Si Mohamed ANAYA, interprète judiciaire-psychologue au Tribunal pour Enfants de Toulouse. Mon Miroir utilise l'IA pour aider les Mineurs Non Accompagnés (MNA) à travers 3 agents : IA Designer (image et dignité), IA Scénariste (récit de vie), IA CV (insertion institutionnelle). Réponds en français, avec bienveillance et professionnalisme, en 3-5 phrases max.`;
-let msgs = [], loading = false, open = false;
-
-function toggleChat() {
-  open = !open;
-  document.getElementById('mm-chat').classList.toggle('open', open);
-  document.getElementById('mm-toggle').textContent = open ? '✕' : '🪞';
-  document.getElementById('mm-toggle').style.background = open ? 'linear-gradient(135deg,#C0392B,#A93226)' : 'linear-gradient(135deg,#1A3A5C,#234E7A)';
-  if (open && msgs.length === 0) addBot("Bonjour 👋 Je suis l'assistant de **Mon Miroir**. Comment puis-je vous aider ?");
-}
-
-function addBot(text) { msgs.push({role:'assistant',content:text}); render(); }
-function render() {
-  const c = document.getElementById('messages');
-  c.innerHTML = msgs.map(m => `<div class="mm-msg ${m.role==='user'?'user':'bot'}"><div class="mm-msg-icon">${m.role==='user'?'👤':'🪞'}</div><div class="mm-bubble">${m.content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div></div>`).join('');
-  c.scrollTop = c.scrollHeight;
-}
-function sendChip(el) { document.getElementById('userInput').value=el.textContent; document.getElementById('suggestions').style.display='none'; sendMessage(); }
-function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
-
-async function sendMessage() {
-  const input = document.getElementById('userInput');
-  const text = input.value.trim();
-  if (!text || loading) return;
-  msgs.push({role:'user',content:text});
-  input.value = ''; render();
-  document.getElementById('suggestions').style.display='none';
-  loading = true; document.getElementById('sendBtn').disabled = true;
-  const c = document.getElementById('messages');
-  const t = document.createElement('div'); t.className='mm-msg bot'; t.id='typing';
-  t.innerHTML='<div class="mm-msg-icon">🪞</div><div class="mm-typing"><span></span><span></span><span></span></div>';
-  c.appendChild(t); c.scrollTop=c.scrollHeight;
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:SYSTEM,messages:msgs})});
-    const data = await res.json();
-    document.getElementById('typing')?.remove();
-    if(data.content?.[0]) addBot(data.content[0].text);
-  } catch(e) { document.getElementById('typing')?.remove(); addBot("Erreur de connexion. Veuillez réessayer."); }
-  loading=false; document.getElementById('sendBtn').disabled=false;
-}
+ 'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompts[currentLang],
+          messages: conversationHistory
+        })
+      });
+ 
+      var data = await response.json();
+      var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : "Je suis là, continue...";
+      conversationHistory.push({ role: 'assistant', content: reply });
+      removeTyping();
+      addMessage('ai', reply);
+    } catch(err) {
+      removeTyping();
+      addMessage('ai', '❌ Erreur de connexion. Vérifiez votre clé API.');
+    }
+ 
+    btn.disabled = false;
+    input.focus();
+  }
+ 
+  addMessage('ai', welcomeMessages['fr']);
 </script>
 </body>
 </html>
-
+ 
