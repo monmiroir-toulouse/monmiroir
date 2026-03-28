@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision Technique — Mon Miroir · IA & MNA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2744;
+    --navy-light: #1a3a5c;
+    --navy-deep: #091c33;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --gold-pale: rgba(200,146,42,0.12);
+    --cream: #f9f5ee;
+    --text: #2a2a2a;
+    --text-light: #888;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy-deep);
+    color: var(--white);
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(9,28,51,0.97);
+    backdrop-filter: blur(10px);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+    border-bottom: 1px solid rgba(200,146,42,0.3);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: 1.2rem; letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold-light); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-links .active { color: var(--gold-light); }
+
+  /* HEADER */
+  .page-header {
+    min-height: 42vh;
+    background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 60%, #0d1f3a 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 8rem 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 60%, rgba(200,146,42,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, rgba(200,146,42,0.05) 0%, transparent 50%);
+  }
+  .page-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, rgba(200,146,42,0.4), transparent);
+  }
+  .header-label {
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 1.2rem;
+    border: 1px solid rgba(200,146,42,0.35); padding: 0.35rem 1.1rem; border-radius: 2rem;
+    display: inline-block; position: relative; z-index: 1;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    color: var(--white); line-height: 1.1; margin-bottom: 1.2rem;
+    position: relative; z-index: 1;
+  }
+  .page-header h1 em { color: var(--gold-light); font-style: italic; }
+  .page-header p {
+    font-size: 1.05rem; color: rgba(255,255,255,0.62);
+    max-width: 580px; margin: 0 auto;
+    font-weight: 300; line-height: 1.85; position: relative; z-index: 1;
+  }
+
+  /* MAIN */
+  main { max-width: 1120px; margin: 0 auto; padding: 5rem 2rem 7rem; }
+
+  /* INTRO STRIP */
+  .intro-strip {
+    display: flex; gap: 3rem; align-items: center;
+    padding: 2.5rem 3rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,146,42,0.2);
+    border-radius: 1rem; margin-bottom: 4rem;
+    flex-wrap: wrap;
+  }
+  .intro-strip-icon { font-size: 2.8rem; flex-shrink: 0; }
+  .intro-strip-text { flex: 1; min-width: 260px; }
+  .intro-strip-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; color: var(--gold-light); margin-bottom: 0.6rem;
+  }
+  .intro-strip-text p { font-size: 0.95rem; color: rgba(255,255,255,0.65); line-height: 1.8; }
+
+  /* AXES GRID */
+  .axes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 2rem;
+  }
+
+  .axe-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,146,42,0.18);
+    border-radius: 1.2rem;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .axe-card:hover {
+    border-color: rgba(200,146,42,0.55);
+    transform: translateY(-3px);
+  }
+
+  .axe-header {
+    padding: 2rem 2.2rem 1.6rem;
+    border-bottom: 1px solid rgba(200,146,42,0.12);
+    display: flex; gap: 1.2rem; align-items: flex-start;
+  }
+  .axe-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem; line-height: 1;
+    color: rgba(200,146,42,0.25);
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .axe-header-text {}
+  .axe-tag {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;
+    display: block;
+  }
+  .axe-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; color: var(--white); line-height: 1.25;
+  }
+  .axe-title em { color: var(--gold-light); font-style: italic; }
+
+  .axe-body { padding: 2rem 2.2rem; }
+  .axe-desc {
+    font-size: 0.93rem; color: rgba(255,255,255,0.62);
+    line-height: 1.85; margin-bottom: 1.6rem;
+  }
+
+  .axe-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .axe-features li {
+    display: flex; gap: 0.75rem; align-items: flex-start;
+    font-size: 0.88rem; color: rgba(255,255,255,0.72); line-height: 1.6;
+  }
+  .axe-features li::before {
+    content: '◆'; color: var(--gold); font-size: 0.5rem;
+    margin-top: 0.45rem; flex-shrink: 0;
+  }
+
+  .axe-chip-row {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.4rem;
+  }
+  .chip {
+    font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 2rem;
+    border: 1px solid rgba(200,146,42,0.3); color: var(--gold-light);
+    background: var(--gold-pale); letter-spacing: 0.04em;
+  }
+
+  /* SEPARATOR */
+  .section-sep {
+    display: flex; align-items: center; gap: 1.5rem; margin: 4rem 0 3rem;
+  }
+  .section-sep::before, .section-sep::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,146,42,0.25), transparent);
+  }
+  .sep-label {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); white-space: nowrap;
+  }
+
+  /* METHODOLOGY */
+  .methodology {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(200,146,42,0.15);
+    border-radius: 1.2rem; padding: 3rem;
+  }
+  .methodology-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; color: var(--white); margin-bottom: 0.6rem;
+  }
+  .methodology-title em { color: var(--gold-light); font-style: italic; }
+  .methodology-sub {
+    font-size: 0.9rem; color: rgba(255,255,255,0.5); margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .pipeline {
+    display: flex; align-items: stretch; gap: 0; flex-wrap: wrap;
+  }
+  .pipeline-step {
+    flex: 1; min-width: 160px;
+    padding: 1.5rem 1.4rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,146,42,0.15);
+    border-radius: 0.8rem;
+    position: relative;
+  }
+  .pipeline-step + .pipeline-step { margin-left: 0.8rem; }
+  .step-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
+  .step-num {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.3rem; font-weight: 600;
+  }
+  .step-name { font-size: 0.92rem; color: var(--white); font-weight: 600; margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 3rem 2rem;
+    border-top: 1px solid rgba(200,146,42,0.15);
+    font-size: 0.8rem; color: rgba(255,255,255,0.3); letter-spacing: 0.06em;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+  footer a:hover { color: var(--gold-light); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .axes-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .intro-strip { padding: 1.8rem; }
+    .methodology { padding: 2rem; }
+    .pipeline { flex-direction: column; }
+    .pipeline-step + .pipeline-step { margin-left: 0; margin-top: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Mon <span>Miroir</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#projet">Le projet</a></li>
+    <li><a href="vision-technique.html" class="active">Vision technique</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="démo.html" style="color:var(--navy);background:var(--gold);padding:0.35rem 1rem;border-radius:0.4rem;font-weight:700;">▶ Démo interactive</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+  <span class="header-label">Architecture IA · Tribunal pour Enfants de Toulouse</span>
+  <h1>Vision <em>technique</em></h1>
+  <p>Les quatre axes analytiques qui structurent l'assistance de Mon Miroir aux professionnels travaillant avec des mineurs non accompagnés.</p>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- INTRO -->
+  <div class="intro-strip">
+    <div class="intro-strip-icon">🔬</div>
+    <div class="intro-strip-text">
+      <h2>Pourquoi une approche en quatre axes ?</h2>
+      <p>Chaque dossier MNA mobilise des dimensions hétérogènes — linguistique, temporelle, psychologique et juridique. Mon Miroir traite ces dimensions de façon coordonnée afin d'offrir au juge et aux travailleurs sociaux une lecture structurée, traçable et nuancée du récit.</p>
+    </div>
+  </div>
+
+  <!-- AXES -->
+  <div class="axes-grid">
+
+    <!-- AXE 1 -->
+    <div class="axe-card">
+      <div class="axe-header">
+        <div class="axe-num">01</div>
+        <div class="axe-header-text">
+          <span class="axe-tag">Linguistique & culturel</span>
+          <h2 class="axe-title">Analyse du <em>lexique MNA</em></h2>
+        </div>
+      </div>
+      <div class="axe-body">
+        <p class="axe-desc">
+          L'IA identifie et contextualise les termes propres aux récits de migration — qu'il s'agisse de mots vernaculaires comme <strong style="color:var(--gold-light)">djardjira</strong> (région berbère d'origine), de verbes de déplacement comme <strong style="color:var(--gold-light)">naviguer</strong>, ou d'expressions codées décrivant les étapes du parcours. Ce décodage culturel enrichit la compréhension du récit sans le réduire.
+        </p>
+        <ul class="axe-features">
+          <li>Détection des topnonymes, ethnonymes et désignations communautaires implicites</li>
+          <li>Cartographie sémantique des verbes de mobilité et d'errance</li>
+          <li>Mise en relation avec des corpus régionaux et dialectaux documentés</li>
+          <li>Signalement des ambiguïtés de traduction pouvant altérer la qualification</li>
+        </ul>
+        <div class="axe-chip-row">
+          <span class="chip">NLP multilingue</span>
+          <span class="chip">Ontologie migratoire</span>
+          <span class="chip">Dialectologie</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AXE 2 -->
+    <div class="axe-card">
+      <div class="axe-header">
+        <div class="axe-num">02</div>
+        <div class="axe-header-text">
+          <span class="axe-tag">Temporel & narratif</span>
+          <h2 class="axe-title">Chronologie de <em>l'errance</em></h2>
+        </div>
+      </div>
+      <div class="axe-body">
+        <p class="axe-desc">
+          À partir du récit libre, l'IA reconstruit une ligne du temps structurée : pays traversés, durées estimées, modes de déplacement, points de rupture. Elle détecte les incohérences chronologiques, les lacunes mémorisées ou volontaires, et les signes de traumatisme narratif qui peuvent expliquer une discontinuité sans disqualifier la crédibilité du mineur.
+        </p>
+        <ul class="axe-features">
+          <li>Extraction automatique d'entités temporelles (dates, durées, séquences)</li>
+          <li>Construction d'une timeline annotée et exportable</li>
+          <li>Score de cohérence interne avec localisation des points de tension</li>
+          <li>Distinction entre incohérence factuelle et désorganisation post-traumatique</li>
+        </ul>
+        <div class="axe-chip-row">
+          <span class="chip">Extraction d'entités</span>
+          <span class="chip">Analyse temporelle</span>
+          <span class="chip">Timeline visuelle</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AXE 3 -->
+    <div class="axe-card">
+      <div class="axe-header">
+        <div class="axe-num">03</div>
+        <div class="axe-header-text">
+          <span class="axe-tag">Psychosocial & clinique</span>
+          <h2 class="axe-title">Évaluation de la <em>vulnérabilité</em></h2>
+        </div>
+      </div>
+      <div class="axe-body">
+        <p class="axe-desc">
+          L'outil analyse les marqueurs linguistiques et narratifs associés à la détresse psychologique, à l'exposition à la violence ou à l'exploitation. Il ne pose pas de diagnostic, mais produit une grille d'indicateurs standardisés aidant les professionnels à prioriser et à orienter vers une évaluation clinique approfondie.
+        </p>
+        <ul class="axe-features">
+          <li>Détection de signaux de stress post-traumatique dans le discours</li>
+          <li>Identification des facteurs de risque : isolation, exploitation, traite</li>
+          <li>Grille UNHCR / CAFCASS adaptée à l'analyse textuelle</li>
+          <li>Recommandations d'orientation (psychologue, médecin légiste, CAOMIDA…)</li>
+        </ul>
+        <div class="axe-chip-row">
+          <span class="chip">Analyse du sentiment</span>
+          <span class="chip">Indicateurs PTSD</span>
+          <span class="chip">Grille de risque</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AXE 4 -->
+    <div class="axe-card">
+      <div class="axe-header">
+        <div class="axe-num">04</div>
+        <div class="axe-header-text">
+          <span class="axe-tag">Juridique & procédural</span>
+          <h2 class="axe-title">Aide à la <em>qualification juridique</em></h2>
+        </div>
+      </div>
+      <div class="axe-body">
+        <p class="axe-desc">
+          En croisant les données des trois premiers axes, l'IA propose une grille de qualification juridique non contraignante : minorité, isolement, applicabilité des textes (CESEDA, CIDE, jurisprudence). Elle met en évidence les éléments du dossier qui confortent ou fragilisent chaque qualification, sans se substituer au juge.
+        </p>
+        <ul class="axe-features">
+          <li>Croisement automatique avec les critères légaux de reconnaissance MNA</li>
+          <li>Synthèse des éléments de preuve et des lacunes documentaires</li>
+          <li>Référencement des textes applicables (CESEDA art. L. 221-5, CIDE art. 3…)</li>
+          <li>Rapport exportable à destination du magistrat ou du travailleur social</li>
+        </ul>
+        <div class="axe-chip-row">
+          <span class="chip">CESEDA</span>
+          <span class="chip">CIDE</span>
+          <span class="chip">Jurisprudence</span>
+          <span class="chip">Rapport PDF</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /axes-grid -->
+
+  <!-- SEPARATOR -->
+  <div class="section-sep">
+    <span class="sep-label">Pipeline de traitement</span>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <h2 class="methodology-title">Comment les axes <em>s'articulent</em></h2>
+    <p class="methodology-sub">Les quatre modules s'alimentent mutuellement au sein d'un pipeline séquentiel et itératif. Chaque analyse enrichit les suivantes pour produire une synthèse cohérente.</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-icon">📝</div>
+        <div class="step-num">Étape 1</div>
+        <div class="step-name">Ingestion</div>
+        <div class="step-desc">Entretien retranscrit, rapport social ou procès-verbal chargé dans le système.</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">🔤</div>
+        <div class="step-num">Étape 2</div>
+        <div class="step-name">Lexique MNA</div>
+        <div class="step-desc">Décodage culturel, normalisation des termes et enrichissement sémantique.</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">📅</div>
+        <div class="step-num">Étape 3</div>
+        <div class="step-name">Chronologie</div>
+        <div class="step-desc">Construction de la timeline et calcul du score de cohérence narrative.</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">🧭</div>
+        <div class="step-num">Étape 4</div>
+        <div class="step-name">Vulnérabilité</div>
+        <div class="step-desc">Analyse des marqueurs de détresse et production de la grille de risque.</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">⚖️</div>
+        <div class="step-num">Étape 5</div>
+        <div class="step-name">Qualification</div>
+        <div class="step-desc">Synthèse juridique et génération du rapport à destination du magistrat.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="index.html">← Retour à l'accueil</a> &nbsp;·&nbsp;
+    Mon Miroir — IA & MNA &nbsp;·&nbsp;
+    Tribunal pour Enfants de Toulouse &nbsp;·&nbsp;
+    Usage strictement professionnel
+  </p>
+</footer>
+
+</body>
+</html>
