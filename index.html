@@ -1,82 +1,278 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mon Miroir — Hors connexion</title>
-  <style>
-    :root { --bordeaux:#6B1A2A; --bordeaux-pale:#F4E8EB; --gris:#888078; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: var(--bordeaux-pale);
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+# MON MIROIR — Guide de Déploiement
+## Architecture Frontend (Vercel/Netlify) + Backend Audio (Docker HDS)
+
+---
+
+## VUE D'ENSEMBLE
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  UTILISATEURS (MNA, Pilote, Magistrats)                 │
+└──────────────────────┬──────────────────────────────────┘
+                       │ HTTPS
+┌──────────────────────▼──────────────────────────────────┐
+│  FRONTEND — Vercel / Netlify (CDN mondial)              │
+│  React.js + Next.js · Variables ENV Vercel              │
+│  → Appels Claude API (Anthropic)                        │
+│  → Appels Backend Audio HDS                             │
+└──────────────────────┬──────────────────────────────────┘
+                       │ HTTPS (API privée)
+┌──────────────────────▼──────────────────────────────────┐
+│  BACKEND AUDIO — Docker sur OVH HDS 🇫🇷                 │
+│  Node.js · PostgreSQL · Redis · Nginx SSL               │
+│  ⚠️  Données vocales MNA — JAMAIS hors HDS              │
+│  → Chiffrement AES-256 · Pseudonymisation               │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 1. SÉPARATION TEST / PRODUCTION
+
+### Structure des fichiers .env
+
+```
+monmiroir/
+├── .env.test          ← Données fictives, clés de test
+├── .env.production    ← Données réelles, clés prod (JAMAIS sur GitHub)
+├── .env.example       ← Template vide pour les nouveaux développeurs
+└── .gitignore         ← Contient : .env*, !.env.example
+```
+
+### .gitignore obligatoire
+
+```gitignore
+# Variables d'environnement — NE JAMAIS COMMITTER
+.env
+.env.local
+.env.test
+.env.production
+.env.staging
+
+# Sauf le template vide
+!.env.example
+
+# Données audio MNA
+/storage/audio/
+/storage/temp/
+```
+
+### Lancer en mode TEST
+
+```bash
+# Copier le template
+cp .env.example .env.test
+
+# Remplir les valeurs de test
+nano .env.test
+
+# Démarrer en mode test
+NODE_ENV=test node --env-file=.env.test server.js
+
+# Ou avec Docker
+docker compose --env-file .env.test up
+```
+
+### Lancer en mode PRODUCTION
+
+```bash
+# Démarrer en production (variables depuis Vercel ou serveur HDS)
+NODE_ENV=production docker compose --env-file .env.production up -d
+```
+
+---
+
+## 2. FRONTEND — DÉPLOIEMENT VERCEL / NETLIFY
+
+### Option A : Vercel (recommandé)
+
+```bash
+# 1. Installer Vercel CLI
+npm install -g vercel
+
+# 2. Connexion
+vercel login
+
+# 3. Déployer
+cd monmiroir-frontend
+vercel --prod
+
+# 4. Configurer les variables d'environnement
+# Dashboard Vercel → Settings → Environment Variables
+# Ajouter :
+# NEXT_PUBLIC_ANTHROPIC_API_KEY  → votre clé (attention : exposée côté client)
+# NEXT_PUBLIC_AUDIO_API_URL      → https://audio.monmiroir-hds.fr
+# NEXT_PUBLIC_APP_ENV            → production
+```
+
+> ⚠️ **Sécurité** : La clé Anthropic côté frontend est exposée dans le navigateur.
+> Pour la production institutionnelle, passez par un **proxy backend** qui cache la clé.
+
+### Option B : Netlify
+
+```bash
+# 1. Installer Netlify CLI
+npm install -g netlify-cli
+
+# 2. Connexion et déploiement
+netlify login
+netlify deploy --prod --dir=out
+
+# 3. Variables d'environnement
+# Dashboard Netlify → Site Settings → Environment Variables
+```
+
+### vercel.json (configuration)
+
+```json
+{
+  "version": 2,
+  "name": "monmiroir",
+  "builds": [
+    { "src": "package.json", "use": "@vercel/next" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.anthropic.com https://audio.monmiroir-hds.fr" }
+      ]
     }
-    .card {
-      background: white;
-      border-top: 4px solid var(--bordeaux);
-      padding: 48px 36px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    .icon { font-size: 48px; margin-bottom: 20px; }
-    h1 {
-      font-family: Georgia, serif;
-      font-size: 22px;
-      color: var(--bordeaux);
-      margin-bottom: 12px;
-    }
-    p {
-      font-size: 14px;
-      color: var(--gris);
-      line-height: 1.7;
-      margin-bottom: 8px;
-    }
-    .ar {
-      direction: rtl;
-      font-size: 14px;
-      color: var(--gris);
-      line-height: 1.7;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #eee;
-    }
-    .retry {
-      margin-top: 28px;
-      background: var(--bordeaux);
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      font-size: 13px;
-      cursor: pointer;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .logo {
-      margin-top: 32px;
-      font-family: Georgia, serif;
-      font-size: 13px;
-      color: var(--bordeaux);
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="icon">📡</div>
-    <h1>Pas de connexion</h1>
-    <p>L'application Mon Miroir a besoin d'une connexion internet pour que les agents IA puissent vous répondre.</p>
-    <p>Votre conversation est sauvegardée. Elle reprendra automatiquement dès que vous serez connecté.</p>
-    <div class="ar">
-      التطبيق يحتاج اتصال بالإنترنت باش يجاوبك الذكاء الاصطناعي.<br/>
-      محادثتك محفوظة — تكمل أوتوماتيكياً لما ترجع الشبكة.
-    </div>
-    <button class="retry" onclick="window.location.reload()">Réessayer / حاول مجدداً</button>
-    <div class="logo">Mon Miroir · Toulouse · 2026</div>
-  </div>
-</body>
-</html>
+  ]
+}
+```
+
+---
+
+## 3. BACKEND AUDIO — DÉPLOIEMENT DOCKER HDS
+
+### Prérequis serveur OVH HDS
+
+```
+- Serveur certifié HDS (Hébergeur de Données de Santé)
+- Ubuntu 22.04 LTS minimum
+- Docker Engine 24+ et Docker Compose v2
+- SSL/TLS avec certificat valide
+- Pare-feu : seuls les ports 80 et 443 ouverts
+```
+
+### Installation sur serveur HDS
+
+```bash
+# 1. Connexion au serveur HDS
+ssh admin@votre-serveur-hds.ovh.fr
+
+# 2. Installer Docker
+curl -fsSL https://get.docker.com | sh
+usermod -aG docker $USER
+
+# 3. Cloner le projet backend
+git clone https://github.com/monmiroir-toulouse/monmiroir-backend.git
+cd monmiroir-backend
+
+# 4. Configurer les variables de production
+cp .env.example .env.production
+nano .env.production
+# → Remplir toutes les valeurs réelles
+
+# 5. Créer les dossiers de données souveraines
+sudo mkdir -p /data/monmiroir/audio
+sudo mkdir -p /data/monmiroir/database
+sudo chown -R 1001:1001 /data/monmiroir
+
+# 6. Démarrer les services
+docker compose --env-file .env.production up -d
+
+# 7. Vérifier l'état
+docker compose ps
+docker compose logs -f audio-backend
+```
+
+### Commandes de maintenance
+
+```bash
+# Voir les logs en temps réel
+docker compose logs -f audio-backend
+
+# Redémarrer un service
+docker compose restart audio-backend
+
+# Mettre à jour l'application
+git pull origin main
+docker compose --env-file .env.production build audio-backend
+docker compose --env-file .env.production up -d audio-backend
+
+# Sauvegarder la base de données
+docker exec monmiroir-db pg_dump -U monmiroir_prod monmiroir_prod > backup_$(date +%Y%m%d).sql
+
+# Nettoyer les fichiers audio temporaires
+docker exec monmiroir-audio find /app/storage/temp -mtime +1 -delete
+```
+
+---
+
+## 4. SÉCURITÉ RGPD — CHECKLIST DÉPLOIEMENT
+
+### Avant tout déploiement en production :
+
+- [ ] `.env.production` jamais commité sur GitHub
+- [ ] Clé API Anthropic via proxy backend (pas exposée frontend)
+- [ ] Base de données sur serveur HDS certifié (OVH)
+- [ ] Volumes Docker montés sur `/data/monmiroir/` (chiffré)
+- [ ] SSL/TLS actif sur tous les endpoints
+- [ ] Pseudonymisation activée (`PSEUDONYMISATION=true`)
+- [ ] DPO désigné et email configuré
+- [ ] Logs sans données identifiantes
+- [ ] Rétention données configurée (`DATA_RETENTION_DAYS=365`)
+- [ ] Sauvegardes automatiques planifiées (cron)
+- [ ] Pare-feu configuré (ports 80/443 uniquement)
+- [ ] Audit de sécurité initial effectué
+
+### Séparation des données TEST / PROD
+
+| Élément | TEST | PRODUCTION |
+|---|---|---|
+| Données MNA | Fictives uniquement | Pseudonymisées réelles |
+| Clé Anthropic | Clé de test limitée | Clé production |
+| Base de données | Locale / Docker local | OVH HDS France |
+| Audio | Dossier local temporaire | Volume Docker HDS |
+| Logs | Niveau DEBUG complet | Niveau WARN anonymisé |
+| Rétention | 7 jours | 365 jours |
+| CORS | localhost | Domaines institutionnels |
+
+---
+
+## 5. ARCHITECTURE RÉSEAU FINALE
+
+```
+Internet
+    │
+    ▼ :443
+┌─────────────┐     ┌──────────────────────────────┐
+│   Vercel    │────▶│   Anthropic API (Claude)      │
+│  (Frontend) │     │   api.anthropic.com           │
+│  React/Next │     └──────────────────────────────┘
+└──────┬──────┘
+       │ HTTPS API privée
+       ▼ :443
+┌─────────────────────────────────────────────────┐
+│              OVH HDS 🇫🇷 (Souverain)            │
+│  ┌─────────┐  ┌──────────┐  ┌────────────────┐  │
+│  │  Nginx  │  │  Audio   │  │  PostgreSQL    │  │
+│  │  :443   │─▶│ Backend  │─▶│  + Redis       │  │
+│  │  SSL    │  │ :4000    │  │  (chiffrés)    │  │
+│  └─────────┘  └──────────┘  └────────────────┘  │
+│         Réseau interne Docker uniquement         │
+└─────────────────────────────────────────────────┘
+```
+
+---
+
+*Mon Miroir · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026*
