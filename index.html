@@ -1,27 +1,82 @@
-{
-  "name": "Mon Miroir — IA pour MNA",
-  "short_name": "Mon Miroir",
-  "description": "Application clinique IA pour Mineurs Non Accompagnés — Tribunal pour Enfants de Toulouse",
-  "start_url": "/monmeoire/",
-  "scope": "/monmeoire/",
-  "display": "standalone",
-  "background_color": "#F7F5F3",
-  "theme_color": "#6B1A2A",
-  "orientation": "portrait-primary",
-  "lang": "fr",
-  "categories": ["education", "medical"],
-  "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon Miroir — Hors connexion</title>
+  <style>
+    :root { --bordeaux:#6B1A2A; --bordeaux-pale:#F4E8EB; --gris:#888078; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bordeaux-pale);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
     }
-  ]
-}
+    .card {
+      background: white;
+      border-top: 4px solid var(--bordeaux);
+      padding: 48px 36px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .icon { font-size: 48px; margin-bottom: 20px; }
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      color: var(--bordeaux);
+      margin-bottom: 12px;
+    }
+    p {
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .ar {
+      direction: rtl;
+      font-size: 14px;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+    }
+    .retry {
+      margin-top: 28px;
+      background: var(--bordeaux);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .logo {
+      margin-top: 32px;
+      font-family: Georgia, serif;
+      font-size: 13px;
+      color: var(--bordeaux);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📡</div>
+    <h1>Pas de connexion</h1>
+    <p>L'application Mon Miroir a besoin d'une connexion internet pour que les agents IA puissent vous répondre.</p>
+    <p>Votre conversation est sauvegardée. Elle reprendra automatiquement dès que vous serez connecté.</p>
+    <div class="ar">
+      التطبيق يحتاج اتصال بالإنترنت باش يجاوبك الذكاء الاصطناعي.<br/>
+      محادثتك محفوظة — تكمل أوتوماتيكياً لما ترجع الشبكة.
+    </div>
+    <button class="retry" onclick="window.location.reload()">Réessayer / حاول مجدداً</button>
+    <div class="logo">Mon Miroir · Toulouse · 2026</div>
+  </div>
+</body>
+</html>
