@@ -1,73 +1,215 @@
-# ============================================================
-# MON MIROIR — Dockerfile Backend Audio HDS
-# ============================================================
-# Serveur souverain pour le Corpus Audio des MNA
-# Hébergement : OVH HDS (Hébergeur de Données de Santé/Justice)
-# ⚠️  Les données vocales ne quittent JAMAIS ce conteneur
-# ============================================================
+# RAPPORT DE SYNTHÈSE IA — MON MIROIR
+**Application clinique pour Mineurs Non Accompagnés**  
+Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · Interprète judiciaire-psychologue
 
-FROM node:20-alpine AS base
+---
 
-# Métadonnées
-LABEL maintainer="Si Mohamed ANAYA <contact@monmiroir.fr>"
-LABEL description="Backend Audio souverain — Mon Miroir MNA"
-LABEL version="1.0.0"
-LABEL rgpd="HDS-conforme"
+## MÉTADONNÉES DU RAPPORT
 
-# Dépendances système pour le traitement audio
-RUN apk add --no-cache \
-    ffmpeg \
-    openssl \
-    ca-certificates \
-    curl \
-    && rm -rf /var/cache/apk/*
+| Champ | Valeur |
+|---|---|
+| **Identifiant rapport** | `RPT-2026-{{ID_RAPPORT}}` |
+| **Date de génération** | `{{DATE_GENERATION}}` |
+| **Heure** | `{{HEURE_GENERATION}}` |
+| **Version application** | `Mon Miroir v1.0` |
+| **Généré par** | IA Scénariste (Claude Sonnet) + validation Pilote humain |
+| **Destinataire** | `{{DESTINATAIRE}}` *(Magistrat / ASE / PJJ)* |
+| **Statut rapport** | `{{STATUT}}` *(BROUILLON / VALIDÉ / TRANSMIS)* |
 
-# Utilisateur non-root pour la sécurité
-RUN addgroup -g 1001 -S monmiroir && \
-    adduser -S monmiroir -u 1001 -G monmiroir
+---
 
-WORKDIR /app
+## IDENTIFICATION DU MINEUR
 
-# ── BUILD STAGE ──
-FROM base AS builder
+> ⚠️ **DONNÉES PSEUDONYMISÉES** — L'identifiant réel est conservé séparément par le Pilote humain. Ce document ne contient aucune donnée identifiante directe.
 
-COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+| Champ | Valeur |
+|---|---|
+| **Pseudonyme MNA** | `{{PSEUDO_MNA}}` |
+| **Sexe** | `{{SEXE}}` |
+| **Âge estimé** | `{{AGE_ESTIME}} ans` |
+| **Pays d'origine** | `{{PAYS_ORIGINE}}` |
+| **Ville / Région d'origine** | `{{VILLE_ORIGINE}}` |
+| **Date d'arrivée en France** | `{{DATE_ARRIVEE}}` |
+| **Structure d'accueil** | `{{STRUCTURE_ACCUEIL}}` |
+| **Référent éducatif** | `{{REFERENT_EDU}}` |
 
-COPY . .
-RUN npm run build 2>/dev/null || true
+---
 
-# ── PRODUCTION STAGE ──
-FROM base AS production
+## DÉROULEMENT DE L'ENTRETIEN
 
-WORKDIR /app
+| Champ | Valeur |
+|---|---|
+| **Date de l'entretien** | `{{DATE_ENTRETIEN}}` |
+| **Durée** | `{{DUREE}} minutes` |
+| **Mode** | `{{MODE}}` *(Accompagné Pilote / Autonome / Mixte)* |
+| **Langue principale** | `{{LANGUE}}` *(FR / AR / EN)* |
+| **Thèmes couverts** | `{{THEMES_COUVERTS}}` |
+| **Thèmes non abordés** | `{{THEMES_NON_ABORDES}}` |
+| **Interruptions** | `{{NB_INTERRUPTIONS}}` — Motif : `{{MOTIF_INTERRUPTION}}` |
 
-# Copier seulement le nécessaire
-COPY --from=builder --chown=monmiroir:monmiroir /app/node_modules ./node_modules
-COPY --from=builder --chown=monmiroir:monmiroir /app/dist ./dist
-COPY --from=builder --chown=monmiroir:monmiroir /app/package.json ./
+---
 
-# Dossiers de stockage audio chiffrés
-RUN mkdir -p /app/storage/audio \
-             /app/storage/temp \
-             /app/logs \
-    && chown -R monmiroir:monmiroir /app/storage /app/logs
+## SYNTHÈSE PAR THÈME — QUOI → COMMENT
 
-# Variables d'environnement par défaut (surchargées au déploiement)
-ENV NODE_ENV=production
-ENV PORT=4000
-ENV AUDIO_STORAGE_PATH=/app/storage/audio
-ENV AUDIO_TEMP_PATH=/app/storage/temp
-ENV LOG_PATH=/app/logs
+### 🔵 Thème 1 — Pays d'origine et famille
 
-# Port exposé (interne uniquement — pas de port public direct)
-EXPOSE 4000
+**Faits recueillis (QUOI) :**
+```
+{{T1_FAITS}}
+```
+**Vécu émotionnel (COMMENT) :**
+```
+{{T1_VECU}}
+```
+**Indicateurs de résilience :**
+```
+{{T1_RESILIENCE}}
+```
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD curl -f http://localhost:4000/health || exit 1
+---
 
-# Lancement en utilisateur non-root
-USER monmiroir
+### 🔵 Thème 2 — Parcours d'exil et trajet
 
-CMD ["node", "dist/server.js"]
+**Faits recueillis (QUOI) :**
+```
+{{T2_FAITS}}
+```
+**Vécu émotionnel (COMMENT) :**
+```
+{{T2_VECU}}
+```
+**⚠️ Signaux de vulnérabilité détectés :**
+```
+{{T2_VULNERABILITE}}
+```
+
+---
+
+### 🔵 Thème 3 — Compétences et école
+
+**Compétences formelles :** `{{T3_COMPETENCES_FORMELLES}}`
+
+**Compétences informelles :** `{{T3_COMPETENCES_INFORMELLES}}`
+
+**Langues parlées :** `{{T3_LANGUES}}`
+
+---
+
+### 🔵 Thème 4 — Rêves et projet de vie
+
+**Projet exprimé par le jeune :**
+```
+{{T4_PROJET}}
+```
+**Objectif à 5 ans :** `{{T4_OBJECTIF}}`
+
+**Ressources internes identifiées :** `{{T4_RESSOURCES}}`
+
+---
+
+### 🔵 Thème 5 — Vulnérabilités *(si abordé — validation Pilote obligatoire)*
+
+**État émotionnel général :** `{{T5_ETAT_EMOTIONNEL}}`
+
+**Facteurs de stress :** `{{T5_STRESS}}`
+
+**Réseau de soutien :** `{{T5_SOUTIEN}}`
+
+**Stratégies d'adaptation :** `{{T5_ADAPTATION}}`
+
+---
+
+## ÉVALUATION GLOBALE DU PILOTE HUMAIN
+
+| Critère | Niveau | Observations |
+|---|---|---|
+| Stabilité émotionnelle | `{{STABILITE}}` *(Faible/Moyen/Bon)* | `{{OBS_STABILITE}}` |
+| Cohérence du récit | `{{COHERENCE}}` *(Faible/Moyen/Bon)* | `{{OBS_COHERENCE}}` |
+| Engagement dans le processus | `{{ENGAGEMENT}}` *(Faible/Moyen/Bon)* | `{{OBS_ENGAGEMENT}}` |
+| Capacité de projection | `{{PROJECTION}}` *(Faible/Moyen/Bon)* | `{{OBS_PROJECTION}}` |
+| Ressources internes | `{{RESSOURCES}}` *(Faibles/Moyennes/Fortes)* | `{{OBS_RESSOURCES}}` |
+
+---
+
+## ÉLÉMENTS POUR LE CV INTERACTIF
+
+### Identité visuelle choisie
+```
+{{CV_IDENTITE_VISUELLE}}
+```
+*(Couleurs, symboles culturels sélectionnés avec l'IA Designer)*
+
+### Phrase clé authentique du jeune
+> *"{{CV_PHRASE_CLE}}"*
+
+### Compétences à valoriser
+1. `{{CV_COMPETENCE_1}}`
+2. `{{CV_COMPETENCE_2}}`
+3. `{{CV_COMPETENCE_3}}`
+
+### Projet d'insertion proposé
+```
+{{CV_PROJET_INSERTION}}
+```
+
+---
+
+## RECOMMANDATIONS ET PROCHAINES ÉTAPES
+
+### Recommandations immédiates
+- [ ] `{{RECOMMANDATION_1}}`
+- [ ] `{{RECOMMANDATION_2}}`
+- [ ] `{{RECOMMANDATION_3}}`
+
+### Orientations proposées
+
+| Type | Détail |
+|---|---|
+| **Scolaire / Formation** | `{{ORIENTATION_SCOLAIRE}}` |
+| **Sociale** | `{{ORIENTATION_SOCIALE}}` |
+| **Psychologique** | `{{ORIENTATION_PSYCHO}}` |
+| **Juridique** | `{{ORIENTATION_JURIDIQUE}}` |
+
+### Signalement nécessaire
+```
+{{SIGNALEMENT}}
+```
+*(OUI / NON — Si OUI : motif et destinataire)*
+
+---
+
+## INDICATEURS DE RISQUE
+
+| Indicateur | Présent | Niveau | Note |
+|---|---|---|---|
+| Stress post-traumatique | `{{R_SPT}}` | `{{N_SPT}}` | `{{NOTE_SPT}}` |
+| Risque de fugue | `{{R_FUGUE}}` | `{{N_FUGUE}}` | `{{NOTE_FUGUE}}` |
+| Isolement social | `{{R_ISOL}}` | `{{N_ISOL}}` | `{{NOTE_ISOL}}` |
+| Vulnérabilité exploitation | `{{R_EXPL}}` | `{{N_EXPL}}` | `{{NOTE_EXPL}}` |
+| Risque rupture de parcours | `{{R_RUPT}}` | `{{N_RUPT}}` | `{{NOTE_RUPT}}` |
+
+---
+
+## VALIDATION ET SIGNATURE
+
+| Rôle | Nom | Date | Signature |
+|---|---|---|---|
+| **Pilote humain** | `{{NOM_PILOTE}}` | `{{DATE_VALIDATION}}` | `{{SIGNATURE_PILOTE}}` |
+| **Superviseur** | `{{NOM_SUPERVISEUR}}` | `{{DATE_SUPERVISION}}` | `{{SIGNATURE_SUPERVISEUR}}` |
+
+---
+
+## CONFORMITÉ RGPD
+
+- [x] Consentement éclairé recueilli (mineur + tuteur légal)
+- [x] Données pseudonymisées avant transmission
+- [x] Aucune donnée identifiante dans ce rapport
+- [x] Hébergement HDS France (OVH)
+- [ ] Droit à l'effacement notifié au jeune
+- **DPO référent :** `{{NOM_DPO}}`
+- **Base légale :** Mission d'intérêt public — Article 6(1)(e) RGPD
+
+---
+
+*Rapport généré automatiquement par Mon Miroir v1.0 — Tribunal pour Enfants de Toulouse*
+*Document confidentiel — destiné exclusivement aux professionnels habilités.*
