@@ -1,212 +1,303 @@
+# 🔒 GUIDE SÉCURITÉ — MON MIROIR
+**Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026**
+
+> Ce guide protège les témoignages sensibles des MNA. À appliquer avant tout déploiement.
+
+---
+
+## 1. BRANCH PROTECTION — Interdire le push direct sur `main`
+
+### Sur GitHub (interface web)
+
+1. Allez sur : `github.com/monmiroir-toulouse/monmeoire`
+2. Cliquez **Settings** → **Branches**
+3. Cliquez **Add branch protection rule**
+4. Dans **Branch name pattern** : tapez `main`
+5. Cochez les options suivantes :
+
+```
+✅ Require a pull request before merging
+✅ Require approvals (minimum : 1)
+✅ Dismiss stale pull request approvals when new commits are pushed
+✅ Require status checks to pass before merging
+✅ Require branches to be up to date before merging
+✅ Include administrators
+✅ Restrict who can push to matching branches
+```
+
+6. Cliquez **Create** ou **Save changes**
+
+> ✅ Résultat : Plus personne (même vous) ne peut modifier `main` directement sans revue.
+
+---
+
+## 2. SECRETS — Ne jamais mettre de clé API dans le code
+
+### ❌ Ce qu'il NE FAUT JAMAIS faire
+
+```javascript
+// DANGEREUX — clé visible dans le code
+const apiKey = "sk-ant-api03-xxxxxxxxxxxx";
+```
+
+### ✅ Ce qu'il FAUT faire — Variables d'environnement
+
+#### Pour le développement local
+
+Créez un fichier `.env` à la racine du projet :
+
+```bash
+# .env — NE JAMAIS COMMITER CE FICHIER
+ANTHROPIC_API_KEY=sk-ant-api03-votre-clé-ici
+INVIDEO_API_KEY=votre-clé-invideo-ici
+NODE_ENV=development
+```
+
+Ajoutez `.env` dans votre `.gitignore` :
+
+```bash
+# .gitignore
+.env
+.env.local
+.env.production
+node_modules/
+*.log
+```
+
+#### Dans votre code Node.js
+
+```javascript
+// ✅ Utiliser process.env
+require('dotenv').config();
+
+const apiKey = process.env.ANTHROPIC_API_KEY;
+const invideoKey = process.env.INVIDEO_API_KEY;
+
+if (!apiKey) {
+  throw new Error('❌ ANTHROPIC_API_KEY manquante dans .env');
+}
+```
+
+#### Sur GitHub Actions (CI/CD)
+
+1. Allez sur votre dépôt → **Settings** → **Secrets and variables** → **Actions**
+2. Cliquez **New repository secret**
+3. Ajoutez :
+
+| Nom du secret | Description |
+|---|---|
+| `ANTHROPIC_API_KEY` | Clé API Claude Anthropic |
+| `INVIDEO_API_KEY` | Clé API InVideo |
+| `DATABASE_URL` | URL base de données chiffrée |
+| `JWT_SECRET` | Secret pour les tokens JWT |
+
+4. Dans votre workflow `.github/workflows/deploy.yml` :
+
+```yaml
+name: Deploy Mon Miroir
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security audit
+        run: npm audit --audit-level=high
+
+      - name: Deploy
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          INVIDEO_API_KEY: ${{ secrets.INVIDEO_API_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: npm run deploy
+```
+
+---
+
+## 3. NPM AUDIT — Vérification régulière des failles
+
+### Commandes essentielles
+
+```bash
+# Audit complet — à faire avant chaque déploiement
+npm audit
+
+# Audit avec niveau de sévérité minimum
+npm audit --audit-level=moderate
+
+# Corriger automatiquement les failles connues
+npm audit fix
+
+# Corriger y compris les mises à jour majeures (attention)
+npm audit fix --force
+
+# Voir le rapport détaillé en JSON
+npm audit --json > audit-report.json
+```
+
+### Script automatique à ajouter dans `package.json`
+
+```json
 {
-  "rapport_monmiroir": {
-
-    "metadata": {
-      "id_rapport": "RPT-2026-{{ID_RAPPORT}}",
-      "version_app": "Mon Miroir v1.0",
-      "modele_ia": "claude-sonnet-4-20250514",
-      "methode_entretien": "Canevas QUOI→COMMENT — 5 thèmes, 22 questions",
-      "date_generation": "{{DATE_GENERATION}}",
-      "heure_generation": "{{HEURE_GENERATION}}",
-      "statut": "{{STATUT}}",
-      "destinataire": "{{DESTINATAIRE}}",
-      "ref_dossier": "{{REF_DOSSIER}}",
-      "hash_integrite": "{{HASH_RAPPORT}}"
-    },
-
-    "mineur": {
-      "pseudonyme": "{{PSEUDO_MNA}}",
-      "sexe": "{{SEXE}}",
-      "age_estime": "{{AGE_ESTIME}}",
-      "pays_origine": "{{PAYS_ORIGINE}}",
-      "ville_region_origine": "{{VILLE_ORIGINE}}",
-      "langues": ["{{LANGUE_1}}", "{{LANGUE_2}}"],
-      "date_arrivee_france": "{{DATE_ARRIVEE}}",
-      "structure_accueil": "{{STRUCTURE_ACCUEIL}}",
-      "referent_educatif": "{{REFERENT_EDU}}",
-      "note_rgpd": "Données pseudonymisées. Identifiant réel conservé séparément par le Pilote humain."
-    },
-
-    "entretien": {
-      "date": "{{DATE_ENTRETIEN}}",
-      "duree_minutes": "{{DUREE}}",
-      "num_session": "{{NUM_SESSION}}",
-      "mode": "{{MODE}}",
-      "langue_entretien": "{{LANGUE_ENTRETIEN}}",
-      "pilote_present": "{{PILOTE_PRESENT}}",
-      "themes_abordes": ["{{THEME_1}}", "{{THEME_2}}", "{{THEME_3}}"],
-      "themes_non_abordes": ["{{THEME_NON_ABORDE}}"],
-      "raison_non_aborde": "{{RAISON_NON_ABORDE}}",
-      "incidents": "{{INCIDENTS}}"
-    },
-
-    "synthese_themes": {
-
-      "theme_1_origine_famille": {
-        "titre": "Pays d'origine et famille",
-        "faits_quoi": "{{FAITS_ORIGINE}}",
-        "vecu_comment": "{{VECU_ORIGINE}}",
-        "indicateurs": {
-          "attachements_identifies": "{{ATTACHEMENTS}}",
-          "figures_reference": "{{FIGURES_REFERENCE}}",
-          "rapport_culture_origine": "{{RAPPORT_CULTURE}}"
-        }
-      },
-
-      "theme_2_exil_trajet": {
-        "titre": "Parcours d'exil et trajet",
-        "faits_quoi": "{{FAITS_EXIL}}",
-        "vecu_comment": "{{VECU_EXIL}}",
-        "indicateurs": {
-          "duree_trajet": "{{DUREE_TRAJET}}",
-          "pays_traverses": ["{{PAYS_1}}", "{{PAYS_2}}"],
-          "evenements_significatifs": "{{EVENEMENTS_TRAJET}}",
-          "niveau_detresse_exprime": "{{NIVEAU_DETRESSE}}",
-          "ressources_mobilisees": "{{RESSOURCES_TRAJET}}"
-        }
-      },
-
-      "theme_3_competences_ecole": {
-        "titre": "Compétences et école",
-        "faits_quoi": "{{FAITS_COMPETENCES}}",
-        "vecu_comment": "{{VECU_COMPETENCES}}",
-        "competences": {
-          "linguistique": {
-            "description": "{{COMP_LINGUISTIQUE}}",
-            "niveau": "{{NIV_LINGUISTIQUE}}"
-          },
-          "scolaire": {
-            "description": "{{COMP_SCOLAIRE}}",
-            "niveau": "{{NIV_SCOLAIRE}}"
-          },
-          "technique_manuelle": {
-            "description": "{{COMP_TECHNIQUE}}",
-            "niveau": "{{NIV_TECHNIQUE}}"
-          },
-          "professionnelle": {
-            "description": "{{COMP_PRO}}",
-            "niveau": "{{NIV_PRO}}"
-          },
-          "sociale_relationnelle": {
-            "description": "{{COMP_SOCIALE}}",
-            "niveau": "{{NIV_SOCIALE}}"
-          }
-        }
-      },
-
-      "theme_4_reves_projet": {
-        "titre": "Rêves et projet de vie",
-        "faits_quoi": "{{FAITS_PROJET}}",
-        "vecu_comment": "{{VECU_PROJET}}",
-        "indicateurs_insertion": {
-          "projet_professionnel": "{{PROJET_PRO}}",
-          "horizon_temporel": "{{HORIZON_TEMPOREL}}",
-          "niveau_motivation": "{{MOTIVATION}}",
-          "obstacles_identifies": "{{OBSTACLES}}",
-          "ressources_internes": "{{RESSOURCES_INTERNES}}"
-        }
-      },
-
-      "theme_5_vulnerabilites": {
-        "titre": "Vulnérabilités et bien-être",
-        "confidentialite": "CONFIDENTIEL — Interlocuteurs habilités uniquement",
-        "indicateurs_vulnerabilite": {
-          "isolement_social":     { "present": "{{ISO_PRESENT}}",    "intensite": "{{ISO_INTENSITE}}",    "note": "{{ISO_NOTE}}" },
-          "symptomes_anxieux":    { "present": "{{ANX_PRESENT}}",    "intensite": "{{ANX_INTENSITE}}",    "note": "{{ANX_NOTE}}" },
-          "symptomes_depressifs": { "present": "{{DEP_PRESENT}}",    "intensite": "{{DEP_INTENSITE}}",    "note": "{{DEP_NOTE}}" },
-          "signes_trauma":        { "present": "{{TRAUMA_PRESENT}}", "intensite": "{{TRAUMA_INTENSITE}}", "note": "{{TRAUMA_NOTE}}" },
-          "risque_exploitation":  { "present": "{{EXPL_PRESENT}}",   "intensite": "{{EXPL_INTENSITE}}",   "note": "{{EXPL_NOTE}}" },
-          "ideation_suicidaire":  { "present": "{{SUI_PRESENT}}",    "intensite": "{{SUI_INTENSITE}}",    "note": "{{SUI_NOTE}}" }
-        },
-        "reseau_soutien": "{{RESEAU_SOUTIEN}}",
-        "strategies_adaptation": "{{STRATEGIES_ADAPTATION}}",
-        "facteurs_resilience": "{{RESILIENCE}}"
-      }
-    },
-
-    "evaluation_pilote": {
-      "note": "Section rédigée et validée manuellement par le Pilote humain. Non générée automatiquement.",
-      "appreciation_generale": "{{APPRECIATION_PILOTE}}",
-      "evolution_depuis_derniere_session": "{{EVOLUTION}}",
-      "points_vigilance": "{{VIGILANCE}}",
-      "recommandation_principale": "{{RECOMMANDATION}}"
-    },
-
-    "signalement": {
-      "necessaire": "{{SIGNALEMENT_OUI_NON}}",
-      "type": "{{TYPE_SIGNALEMENT}}",
-      "motif": "{{MOTIF_SIGNALEMENT}}",
-      "urgence": "{{URGENCE}}",
-      "valide_pilote": "{{VALIDE_PILOTE}}",
-      "date_transmission": "{{DATE_TRANSMISSION}}"
-    },
-
-    "plan_action": [
-      {
-        "priorite": 1,
-        "action": "{{ACTION_1}}",
-        "responsable": "{{RESP_1}}",
-        "echeance": "{{ECHEANCE_1}}"
-      },
-      {
-        "priorite": 2,
-        "action": "{{ACTION_2}}",
-        "responsable": "{{RESP_2}}",
-        "echeance": "{{ECHEANCE_2}}"
-      },
-      {
-        "priorite": 3,
-        "action": "{{ACTION_3}}",
-        "responsable": "{{RESP_3}}",
-        "echeance": "{{ECHEANCE_3}}"
-      }
-    ],
-
-    "cv_interactif": {
-      "titre": "{{TITRE_CV}}",
-      "accroche": "{{ACCROCHE_CV}}",
-      "competences_cles": [
-        "{{COMP_CLE_1}}",
-        "{{COMP_CLE_2}}",
-        "{{COMP_CLE_3}}"
-      ],
-      "phrase_resilience": "{{PHRASE_RESILIENCE}}",
-      "projet_avenir": "{{PROJET_AVENIR}}",
-      "identite_visuelle": "{{IDENTITE_VISUELLE}}",
-      "voix_utilisee": "{{VOIX_CV}}",
-      "duree_video_minutes": "{{DUREE_VIDEO}}",
-      "statut_production": "{{STATUT_VIDEO}}"
-    },
-
-    "rgpd": {
-      "base_legale": "Mission d'intérêt public — Art. 6.1.e RGPD",
-      "categorie_donnees": "Données sensibles Art. 9 RGPD — Mineur",
-      "responsable_traitement": "Si Mohamed ANAYA / Tribunal pour Enfants de Toulouse",
-      "hebergement": "OVH HDS — Données sur sol français",
-      "duree_conservation": "{{DUREE_CONSERVATION}}",
-      "consentement_recueilli": "{{CONSENTEMENT}}",
-      "date_consentement": "{{DATE_CONSENTEMENT}}",
-      "droit_effacement": "Sur demande du tuteur légal",
-      "dpo": "{{DPO}}"
-    },
-
-    "signatures": {
-      "pilote_humain": {
-        "nom": "{{NOM_PILOTE}}",
-        "date_signature": "{{DATE_SIGNATURE_PILOTE}}",
-        "signature_electronique": "{{SIG_PILOTE}}"
-      },
-      "responsable_structure": {
-        "nom": "{{NOM_RESPONSABLE}}",
-        "date_signature": "{{DATE_SIGNATURE_RESP}}",
-        "signature_electronique": "{{SIG_RESP}}"
-      },
-      "magistrat_destinataire": {
-        "nom": "{{NOM_MAGISTRAT}}",
-        "date_reception": "{{DATE_RECEPTION}}",
-        "lecture_confirmee": false
-      }
-    }
-
+  "name": "monmiroir",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "audit-check": "npm audit --audit-level=high",
+    "security-check": "npm audit && npm outdated",
+    "precommit": "npm audit --audit-level=critical",
+    "predeploy": "npm audit --audit-level=high"
   }
 }
+```
+
+> ✅ Le script `predeploy` bloque automatiquement le déploiement si une faille critique est détectée.
+
+---
+
+## 4. PROTECTION SPÉCIFIQUE AUX TÉMOIGNAGES MNA
+
+### Chiffrement des données sensibles
+
+```javascript
+const crypto = require('crypto');
+
+// Chiffrer un témoignage avant stockage
+function chiffrerTemoignage(texte, cle) {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(
+    'aes-256-gcm',
+    Buffer.from(cle, 'hex'),
+    iv
+  );
+  let chiffre = cipher.update(texte, 'utf8', 'hex');
+  chiffre += cipher.final('hex');
+  const authTag = cipher.getAuthTag().toString('hex');
+  return { iv: iv.toString('hex'), chiffre, authTag };
+}
+
+// Déchiffrer un témoignage
+function dechiffrerTemoignage(donnees, cle) {
+  const decipher = crypto.createDecipheriv(
+    'aes-256-gcm',
+    Buffer.from(cle, 'hex'),
+    Buffer.from(donnees.iv, 'hex')
+  );
+  decipher.setAuthTag(Buffer.from(donnees.authTag, 'hex'));
+  let texte = decipher.update(donnees.chiffre, 'hex', 'utf8');
+  texte += decipher.final('utf8');
+  return texte;
+}
+```
+
+### Headers de sécurité HTTP
+
+```javascript
+const helmet = require('helmet');
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://api.anthropic.com"],
+      connectSrc: ["'self'", "https://api.anthropic.com"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    }
+  },
+  hsts: { maxAge: 31536000, includeSubDomains: true },
+  noSniff: true,
+  xssFilter: true
+}));
+```
+
+### Rate limiting — Protéger les endpoints sensibles
+
+```javascript
+const rateLimit = require('express-rate-limit');
+
+// Limiter les appels à l'API Claude
+const claudeLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50,                   // 50 requêtes max
+  message: '⚠️ Trop de requêtes. Réessayez dans 15 minutes.',
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use('/api/claude', claudeLimit);
+
+// Limiter les tentatives de connexion
+const loginLimit = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 heure
+  max: 10,                   // 10 tentatives max
+  message: '⚠️ Compte temporairement bloqué.'
+});
+
+app.use('/api/auth/login', loginLimit);
+```
+
+---
+
+## 5. CHECKLIST SÉCURITÉ — À VALIDER AVANT DÉPLOIEMENT
+
+```
+GITHUB
+☐ Branch protection activée sur main
+☐ Revue de code obligatoire (minimum 1 approbation)
+☐ Push direct sur main désactivé
+☐ Secrets configurés dans GitHub Actions (jamais dans le code)
+
+CODE
+☐ Aucune clé API dans le code source
+☐ Fichier .env dans .gitignore
+☐ Variables d'environnement utilisées via process.env
+☐ Chiffrement AES-256 des témoignages
+
+DÉPENDANCES
+☐ npm audit exécuté — 0 faille critique
+☐ npm outdated vérifié
+☐ Script predeploy configuré
+
+DONNÉES MNA
+☐ Pseudonymisation systématique
+☐ Aucune donnée identifiante dans les logs
+☐ Consentement tracé avant toute session
+☐ Données hébergées en France (HDS)
+
+RÉSEAU
+☐ HTTPS forcé
+☐ Headers de sécurité (Helmet)
+☐ Rate limiting sur endpoints sensibles
+☐ CORS configuré strictement
+```
+
+---
+
+## 6. RAPPEL RGPD — Spécifique mineurs
+
+> Les données de mineurs sont soumises à une protection renforcée en France.
+
+- **Hébergement obligatoire en France** (OVH HDS ou équivalent certifié)
+- **Durée de conservation** : définie et documentée
+- **Droit à l'effacement** : implémenté techniquement
+- **DPO désigné** avant tout déploiement réel
+- **Aucune donnée identifiante** ne transite vers les API externes (Claude, InVideo)
+
+---
+
+*Mon Miroir · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026*
