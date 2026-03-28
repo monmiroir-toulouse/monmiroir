@@ -1,215 +1,179 @@
-# RAPPORT DE SYNTHÈSE IA — MON MIROIR
-**Application clinique pour Mineurs Non Accompagnés**  
-Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · Interprète judiciaire-psychologue
+{
+  "rapport": {
+    "metadata": {
+      "id": "RPT-2026-{{ID_RAPPORT}}",
+      "version_app": "Mon Miroir v1.0",
+      "date_generation": "{{DATE_GENERATION}}",
+      "heure_generation": "{{HEURE_GENERATION}}",
+      "genere_par": "IA Scénariste (Claude Sonnet) + validation Pilote humain",
+      "destinataire": "{{DESTINATAIRE}}",
+      "type_destinataire": "{{TYPE_DESTINATAIRE}}",
+      "statut": "{{STATUT}}",
+      "note_rgpd": "Données pseudonymisées — aucune donnée identifiante directe"
+    },
 
----
+    "mineur": {
+      "pseudonyme": "{{PSEUDO_MNA}}",
+      "sexe": "{{SEXE}}",
+      "age_estime": "{{AGE_ESTIME}}",
+      "pays_origine": "{{PAYS_ORIGINE}}",
+      "ville_origine": "{{VILLE_ORIGINE}}",
+      "date_arrivee_france": "{{DATE_ARRIVEE}}",
+      "structure_accueil": "{{STRUCTURE_ACCUEIL}}",
+      "referent_educatif": "{{REFERENT_EDU}}"
+    },
 
-## MÉTADONNÉES DU RAPPORT
+    "entretien": {
+      "date": "{{DATE_ENTRETIEN}}",
+      "duree_minutes": "{{DUREE}}",
+      "mode": "{{MODE}}",
+      "langue_principale": "{{LANGUE}}",
+      "themes_couverts": ["{{THEME_1}}", "{{THEME_2}}", "{{THEME_3}}"],
+      "themes_non_abordes": ["{{THEME_NON_ABORDE_1}}"],
+      "nb_interruptions": "{{NB_INTERRUPTIONS}}",
+      "motif_interruption": "{{MOTIF_INTERRUPTION}}"
+    },
 
-| Champ | Valeur |
-|---|---|
-| **Identifiant rapport** | `RPT-2026-{{ID_RAPPORT}}` |
-| **Date de génération** | `{{DATE_GENERATION}}` |
-| **Heure** | `{{HEURE_GENERATION}}` |
-| **Version application** | `Mon Miroir v1.0` |
-| **Généré par** | IA Scénariste (Claude Sonnet) + validation Pilote humain |
-| **Destinataire** | `{{DESTINATAIRE}}` *(Magistrat / ASE / PJJ)* |
-| **Statut rapport** | `{{STATUT}}` *(BROUILLON / VALIDÉ / TRANSMIS)* |
+    "synthese_themes": {
+      "theme1_famille": {
+        "titre": "Pays d'origine et famille",
+        "quoi_faits": "{{T1_FAITS}}",
+        "comment_vecu": "{{T1_VECU}}",
+        "resilience": "{{T1_RESILIENCE}}"
+      },
+      "theme2_exil": {
+        "titre": "Parcours d'exil et trajet",
+        "quoi_faits": "{{T2_FAITS}}",
+        "comment_vecu": "{{T2_VECU}}",
+        "vulnerabilite_detectee": "{{T2_VULNERABILITE}}",
+        "alerte": false
+      },
+      "theme3_competences": {
+        "titre": "Compétences et école",
+        "competences_formelles": "{{T3_COMPETENCES_FORMELLES}}",
+        "competences_informelles": "{{T3_COMPETENCES_INFORMELLES}}",
+        "langues": ["{{LANGUE_1}}", "{{LANGUE_2}}", "{{LANGUE_3}}"],
+        "niveau_scolaire": "{{NIVEAU_SCOLAIRE}}"
+      },
+      "theme4_projet": {
+        "titre": "Rêves et projet de vie",
+        "projet_exprime": "{{T4_PROJET}}",
+        "objectif_5ans": "{{T4_OBJECTIF}}",
+        "ressources_internes": "{{T4_RESSOURCES}}"
+      },
+      "theme5_vulnerabilites": {
+        "titre": "Vulnérabilités et bien-être",
+        "aborde": false,
+        "validation_pilote": false,
+        "etat_emotionnel": "{{T5_ETAT_EMOTIONNEL}}",
+        "facteurs_stress": "{{T5_STRESS}}",
+        "reseau_soutien": "{{T5_SOUTIEN}}",
+        "strategies_adaptation": "{{T5_ADAPTATION}}"
+      }
+    },
 
----
+    "evaluation_pilote": {
+      "stabilite_emotionnelle": {
+        "niveau": "{{STABILITE}}",
+        "observation": "{{OBS_STABILITE}}"
+      },
+      "coherence_recit": {
+        "niveau": "{{COHERENCE}}",
+        "observation": "{{OBS_COHERENCE}}"
+      },
+      "engagement": {
+        "niveau": "{{ENGAGEMENT}}",
+        "observation": "{{OBS_ENGAGEMENT}}"
+      },
+      "capacite_projection": {
+        "niveau": "{{PROJECTION}}",
+        "observation": "{{OBS_PROJECTION}}"
+      },
+      "ressources_internes": {
+        "niveau": "{{RESSOURCES}}",
+        "observation": "{{OBS_RESSOURCES}}"
+      }
+    },
 
-## IDENTIFICATION DU MINEUR
+    "cv_interactif": {
+      "identite_visuelle": "{{CV_IDENTITE_VISUELLE}}",
+      "phrase_cle_jeune": "{{CV_PHRASE_CLE}}",
+      "competences_valorisees": [
+        "{{CV_COMPETENCE_1}}",
+        "{{CV_COMPETENCE_2}}",
+        "{{CV_COMPETENCE_3}}"
+      ],
+      "projet_insertion": "{{CV_PROJET_INSERTION}}"
+    },
 
-> ⚠️ **DONNÉES PSEUDONYMISÉES** — L'identifiant réel est conservé séparément par le Pilote humain. Ce document ne contient aucune donnée identifiante directe.
+    "recommandations": {
+      "immediates": [
+        "{{RECOMMANDATION_1}}",
+        "{{RECOMMANDATION_2}}",
+        "{{RECOMMANDATION_3}}"
+      ],
+      "orientations": {
+        "scolaire_formation": "{{ORIENTATION_SCOLAIRE}}",
+        "sociale": "{{ORIENTATION_SOCIALE}}",
+        "psychologique": "{{ORIENTATION_PSYCHO}}",
+        "juridique": "{{ORIENTATION_JURIDIQUE}}"
+      },
+      "signalement": {
+        "necessaire": false,
+        "motif": "{{MOTIF_SIGNALEMENT}}",
+        "destinataire": "{{DESTINATAIRE_SIGNALEMENT}}"
+      }
+    },
 
-| Champ | Valeur |
-|---|---|
-| **Pseudonyme MNA** | `{{PSEUDO_MNA}}` |
-| **Sexe** | `{{SEXE}}` |
-| **Âge estimé** | `{{AGE_ESTIME}} ans` |
-| **Pays d'origine** | `{{PAYS_ORIGINE}}` |
-| **Ville / Région d'origine** | `{{VILLE_ORIGINE}}` |
-| **Date d'arrivée en France** | `{{DATE_ARRIVEE}}` |
-| **Structure d'accueil** | `{{STRUCTURE_ACCUEIL}}` |
-| **Référent éducatif** | `{{REFERENT_EDU}}` |
+    "indicateurs_risque": {
+      "stress_post_traumatique": {
+        "present": false,
+        "niveau": "{{N_SPT}}",
+        "note": "{{NOTE_SPT}}"
+      },
+      "risque_fugue": {
+        "present": false,
+        "niveau": "{{N_FUGUE}}",
+        "note": "{{NOTE_FUGUE}}"
+      },
+      "isolement_social": {
+        "present": false,
+        "niveau": "{{N_ISOL}}",
+        "note": "{{NOTE_ISOL}}"
+      },
+      "vulnerabilite_exploitation": {
+        "present": false,
+        "niveau": "{{N_EXPL}}",
+        "note": "{{NOTE_EXPL}}"
+      },
+      "risque_rupture_parcours": {
+        "present": false,
+        "niveau": "{{N_RUPT}}",
+        "note": "{{NOTE_RUPT}}"
+      }
+    },
 
----
+    "validation": {
+      "pilote_humain": {
+        "nom": "{{NOM_PILOTE}}",
+        "date": "{{DATE_VALIDATION}}",
+        "signature": "{{SIGNATURE_PILOTE}}"
+      },
+      "superviseur": {
+        "nom": "{{NOM_SUPERVISEUR}}",
+        "date": "{{DATE_SUPERVISION}}",
+        "signature": "{{SIGNATURE_SUPERVISEUR}}"
+      }
+    },
 
-## DÉROULEMENT DE L'ENTRETIEN
-
-| Champ | Valeur |
-|---|---|
-| **Date de l'entretien** | `{{DATE_ENTRETIEN}}` |
-| **Durée** | `{{DUREE}} minutes` |
-| **Mode** | `{{MODE}}` *(Accompagné Pilote / Autonome / Mixte)* |
-| **Langue principale** | `{{LANGUE}}` *(FR / AR / EN)* |
-| **Thèmes couverts** | `{{THEMES_COUVERTS}}` |
-| **Thèmes non abordés** | `{{THEMES_NON_ABORDES}}` |
-| **Interruptions** | `{{NB_INTERRUPTIONS}}` — Motif : `{{MOTIF_INTERRUPTION}}` |
-
----
-
-## SYNTHÈSE PAR THÈME — QUOI → COMMENT
-
-### 🔵 Thème 1 — Pays d'origine et famille
-
-**Faits recueillis (QUOI) :**
-```
-{{T1_FAITS}}
-```
-**Vécu émotionnel (COMMENT) :**
-```
-{{T1_VECU}}
-```
-**Indicateurs de résilience :**
-```
-{{T1_RESILIENCE}}
-```
-
----
-
-### 🔵 Thème 2 — Parcours d'exil et trajet
-
-**Faits recueillis (QUOI) :**
-```
-{{T2_FAITS}}
-```
-**Vécu émotionnel (COMMENT) :**
-```
-{{T2_VECU}}
-```
-**⚠️ Signaux de vulnérabilité détectés :**
-```
-{{T2_VULNERABILITE}}
-```
-
----
-
-### 🔵 Thème 3 — Compétences et école
-
-**Compétences formelles :** `{{T3_COMPETENCES_FORMELLES}}`
-
-**Compétences informelles :** `{{T3_COMPETENCES_INFORMELLES}}`
-
-**Langues parlées :** `{{T3_LANGUES}}`
-
----
-
-### 🔵 Thème 4 — Rêves et projet de vie
-
-**Projet exprimé par le jeune :**
-```
-{{T4_PROJET}}
-```
-**Objectif à 5 ans :** `{{T4_OBJECTIF}}`
-
-**Ressources internes identifiées :** `{{T4_RESSOURCES}}`
-
----
-
-### 🔵 Thème 5 — Vulnérabilités *(si abordé — validation Pilote obligatoire)*
-
-**État émotionnel général :** `{{T5_ETAT_EMOTIONNEL}}`
-
-**Facteurs de stress :** `{{T5_STRESS}}`
-
-**Réseau de soutien :** `{{T5_SOUTIEN}}`
-
-**Stratégies d'adaptation :** `{{T5_ADAPTATION}}`
-
----
-
-## ÉVALUATION GLOBALE DU PILOTE HUMAIN
-
-| Critère | Niveau | Observations |
-|---|---|---|
-| Stabilité émotionnelle | `{{STABILITE}}` *(Faible/Moyen/Bon)* | `{{OBS_STABILITE}}` |
-| Cohérence du récit | `{{COHERENCE}}` *(Faible/Moyen/Bon)* | `{{OBS_COHERENCE}}` |
-| Engagement dans le processus | `{{ENGAGEMENT}}` *(Faible/Moyen/Bon)* | `{{OBS_ENGAGEMENT}}` |
-| Capacité de projection | `{{PROJECTION}}` *(Faible/Moyen/Bon)* | `{{OBS_PROJECTION}}` |
-| Ressources internes | `{{RESSOURCES}}` *(Faibles/Moyennes/Fortes)* | `{{OBS_RESSOURCES}}` |
-
----
-
-## ÉLÉMENTS POUR LE CV INTERACTIF
-
-### Identité visuelle choisie
-```
-{{CV_IDENTITE_VISUELLE}}
-```
-*(Couleurs, symboles culturels sélectionnés avec l'IA Designer)*
-
-### Phrase clé authentique du jeune
-> *"{{CV_PHRASE_CLE}}"*
-
-### Compétences à valoriser
-1. `{{CV_COMPETENCE_1}}`
-2. `{{CV_COMPETENCE_2}}`
-3. `{{CV_COMPETENCE_3}}`
-
-### Projet d'insertion proposé
-```
-{{CV_PROJET_INSERTION}}
-```
-
----
-
-## RECOMMANDATIONS ET PROCHAINES ÉTAPES
-
-### Recommandations immédiates
-- [ ] `{{RECOMMANDATION_1}}`
-- [ ] `{{RECOMMANDATION_2}}`
-- [ ] `{{RECOMMANDATION_3}}`
-
-### Orientations proposées
-
-| Type | Détail |
-|---|---|
-| **Scolaire / Formation** | `{{ORIENTATION_SCOLAIRE}}` |
-| **Sociale** | `{{ORIENTATION_SOCIALE}}` |
-| **Psychologique** | `{{ORIENTATION_PSYCHO}}` |
-| **Juridique** | `{{ORIENTATION_JURIDIQUE}}` |
-
-### Signalement nécessaire
-```
-{{SIGNALEMENT}}
-```
-*(OUI / NON — Si OUI : motif et destinataire)*
-
----
-
-## INDICATEURS DE RISQUE
-
-| Indicateur | Présent | Niveau | Note |
-|---|---|---|---|
-| Stress post-traumatique | `{{R_SPT}}` | `{{N_SPT}}` | `{{NOTE_SPT}}` |
-| Risque de fugue | `{{R_FUGUE}}` | `{{N_FUGUE}}` | `{{NOTE_FUGUE}}` |
-| Isolement social | `{{R_ISOL}}` | `{{N_ISOL}}` | `{{NOTE_ISOL}}` |
-| Vulnérabilité exploitation | `{{R_EXPL}}` | `{{N_EXPL}}` | `{{NOTE_EXPL}}` |
-| Risque rupture de parcours | `{{R_RUPT}}` | `{{N_RUPT}}` | `{{NOTE_RUPT}}` |
-
----
-
-## VALIDATION ET SIGNATURE
-
-| Rôle | Nom | Date | Signature |
-|---|---|---|---|
-| **Pilote humain** | `{{NOM_PILOTE}}` | `{{DATE_VALIDATION}}` | `{{SIGNATURE_PILOTE}}` |
-| **Superviseur** | `{{NOM_SUPERVISEUR}}` | `{{DATE_SUPERVISION}}` | `{{SIGNATURE_SUPERVISEUR}}` |
-
----
-
-## CONFORMITÉ RGPD
-
-- [x] Consentement éclairé recueilli (mineur + tuteur légal)
-- [x] Données pseudonymisées avant transmission
-- [x] Aucune donnée identifiante dans ce rapport
-- [x] Hébergement HDS France (OVH)
-- [ ] Droit à l'effacement notifié au jeune
-- **DPO référent :** `{{NOM_DPO}}`
-- **Base légale :** Mission d'intérêt public — Article 6(1)(e) RGPD
-
----
-
-*Rapport généré automatiquement par Mon Miroir v1.0 — Tribunal pour Enfants de Toulouse*
-*Document confidentiel — destiné exclusivement aux professionnels habilités.*
+    "conformite_rgpd": {
+      "consentement_recueilli": true,
+      "tuteur_legal_informe": true,
+      "donnees_pseudonymisees": true,
+      "hebergement": "OVH HDS France",
+      "base_legale": "Article 6(1)(e) RGPD — Mission d'intérêt public",
+      "dpo_referent": "{{NOM_DPO}}",
+      "droit_effacement_notifie": false
+    }
+  }
+}
