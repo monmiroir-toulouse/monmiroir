@@ -1,107 +1,27 @@
-// ══════════════════════════════════════════════
-// MON MIROIR — Service Worker PWA
-// Gère le cache hors-ligne pour les MNA
-// ══════════════════════════════════════════════
-
-const CACHE_NAME = 'monmiroir-v1';
-const OFFLINE_URL = '/monmeoire/offline.html';
-
-// Fichiers à mettre en cache immédiatement
-const STATIC_ASSETS = [
-  '/monmeoire/',
-  '/monmeoire/index.html',
-  '/monmeoire/offline.html',
-  '/monmeoire/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap'
-];
-
-// ── INSTALLATION ──
-self.addEventListener('install', event => {
-  console.log('[SW] Installation Mon Miroir');
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS.filter(url => !url.startsWith('http')));
-    }).then(() => self.skipWaiting())
-  );
-});
-
-// ── ACTIVATION ──
-self.addEventListener('activate', event => {
-  console.log('[SW] Activation Mon Miroir');
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      )
-    ).then(() => self.clients.claim())
-  );
-});
-
-// ── INTERCEPTION DES REQUÊTES ──
-self.addEventListener('fetch', event => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Ne pas intercepter les appels API Anthropic
-  if (url.hostname === 'api.anthropic.com') {
-    event.respondWith(
-      fetch(request).catch(() => {
-        // Hors-ligne : retourner une réponse d'erreur douce
-        return new Response(
-          JSON.stringify({
-            error: 'offline',
-            message: 'Pas de connexion. Votre message sera envoyé dès que vous serez connecté.'
-          }),
-          { headers: { 'Content-Type': 'application/json' } }
-        );
-      })
-    );
-    return;
-  }
-
-  // Stratégie Cache First pour les assets statiques
-  if (request.method === 'GET') {
-    event.respondWith(
-      caches.match(request).then(cached => {
-        if (cached) return cached;
-
-        return fetch(request).then(response => {
-          // Mettre en cache les nouvelles ressources statiques
-          if (response.ok && request.url.startsWith(self.location.origin)) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
-          }
-          return response;
-        }).catch(() => {
-          // Page hors-ligne si navigation
-          if (request.mode === 'navigate') {
-            return caches.match(OFFLINE_URL);
-          }
-        });
-      })
-    );
-  }
-});
-
-// ── SYNC EN ARRIÈRE-PLAN (messages en attente) ──
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-messages') {
-    event.waitUntil(syncPendingMessages());
-  }
-});
-
-async function syncPendingMessages() {
-  // Récupérer messages en attente depuis IndexedDB
-  // et les envoyer quand la connexion revient
-  console.log('[SW] Synchronisation des messages en attente');
+{
+  "name": "Mon Miroir — IA pour MNA",
+  "short_name": "Mon Miroir",
+  "description": "Application clinique IA pour Mineurs Non Accompagnés — Tribunal pour Enfants de Toulouse",
+  "start_url": "/monmeoire/",
+  "scope": "/monmeoire/",
+  "display": "standalone",
+  "background_color": "#F7F5F3",
+  "theme_color": "#6B1A2A",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "categories": ["education", "medical"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
-
-// ── NOTIFICATION PUSH (optionnel future) ──
-self.addEventListener('push', event => {
-  const data = event.data?.json() || {};
-  self.registration.showNotification(data.title || 'Mon Miroir', {
-    body: data.body || 'Nouveau message',
-    icon: '/monmeoire/icons/icon-192.png',
-    badge: '/monmeoire/icons/icon-192.png'
-  });
-});
