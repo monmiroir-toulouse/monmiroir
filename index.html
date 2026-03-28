@@ -1,149 +1,107 @@
-{
-  "rapport": {
-    "metadata": {
-      "id": "RPT-2026-{{ID_RAPPORT}}",
-      "version": "1.0",
-      "application": "Mon Miroir",
-      "date_generation": "{{DATE_GENERATION}}",
-      "heure_generation": "{{HEURE_GENERATION}}",
-      "genere_par": "IA Scénariste (Claude Sonnet) + Pilote humain",
-      "statut": "{{STATUT}}",
-      "destinataire": "{{DESTINATAIRE}}",
-      "signature_pilote": "{{SIGNATURE}}"
-    },
+// ══════════════════════════════════════════════
+// MON MIROIR — Service Worker PWA
+// Gère le cache hors-ligne pour les MNA
+// ══════════════════════════════════════════════
 
-    "mineur": {
-      "pseudonyme": "{{PSEUDO_MNA}}",
-      "sexe": "{{SEXE}}",
-      "age_estime": "{{AGE_ESTIME}}",
-      "pays_origine": "{{PAYS_ORIGINE}}",
-      "ville_origine": "{{VILLE_ORIGINE}}",
-      "date_arrivee_france": "{{DATE_ARRIVEE}}",
-      "structure_accueil": "{{STRUCTURE_ACCUEIL}}",
-      "referent_educatif": "{{REFERENT_EDU}}",
-      "rgpd": {
-        "pseudonymise": true,
-        "donnees_identifiantes_separees": true,
-        "consentement_recueilli": "{{CONSENTEMENT}}",
-        "date_consentement": "{{DATE_CONSENTEMENT}}"
-      }
-    },
+const CACHE_NAME = 'monmiroir-v1';
+const OFFLINE_URL = '/monmeoire/offline.html';
 
-    "entretien": {
-      "date": "{{DATE_ENTRETIEN}}",
-      "duree_minutes": "{{DUREE}}",
-      "mode": "{{MODE}}",
-      "langue_principale": "{{LANGUE}}",
-      "langues_utilisees": ["{{LANGUE_1}}", "{{LANGUE_2}}"],
-      "themes_abordes": ["{{THEME_1}}", "{{THEME_2}}", "{{THEME_3}}"],
-      "themes_non_abordes": [
-        {
-          "theme": "{{THEME_NON_ABORDE}}",
-          "raison": "{{RAISON_NON_ABORDE}}"
-        }
-      ],
-      "alertes_declenchees": "{{NB_ALERTES}}",
-      "interventions_pilote": "{{NB_INTERVENTIONS_PILOTE}}",
-      "micro_relances": {
-        "total_utilisees": "{{NB_RELANCES_TOTAL}}",
-        "validation": "{{NB_VALIDATION}}",
-        "encouragement": "{{NB_ENCOURAGEMENT}}",
-        "valorisation": "{{NB_VALORISATION}}",
-        "alerte_detresse": "{{NB_ALERTE_DETRESSE}}",
-        "langue_dominante_jeune": "{{LANGUE_DOMINANTE}}",
-        "passages_darija": "{{NB_DARIJA}}",
-        "observation_linguistique": "{{OBS_LINGUISTIQUE}}"
-      }
-    },
+// Fichiers à mettre en cache immédiatement
+const STATIC_ASSETS = [
+  '/monmeoire/',
+  '/monmeoire/index.html',
+  '/monmeoire/offline.html',
+  '/monmeoire/manifest.json',
+  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap'
+];
 
-    "synthese_themes": {
-      "theme_1_origine_famille": {
-        "faits": "{{T1_FAITS}}",
-        "vecu_emotionnel": "{{T1_VECU}}",
-        "indicateurs_cliniques": "{{T1_CLINIQUE}}",
-        "niveau_detresse": "{{T1_DETRESSE}}"
-      },
-      "theme_2_exil_trajet": {
-        "faits": "{{T2_FAITS}}",
-        "vecu_emotionnel": "{{T2_VECU}}",
-        "indicateurs_cliniques": "{{T2_CLINIQUE}}",
-        "niveau_detresse": "{{T2_DETRESSE}}",
-        "alerte_declenchee": "{{T2_ALERTE}}"
-      },
-      "theme_3_competences_ecole": {
-        "faits": "{{T3_FAITS}}",
-        "vecu_emotionnel": "{{T3_VECU}}",
-        "competences": [
-          {
-            "intitule": "{{COMP_1}}",
-            "type": "{{TYPE_COMP_1}}",
-            "niveau": "{{NIV_COMP_1}}"
-          },
-          {
-            "intitule": "{{COMP_2}}",
-            "type": "{{TYPE_COMP_2}}",
-            "niveau": "{{NIV_COMP_2}}"
-          }
-        ],
-        "langues_parlees": ["{{LANGUE_PARLEE_1}}", "{{LANGUE_PARLEE_2}}"],
-        "niveau_francais": "{{NIVEAU_FR}}",
-        "niveau_scolarite": "{{NIVEAU_SCOLARITE}}"
-      },
-      "theme_4_reves_projet": {
-        "faits": "{{T4_FAITS}}",
-        "vecu_emotionnel": "{{T4_VECU}}",
-        "projet_vie": "{{PROJET_VIE}}",
-        "objectif_5ans": "{{OBJECTIF_5ANS}}",
-        "ressources_internes": ["{{RESSOURCE_1}}", "{{RESSOURCE_2}}"],
-        "figures_attachement": ["{{FIGURE_1}}", "{{FIGURE_2}}"]
-      },
-      "theme_5_vulnerabilites": {
-        "aborde": "{{T5_ABORDE}}",
-        "raison_non_aborde": "{{T5_RAISON}}",
-        "faits": "{{T5_FAITS}}",
-        "vecu_emotionnel": "{{T5_VECU}}",
-        "vulnerabilites_identifiees": ["{{VULN_1}}", "{{VULN_2}}"],
-        "strategies_adaptation": ["{{STRAT_1}}", "{{STRAT_2}}"],
-        "reseau_soutien": "{{RESEAU_SOUTIEN}}",
-        "niveau_detresse": "{{T5_DETRESSE}}"
-      }
-    },
+// ── INSTALLATION ──
+self.addEventListener('install', event => {
+  console.log('[SW] Installation Mon Miroir');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_ASSETS.filter(url => !url.startsWith('http')));
+    }).then(() => self.skipWaiting())
+  );
+});
 
-    "evaluation_globale": {
-      "scores": {
-        "engagement_verbal": "{{SCORE_VERBAL}}",
-        "stabilite_emotionnelle": "{{SCORE_EMOTION}}",
-        "coherence_recit": "{{SCORE_COHERENCE}}",
-        "projection_avenir": "{{SCORE_PROJECTION}}",
-        "score_global_sur_20": "{{SCORE_GLOBAL}}"
-      },
-      "niveau_risque": "{{NIVEAU_RISQUE}}",
-      "signalement_requis": "{{SIGNALEMENT}}",
-      "nature_signalement": "{{NATURE_SIGNALEMENT}}"
-    },
+// ── ACTIVATION ──
+self.addEventListener('activate', event => {
+  console.log('[SW] Activation Mon Miroir');
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      )
+    ).then(() => self.clients.claim())
+  );
+});
 
-    "recommandations": {
-      "pour_magistrats": "{{RECO_MAGISTRATS}}",
-      "pour_ase_pjj": "{{RECO_ASE_PJJ}}",
-      "prochaine_etape": "{{PROCHAINE_ETAPE}}",
-      "delai_suivi_jours": "{{DELAI_SUIVI}}"
-    },
+// ── INTERCEPTION DES REQUÊTES ──
+self.addEventListener('fetch', event => {
+  const { request } = event;
+  const url = new URL(request.url);
 
-    "cv_interactif": {
-      "qui_je_suis": "{{CV_QUI_JE_SUIS}}",
-      "mon_parcours": "{{CV_PARCOURS}}",
-      "mes_competences": "{{CV_COMPETENCES}}",
-      "mon_projet": "{{CV_PROJET}}",
-      "ce_qui_me_donne_de_la_force": "{{CV_FORCE}}",
-      "url_video": "{{URL_VIDEO_CV}}"
-    },
-
-    "validation": {
-      "valide_par": "{{VALIDE_PAR}}",
-      "date_validation": "{{DATE_VALIDATION}}",
-      "observations_pilote": "{{OBS_PILOTE}}",
-      "transmis_le": "{{DATE_TRANSMISSION}}",
-      "transmis_a": ["{{DESTINATAIRE_1}}", "{{DESTINATAIRE_2}}"]
-    }
+  // Ne pas intercepter les appels API Anthropic
+  if (url.hostname === 'api.anthropic.com') {
+    event.respondWith(
+      fetch(request).catch(() => {
+        // Hors-ligne : retourner une réponse d'erreur douce
+        return new Response(
+          JSON.stringify({
+            error: 'offline',
+            message: 'Pas de connexion. Votre message sera envoyé dès que vous serez connecté.'
+          }),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+      })
+    );
+    return;
   }
+
+  // Stratégie Cache First pour les assets statiques
+  if (request.method === 'GET') {
+    event.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+
+        return fetch(request).then(response => {
+          // Mettre en cache les nouvelles ressources statiques
+          if (response.ok && request.url.startsWith(self.location.origin)) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          }
+          return response;
+        }).catch(() => {
+          // Page hors-ligne si navigation
+          if (request.mode === 'navigate') {
+            return caches.match(OFFLINE_URL);
+          }
+        });
+      })
+    );
+  }
+});
+
+// ── SYNC EN ARRIÈRE-PLAN (messages en attente) ──
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-messages') {
+    event.waitUntil(syncPendingMessages());
+  }
+});
+
+async function syncPendingMessages() {
+  // Récupérer messages en attente depuis IndexedDB
+  // et les envoyer quand la connexion revient
+  console.log('[SW] Synchronisation des messages en attente');
 }
+
+// ── NOTIFICATION PUSH (optionnel future) ──
+self.addEventListener('push', event => {
+  const data = event.data?.json() || {};
+  self.registration.showNotification(data.title || 'Mon Miroir', {
+    body: data.body || 'Nouveau message',
+    icon: '/monmeoire/icons/icon-192.png',
+    badge: '/monmeoire/icons/icon-192.png'
+  });
+});
