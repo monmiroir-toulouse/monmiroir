@@ -1,24 +1,234 @@
-// Exemple d'intégration dans le prompt système
-const microRelances = {
-  validation: [
-    "Shokran 3la thiqa, had chi machi sahel. / Merci pour ta confiance.",
-    "3arft ki hada s3ib. Bqit m3ak. / Je sais que c'est dur. Je reste avec toi.",
-  ],
-  encouragement: [
-    "Khod wqtk, ana m3ak. / Prends ton temps, je suis là.",
-    "Ma kayn hta jawab kha6a hna. / Il n'y a pas de mauvaise réponse ici.",
-  ],
-  valorisation: [
-    "Had l-mqdar, kayen bezzaf dyal n-nas ma 3endhomch. / Cette compétence, beaucoup ne l'ont pas.",
-  ],
-  detresse: [
-    "🚨 ALERTE PILOTE — Intervention humaine recommandée immédiatement.",
-  ]
-};
+# RAPPORT DE SYNTHÈSE IA — MON MIROIR
+**Application clinique pour Mineurs Non Accompagnés**  
+Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · Interprète judiciaire-psychologue
 
-// Règle d'utilisation :
-// 1. Toujours commencer par une validation avant de poser la question suivante
-// 2. Si réponse courte → utiliser une relance d'approfondissement
-// 3. Si silence > 10s → encouragement doux
-// 4. Si détresse détectée → ARRÊT + alerte Pilote
-// 5. Alterner FR et Darija selon la langue choisie par le jeune
+---
+
+## MÉTADONNÉES DU RAPPORT
+
+| Champ | Valeur |
+|---|---|
+| **Identifiant rapport** | `RPT-2026-{{ID_RAPPORT}}` |
+| **Date de génération** | `{{DATE_GENERATION}}` |
+| **Heure** | `{{HEURE_GENERATION}}` |
+| **Version application** | `Mon Miroir v1.0` |
+| **Généré par** | IA Scénariste (Claude Sonnet) + validation Pilote humain |
+| **Destinataire** | `{{DESTINATAIRE}}` *(Magistrat / ASE / PJJ)* |
+| **Statut rapport** | `{{STATUT}}` *(BROUILLON / VALIDÉ / TRANSMIS)* |
+
+---
+
+## IDENTIFICATION DU MINEUR
+
+> ⚠️ **DONNÉES PSEUDONYMISÉES** — L'identifiant réel est conservé séparément par le Pilote humain.  
+> Ce document ne contient aucune donnée identifiante directe. Conforme RGPD mineurs.
+
+| Champ | Valeur |
+|---|---|
+| **Pseudonyme MNA** | `{{PSEUDO_MNA}}` |
+| **Sexe** | `{{SEXE}}` |
+| **Âge estimé** | `{{AGE_ESTIME}} ans` |
+| **Pays d'origine** | `{{PAYS_ORIGINE}}` |
+| **Ville / Région d'origine** | `{{VILLE_ORIGINE}}` |
+| **Date d'arrivée en France** | `{{DATE_ARRIVEE}}` |
+| **Structure d'accueil** | `{{STRUCTURE_ACCUEIL}}` |
+| **Référent éducatif** | `{{REFERENT_EDU}}` |
+
+---
+
+## DÉROULEMENT DE L'ENTRETIEN
+
+| Champ | Valeur |
+|---|---|
+| **Date de l'entretien** | `{{DATE_ENTRETIEN}}` |
+| **Durée totale** | `{{DUREE}} minutes` |
+| **Mode** | `{{MODE}}` *(Accompagné Pilote / Autonome / Semi-guidé)* |
+| **Langue principale** | `{{LANGUE}}` *(FR / AR / EN / Mixte)* |
+| **Thèmes abordés** | `{{THEMES_ABORDES}}` |
+| **Thèmes non abordés** | `{{THEMES_NON_ABORDES}}` *(raison : {{RAISON}})* |
+| **Alertes déclenchées** | `{{NB_ALERTES}}` *(dont {{NB_PILOTE}} interventions Pilote)* |
+| **Micro-relances utilisées** | `{{NB_RELANCES}}` |
+
+---
+
+## SYNTHÈSE PAR THÈME — MÉTHODE QUOI → COMMENT
+
+### THÈME 1 — Pays d'origine et famille
+
+**QUOI (faits)** :  
+`{{T1_FAITS}}`
+
+**COMMENT (vécu émotionnel)** :  
+`{{T1_VECU}}`
+
+**Indicateurs cliniques observés** :  
+`{{T1_CLINIQUE}}`
+
+---
+
+### THÈME 2 — Parcours d'exil et trajet
+
+**QUOI (faits)** :  
+`{{T2_FAITS}}`
+
+**COMMENT (vécu émotionnel)** :  
+`{{T2_VECU}}`
+
+**Indicateurs cliniques observés** :  
+`{{T2_CLINIQUE}}`
+
+> ⚠️ Niveau de détresse observé : `{{T2_DETRESSE}}` *(Faible / Modéré / Élevé / Alerte)*
+
+---
+
+### THÈME 3 — Compétences et école
+
+**QUOI (faits)** :  
+`{{T3_FAITS}}`
+
+**COMMENT (vécu émotionnel)** :  
+`{{T3_VECU}}`
+
+**Compétences identifiées** :
+
+| Compétence | Type | Niveau estimé |
+|---|---|---|
+| `{{COMP_1}}` | `{{TYPE_1}}` *(Scolaire / Manuel / Linguistique / Social)* | `{{NIV_1}}` |
+| `{{COMP_2}}` | `{{TYPE_2}}` | `{{NIV_2}}` |
+| `{{COMP_3}}` | `{{TYPE_3}}` | `{{NIV_3}}` |
+
+**Langues parlées** : `{{LANGUES}}`  
+**Niveau français** : `{{NIVEAU_FR}}` *(Débutant / Intermédiaire / Avancé)*
+
+---
+
+### THÈME 4 — Rêves et projet de vie
+
+**QUOI (faits)** :  
+`{{T4_FAITS}}`
+
+**COMMENT (vécu émotionnel)** :  
+`{{T4_VECU}}`
+
+**Projet de vie exprimé** : `{{PROJET_VIE}}`  
+**Objectif à 5 ans** : `{{OBJECTIF_5ANS}}`  
+**Ressources internes identifiées** : `{{RESSOURCES_INTERNES}}`  
+**Figures d'attachement mentionnées** : `{{FIGURES_ATTACHEMENT}}`
+
+---
+
+### THÈME 5 — Vulnérabilités et bien-être
+
+> ⚠️ **Ce thème n'a été abordé que si le Pilote humain a validé la stabilité du jeune.**
+
+**Abordé** : `{{T5_ABORDE}}` *(Oui / Non — Raison : {{T5_RAISON}})*
+
+**QUOI (faits)** :  
+`{{T5_FAITS}}`
+
+**COMMENT (vécu émotionnel)** :  
+`{{T5_VECU}}`
+
+**Indicateurs de vulnérabilité** : `{{VULNERABILITES}}`  
+**Stratégies d'adaptation observées** : `{{STRATEGIES_ADAPTATION}}`  
+**Réseau de soutien disponible** : `{{RESEAU_SOUTIEN}}`
+
+---
+
+## ANALYSE DES MICRO-RELANCES
+
+> Cette section documente l'usage des relances cliniques bilingues (FR / Darija) utilisées pendant l'entretien.
+
+| Type de relance | Nombre utilisé | Efficacité observée |
+|---|---|---|
+| **Validation** *(Shokran 3la thiqa…)* | `{{NB_VALID}}` | `{{EFF_VALID}}` |
+| **Encouragement** *(Khod wqtk…)* | `{{NB_ENCOUR}}` | `{{EFF_ENCOUR}}` |
+| **Valorisation** *(Had l-mqdar…)* | `{{NB_VALOR}}` | `{{EFF_VALOR}}` |
+| **Alerte détresse** 🚨 | `{{NB_ALERTE}}` | *(Intervention Pilote : {{PILOTE_INTERVENU}})* |
+
+**Langue dominante du jeune pendant l'entretien** : `{{LANGUE_DOMINANTE}}`  
+**Passages en Darija** : `{{NB_DARIJA}}` fois  
+**Observation linguistique** : `{{OBS_LINGUISTIQUE}}`
+
+---
+
+## ÉVALUATION GLOBALE
+
+### Score de participation
+
+| Dimension | Score | Observation |
+|---|---|---|
+| **Engagement verbal** | `{{SCORE_VERBAL}}/5` | `{{OBS_VERBAL}}` |
+| **Stabilité émotionnelle** | `{{SCORE_EMOTION}}/5` | `{{OBS_EMOTION}}` |
+| **Cohérence du récit** | `{{SCORE_COHERENCE}}/5` | `{{OBS_COHERENCE}}` |
+| **Projection dans l'avenir** | `{{SCORE_PROJECTION}}/5` | `{{OBS_PROJECTION}}` |
+| **Score global** | `{{SCORE_GLOBAL}}/20` | |
+
+### Niveau de risque global
+
+`{{NIVEAU_RISQUE}}` *(Faible / Modéré / Élevé / Critique)*
+
+### Signalement requis
+
+`{{SIGNALEMENT}}` *(Oui / Non)*  
+Si oui — Nature : `{{NATURE_SIGNALEMENT}}`
+
+---
+
+## RECOMMANDATIONS
+
+### Pour les magistrats
+
+`{{RECO_MAGISTRATS}}`
+
+### Pour l'ASE / PJJ
+
+`{{RECO_ASE_PJJ}}`
+
+### Prochaine étape recommandée
+
+`{{PROCHAINE_ETAPE}}`
+
+### Délai recommandé pour suivi
+
+`{{DELAI_SUIVI}}`
+
+---
+
+## VALIDATION DU RAPPORT
+
+| Champ | Valeur |
+|---|---|
+| **Validé par le Pilote humain** | `{{VALIDE_PAR}}` |
+| **Date de validation** | `{{DATE_VALIDATION}}` |
+| **Signature électronique** | `{{SIGNATURE}}` |
+| **Observations du Pilote** | `{{OBS_PILOTE}}` |
+
+---
+
+## ANNEXE — EXTRAIT DU CV INTERACTIF
+
+> Résumé narratif généré par l'IA Scénariste à partir de l'entretien. Ce texte a été relu et validé par le Pilote humain avant transmission.
+
+---
+
+**Qui je suis :**  
+`{{CV_QUI_JE_SUIS}}`
+
+**Mon parcours :**  
+`{{CV_PARCOURS}}`
+
+**Mes compétences :**  
+`{{CV_COMPETENCES}}`
+
+**Mon projet :**  
+`{{CV_PROJET}}`
+
+**Ce qui me donne de la force :**  
+`{{CV_FORCE}}`
+
+---
+
+*Ce rapport a été généré automatiquement par l'application Mon Miroir (IA Scénariste — Claude Sonnet) et validé par le Pilote humain. Il constitue un support de médiation complémentaire aux rapports PJJ et ASE, et ne se substitue pas à l'évaluation professionnelle humaine.*
+
+**Mon Miroir · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026**
