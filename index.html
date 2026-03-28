@@ -1,156 +1,73 @@
 # ============================================================
-# MON MIROIR — Docker Compose (Production HDS)
+# MON MIROIR — Dockerfile Backend Audio HDS
 # ============================================================
-# Orchestration complète : Backend Audio + DB + Reverse Proxy
-# Hébergement : OVH HDS souverain France
+# Serveur souverain pour le Corpus Audio des MNA
+# Hébergement : OVH HDS (Hébergeur de Données de Santé/Justice)
+# ⚠️  Les données vocales ne quittent JAMAIS ce conteneur
 # ============================================================
 
-version: '3.9'
+FROM node:20-alpine AS base
 
-services:
+# Métadonnées
+LABEL maintainer="Si Mohamed ANAYA <contact@monmiroir.fr>"
+LABEL description="Backend Audio souverain — Mon Miroir MNA"
+LABEL version="1.0.0"
+LABEL rgpd="HDS-conforme"
 
-  # ── BACKEND AUDIO SOUVERAIN ──────────────────────────────
-  audio-backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.audio
-      target: production
-    container_name: monmiroir-audio
-    restart: unless-stopped
-    env_file:
-      - .env.production
-    environment:
-      NODE_ENV: production
-      PORT: 4000
-      AUDIO_STORAGE_PATH: /app/storage/audio
-    volumes:
-      # Stockage audio chiffré — persistant sur serveur HDS
-      - audio_data:/app/storage/audio
-      - audio_temp:/app/storage/temp
-      - audio_logs:/app/logs
-    networks:
-      - monmiroir-internal
-    # Pas de port public — accessible uniquement via nginx
-    expose:
-      - "4000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 512M
-        reservations:
-          memory: 256M
+# Dépendances système pour le traitement audio
+RUN apk add --no-cache \
+    ffmpeg \
+    openssl \
+    ca-certificates \
+    curl \
+    && rm -rf /var/cache/apk/*
 
-  # ── BASE DE DONNÉES POSTGRESQL CHIFFRÉE ─────────────────
-  database:
-    image: postgres:16-alpine
-    container_name: monmiroir-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: monmiroir_prod
-      POSTGRES_USER: monmiroir_prod
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    networks:
-      - monmiroir-internal
-    expose:
-      - "5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U monmiroir_prod"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 256M
+# Utilisateur non-root pour la sécurité
+RUN addgroup -g 1001 -S monmiroir && \
+    adduser -S monmiroir -u 1001 -G monmiroir
 
-  # ── REVERSE PROXY NGINX (SSL + Sécurité) ─────────────────
-  nginx:
-    image: nginx:alpine
-    container_name: monmiroir-nginx
-    restart: unless-stopped
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-      - nginx_logs:/var/log/nginx
-    networks:
-      - monmiroir-internal
-      - monmiroir-external
-    depends_on:
-      - audio-backend
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: 64M
+WORKDIR /app
 
-  # ── REDIS (Cache sessions & rate limiting) ───────────────
-  redis:
-    image: redis:7-alpine
-    container_name: monmiroir-redis
-    restart: unless-stopped
-    command: >
-      redis-server
-      --requirepass ${REDIS_PASSWORD}
-      --maxmemory 128mb
-      --maxmemory-policy allkeys-lru
-      --save 60 1
-    volumes:
-      - redis_data:/data
-    networks:
-      - monmiroir-internal
-    expose:
-      - "6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
+# ── BUILD STAGE ──
+FROM base AS builder
 
-# ── VOLUMES PERSISTANTS (Données souveraines HDS) ─────────
-volumes:
-  audio_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      # ⚠️  Chemin sur serveur OVH HDS certifié
-      device: /data/monmiroir/audio
-  audio_temp:
-    driver: local
-  audio_logs:
-    driver: local
-  db_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /data/monmiroir/database
-  redis_data:
-    driver: local
-  nginx_logs:
-    driver: local
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
 
-# ── RÉSEAUX ───────────────────────────────────────────────
-networks:
-  monmiroir-internal:
-    # Réseau interne — aucun accès externe direct
-    internal: true
-    driver: bridge
-  monmiroir-external:
-    # Réseau externe — uniquement nginx
-    driver: bridge
+COPY . .
+RUN npm run build 2>/dev/null || true
+
+# ── PRODUCTION STAGE ──
+FROM base AS production
+
+WORKDIR /app
+
+# Copier seulement le nécessaire
+COPY --from=builder --chown=monmiroir:monmiroir /app/node_modules ./node_modules
+COPY --from=builder --chown=monmiroir:monmiroir /app/dist ./dist
+COPY --from=builder --chown=monmiroir:monmiroir /app/package.json ./
+
+# Dossiers de stockage audio chiffrés
+RUN mkdir -p /app/storage/audio \
+             /app/storage/temp \
+             /app/logs \
+    && chown -R monmiroir:monmiroir /app/storage /app/logs
+
+# Variables d'environnement par défaut (surchargées au déploiement)
+ENV NODE_ENV=production
+ENV PORT=4000
+ENV AUDIO_STORAGE_PATH=/app/storage/audio
+ENV AUDIO_TEMP_PATH=/app/storage/temp
+ENV LOG_PATH=/app/logs
+
+# Port exposé (interne uniquement — pas de port public direct)
+EXPOSE 4000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:4000/health || exit 1
+
+# Lancement en utilisateur non-root
+USER monmiroir
+
+CMD ["node", "dist/server.js"]
