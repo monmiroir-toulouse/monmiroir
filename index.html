@@ -1,234 +1,149 @@
-# RAPPORT DE SYNTHÈSE IA — MON MIROIR
-**Application clinique pour Mineurs Non Accompagnés**  
-Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · Interprète judiciaire-psychologue
-
----
-
-## MÉTADONNÉES DU RAPPORT
-
-| Champ | Valeur |
-|---|---|
-| **Identifiant rapport** | `RPT-2026-{{ID_RAPPORT}}` |
-| **Date de génération** | `{{DATE_GENERATION}}` |
-| **Heure** | `{{HEURE_GENERATION}}` |
-| **Version application** | `Mon Miroir v1.0` |
-| **Généré par** | IA Scénariste (Claude Sonnet) + validation Pilote humain |
-| **Destinataire** | `{{DESTINATAIRE}}` *(Magistrat / ASE / PJJ)* |
-| **Statut rapport** | `{{STATUT}}` *(BROUILLON / VALIDÉ / TRANSMIS)* |
-
----
-
-## IDENTIFICATION DU MINEUR
-
-> ⚠️ **DONNÉES PSEUDONYMISÉES** — L'identifiant réel est conservé séparément par le Pilote humain.  
-> Ce document ne contient aucune donnée identifiante directe. Conforme RGPD mineurs.
-
-| Champ | Valeur |
-|---|---|
-| **Pseudonyme MNA** | `{{PSEUDO_MNA}}` |
-| **Sexe** | `{{SEXE}}` |
-| **Âge estimé** | `{{AGE_ESTIME}} ans` |
-| **Pays d'origine** | `{{PAYS_ORIGINE}}` |
-| **Ville / Région d'origine** | `{{VILLE_ORIGINE}}` |
-| **Date d'arrivée en France** | `{{DATE_ARRIVEE}}` |
-| **Structure d'accueil** | `{{STRUCTURE_ACCUEIL}}` |
-| **Référent éducatif** | `{{REFERENT_EDU}}` |
-
----
-
-## DÉROULEMENT DE L'ENTRETIEN
-
-| Champ | Valeur |
-|---|---|
-| **Date de l'entretien** | `{{DATE_ENTRETIEN}}` |
-| **Durée totale** | `{{DUREE}} minutes` |
-| **Mode** | `{{MODE}}` *(Accompagné Pilote / Autonome / Semi-guidé)* |
-| **Langue principale** | `{{LANGUE}}` *(FR / AR / EN / Mixte)* |
-| **Thèmes abordés** | `{{THEMES_ABORDES}}` |
-| **Thèmes non abordés** | `{{THEMES_NON_ABORDES}}` *(raison : {{RAISON}})* |
-| **Alertes déclenchées** | `{{NB_ALERTES}}` *(dont {{NB_PILOTE}} interventions Pilote)* |
-| **Micro-relances utilisées** | `{{NB_RELANCES}}` |
-
----
-
-## SYNTHÈSE PAR THÈME — MÉTHODE QUOI → COMMENT
-
-### THÈME 1 — Pays d'origine et famille
-
-**QUOI (faits)** :  
-`{{T1_FAITS}}`
-
-**COMMENT (vécu émotionnel)** :  
-`{{T1_VECU}}`
-
-**Indicateurs cliniques observés** :  
-`{{T1_CLINIQUE}}`
-
----
-
-### THÈME 2 — Parcours d'exil et trajet
-
-**QUOI (faits)** :  
-`{{T2_FAITS}}`
-
-**COMMENT (vécu émotionnel)** :  
-`{{T2_VECU}}`
-
-**Indicateurs cliniques observés** :  
-`{{T2_CLINIQUE}}`
-
-> ⚠️ Niveau de détresse observé : `{{T2_DETRESSE}}` *(Faible / Modéré / Élevé / Alerte)*
-
----
-
-### THÈME 3 — Compétences et école
-
-**QUOI (faits)** :  
-`{{T3_FAITS}}`
-
-**COMMENT (vécu émotionnel)** :  
-`{{T3_VECU}}`
-
-**Compétences identifiées** :
-
-| Compétence | Type | Niveau estimé |
-|---|---|---|
-| `{{COMP_1}}` | `{{TYPE_1}}` *(Scolaire / Manuel / Linguistique / Social)* | `{{NIV_1}}` |
-| `{{COMP_2}}` | `{{TYPE_2}}` | `{{NIV_2}}` |
-| `{{COMP_3}}` | `{{TYPE_3}}` | `{{NIV_3}}` |
-
-**Langues parlées** : `{{LANGUES}}`  
-**Niveau français** : `{{NIVEAU_FR}}` *(Débutant / Intermédiaire / Avancé)*
-
----
-
-### THÈME 4 — Rêves et projet de vie
-
-**QUOI (faits)** :  
-`{{T4_FAITS}}`
-
-**COMMENT (vécu émotionnel)** :  
-`{{T4_VECU}}`
-
-**Projet de vie exprimé** : `{{PROJET_VIE}}`  
-**Objectif à 5 ans** : `{{OBJECTIF_5ANS}}`  
-**Ressources internes identifiées** : `{{RESSOURCES_INTERNES}}`  
-**Figures d'attachement mentionnées** : `{{FIGURES_ATTACHEMENT}}`
-
----
-
-### THÈME 5 — Vulnérabilités et bien-être
-
-> ⚠️ **Ce thème n'a été abordé que si le Pilote humain a validé la stabilité du jeune.**
-
-**Abordé** : `{{T5_ABORDE}}` *(Oui / Non — Raison : {{T5_RAISON}})*
-
-**QUOI (faits)** :  
-`{{T5_FAITS}}`
-
-**COMMENT (vécu émotionnel)** :  
-`{{T5_VECU}}`
-
-**Indicateurs de vulnérabilité** : `{{VULNERABILITES}}`  
-**Stratégies d'adaptation observées** : `{{STRATEGIES_ADAPTATION}}`  
-**Réseau de soutien disponible** : `{{RESEAU_SOUTIEN}}`
-
----
-
-## ANALYSE DES MICRO-RELANCES
-
-> Cette section documente l'usage des relances cliniques bilingues (FR / Darija) utilisées pendant l'entretien.
-
-| Type de relance | Nombre utilisé | Efficacité observée |
-|---|---|---|
-| **Validation** *(Shokran 3la thiqa…)* | `{{NB_VALID}}` | `{{EFF_VALID}}` |
-| **Encouragement** *(Khod wqtk…)* | `{{NB_ENCOUR}}` | `{{EFF_ENCOUR}}` |
-| **Valorisation** *(Had l-mqdar…)* | `{{NB_VALOR}}` | `{{EFF_VALOR}}` |
-| **Alerte détresse** 🚨 | `{{NB_ALERTE}}` | *(Intervention Pilote : {{PILOTE_INTERVENU}})* |
-
-**Langue dominante du jeune pendant l'entretien** : `{{LANGUE_DOMINANTE}}`  
-**Passages en Darija** : `{{NB_DARIJA}}` fois  
-**Observation linguistique** : `{{OBS_LINGUISTIQUE}}`
-
----
-
-## ÉVALUATION GLOBALE
-
-### Score de participation
-
-| Dimension | Score | Observation |
-|---|---|---|
-| **Engagement verbal** | `{{SCORE_VERBAL}}/5` | `{{OBS_VERBAL}}` |
-| **Stabilité émotionnelle** | `{{SCORE_EMOTION}}/5` | `{{OBS_EMOTION}}` |
-| **Cohérence du récit** | `{{SCORE_COHERENCE}}/5` | `{{OBS_COHERENCE}}` |
-| **Projection dans l'avenir** | `{{SCORE_PROJECTION}}/5` | `{{OBS_PROJECTION}}` |
-| **Score global** | `{{SCORE_GLOBAL}}/20` | |
-
-### Niveau de risque global
-
-`{{NIVEAU_RISQUE}}` *(Faible / Modéré / Élevé / Critique)*
-
-### Signalement requis
-
-`{{SIGNALEMENT}}` *(Oui / Non)*  
-Si oui — Nature : `{{NATURE_SIGNALEMENT}}`
-
----
-
-## RECOMMANDATIONS
-
-### Pour les magistrats
-
-`{{RECO_MAGISTRATS}}`
-
-### Pour l'ASE / PJJ
-
-`{{RECO_ASE_PJJ}}`
-
-### Prochaine étape recommandée
-
-`{{PROCHAINE_ETAPE}}`
-
-### Délai recommandé pour suivi
-
-`{{DELAI_SUIVI}}`
-
----
-
-## VALIDATION DU RAPPORT
-
-| Champ | Valeur |
-|---|---|
-| **Validé par le Pilote humain** | `{{VALIDE_PAR}}` |
-| **Date de validation** | `{{DATE_VALIDATION}}` |
-| **Signature électronique** | `{{SIGNATURE}}` |
-| **Observations du Pilote** | `{{OBS_PILOTE}}` |
-
----
-
-## ANNEXE — EXTRAIT DU CV INTERACTIF
-
-> Résumé narratif généré par l'IA Scénariste à partir de l'entretien. Ce texte a été relu et validé par le Pilote humain avant transmission.
-
----
-
-**Qui je suis :**  
-`{{CV_QUI_JE_SUIS}}`
-
-**Mon parcours :**  
-`{{CV_PARCOURS}}`
-
-**Mes compétences :**  
-`{{CV_COMPETENCES}}`
-
-**Mon projet :**  
-`{{CV_PROJET}}`
-
-**Ce qui me donne de la force :**  
-`{{CV_FORCE}}`
-
----
-
-*Ce rapport a été généré automatiquement par l'application Mon Miroir (IA Scénariste — Claude Sonnet) et validé par le Pilote humain. Il constitue un support de médiation complémentaire aux rapports PJJ et ASE, et ne se substitue pas à l'évaluation professionnelle humaine.*
-
-**Mon Miroir · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026**
+{
+  "rapport": {
+    "metadata": {
+      "id": "RPT-2026-{{ID_RAPPORT}}",
+      "version": "1.0",
+      "application": "Mon Miroir",
+      "date_generation": "{{DATE_GENERATION}}",
+      "heure_generation": "{{HEURE_GENERATION}}",
+      "genere_par": "IA Scénariste (Claude Sonnet) + Pilote humain",
+      "statut": "{{STATUT}}",
+      "destinataire": "{{DESTINATAIRE}}",
+      "signature_pilote": "{{SIGNATURE}}"
+    },
+
+    "mineur": {
+      "pseudonyme": "{{PSEUDO_MNA}}",
+      "sexe": "{{SEXE}}",
+      "age_estime": "{{AGE_ESTIME}}",
+      "pays_origine": "{{PAYS_ORIGINE}}",
+      "ville_origine": "{{VILLE_ORIGINE}}",
+      "date_arrivee_france": "{{DATE_ARRIVEE}}",
+      "structure_accueil": "{{STRUCTURE_ACCUEIL}}",
+      "referent_educatif": "{{REFERENT_EDU}}",
+      "rgpd": {
+        "pseudonymise": true,
+        "donnees_identifiantes_separees": true,
+        "consentement_recueilli": "{{CONSENTEMENT}}",
+        "date_consentement": "{{DATE_CONSENTEMENT}}"
+      }
+    },
+
+    "entretien": {
+      "date": "{{DATE_ENTRETIEN}}",
+      "duree_minutes": "{{DUREE}}",
+      "mode": "{{MODE}}",
+      "langue_principale": "{{LANGUE}}",
+      "langues_utilisees": ["{{LANGUE_1}}", "{{LANGUE_2}}"],
+      "themes_abordes": ["{{THEME_1}}", "{{THEME_2}}", "{{THEME_3}}"],
+      "themes_non_abordes": [
+        {
+          "theme": "{{THEME_NON_ABORDE}}",
+          "raison": "{{RAISON_NON_ABORDE}}"
+        }
+      ],
+      "alertes_declenchees": "{{NB_ALERTES}}",
+      "interventions_pilote": "{{NB_INTERVENTIONS_PILOTE}}",
+      "micro_relances": {
+        "total_utilisees": "{{NB_RELANCES_TOTAL}}",
+        "validation": "{{NB_VALIDATION}}",
+        "encouragement": "{{NB_ENCOURAGEMENT}}",
+        "valorisation": "{{NB_VALORISATION}}",
+        "alerte_detresse": "{{NB_ALERTE_DETRESSE}}",
+        "langue_dominante_jeune": "{{LANGUE_DOMINANTE}}",
+        "passages_darija": "{{NB_DARIJA}}",
+        "observation_linguistique": "{{OBS_LINGUISTIQUE}}"
+      }
+    },
+
+    "synthese_themes": {
+      "theme_1_origine_famille": {
+        "faits": "{{T1_FAITS}}",
+        "vecu_emotionnel": "{{T1_VECU}}",
+        "indicateurs_cliniques": "{{T1_CLINIQUE}}",
+        "niveau_detresse": "{{T1_DETRESSE}}"
+      },
+      "theme_2_exil_trajet": {
+        "faits": "{{T2_FAITS}}",
+        "vecu_emotionnel": "{{T2_VECU}}",
+        "indicateurs_cliniques": "{{T2_CLINIQUE}}",
+        "niveau_detresse": "{{T2_DETRESSE}}",
+        "alerte_declenchee": "{{T2_ALERTE}}"
+      },
+      "theme_3_competences_ecole": {
+        "faits": "{{T3_FAITS}}",
+        "vecu_emotionnel": "{{T3_VECU}}",
+        "competences": [
+          {
+            "intitule": "{{COMP_1}}",
+            "type": "{{TYPE_COMP_1}}",
+            "niveau": "{{NIV_COMP_1}}"
+          },
+          {
+            "intitule": "{{COMP_2}}",
+            "type": "{{TYPE_COMP_2}}",
+            "niveau": "{{NIV_COMP_2}}"
+          }
+        ],
+        "langues_parlees": ["{{LANGUE_PARLEE_1}}", "{{LANGUE_PARLEE_2}}"],
+        "niveau_francais": "{{NIVEAU_FR}}",
+        "niveau_scolarite": "{{NIVEAU_SCOLARITE}}"
+      },
+      "theme_4_reves_projet": {
+        "faits": "{{T4_FAITS}}",
+        "vecu_emotionnel": "{{T4_VECU}}",
+        "projet_vie": "{{PROJET_VIE}}",
+        "objectif_5ans": "{{OBJECTIF_5ANS}}",
+        "ressources_internes": ["{{RESSOURCE_1}}", "{{RESSOURCE_2}}"],
+        "figures_attachement": ["{{FIGURE_1}}", "{{FIGURE_2}}"]
+      },
+      "theme_5_vulnerabilites": {
+        "aborde": "{{T5_ABORDE}}",
+        "raison_non_aborde": "{{T5_RAISON}}",
+        "faits": "{{T5_FAITS}}",
+        "vecu_emotionnel": "{{T5_VECU}}",
+        "vulnerabilites_identifiees": ["{{VULN_1}}", "{{VULN_2}}"],
+        "strategies_adaptation": ["{{STRAT_1}}", "{{STRAT_2}}"],
+        "reseau_soutien": "{{RESEAU_SOUTIEN}}",
+        "niveau_detresse": "{{T5_DETRESSE}}"
+      }
+    },
+
+    "evaluation_globale": {
+      "scores": {
+        "engagement_verbal": "{{SCORE_VERBAL}}",
+        "stabilite_emotionnelle": "{{SCORE_EMOTION}}",
+        "coherence_recit": "{{SCORE_COHERENCE}}",
+        "projection_avenir": "{{SCORE_PROJECTION}}",
+        "score_global_sur_20": "{{SCORE_GLOBAL}}"
+      },
+      "niveau_risque": "{{NIVEAU_RISQUE}}",
+      "signalement_requis": "{{SIGNALEMENT}}",
+      "nature_signalement": "{{NATURE_SIGNALEMENT}}"
+    },
+
+    "recommandations": {
+      "pour_magistrats": "{{RECO_MAGISTRATS}}",
+      "pour_ase_pjj": "{{RECO_ASE_PJJ}}",
+      "prochaine_etape": "{{PROCHAINE_ETAPE}}",
+      "delai_suivi_jours": "{{DELAI_SUIVI}}"
+    },
+
+    "cv_interactif": {
+      "qui_je_suis": "{{CV_QUI_JE_SUIS}}",
+      "mon_parcours": "{{CV_PARCOURS}}",
+      "mes_competences": "{{CV_COMPETENCES}}",
+      "mon_projet": "{{CV_PROJET}}",
+      "ce_qui_me_donne_de_la_force": "{{CV_FORCE}}",
+      "url_video": "{{URL_VIDEO_CV}}"
+    },
+
+    "validation": {
+      "valide_par": "{{VALIDE_PAR}}",
+      "date_validation": "{{DATE_VALIDATION}}",
+      "observations_pilote": "{{OBS_PILOTE}}",
+      "transmis_le": "{{DATE_TRANSMISSION}}",
+      "transmis_a": ["{{DESTINATAIRE_1}}", "{{DESTINATAIRE_2}}"]
+    }
+  }
+}
