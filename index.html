@@ -1,278 +1,156 @@
-# MON MIROIR — Guide de Déploiement
-## Architecture Frontend (Vercel/Netlify) + Backend Audio (Docker HDS)
+# ============================================================
+# MON MIROIR — Docker Compose (Production HDS)
+# ============================================================
+# Orchestration complète : Backend Audio + DB + Reverse Proxy
+# Hébergement : OVH HDS souverain France
+# ============================================================
 
----
+version: '3.9'
 
-## VUE D'ENSEMBLE
+services:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  UTILISATEURS (MNA, Pilote, Magistrats)                 │
-└──────────────────────┬──────────────────────────────────┘
-                       │ HTTPS
-┌──────────────────────▼──────────────────────────────────┐
-│  FRONTEND — Vercel / Netlify (CDN mondial)              │
-│  React.js + Next.js · Variables ENV Vercel              │
-│  → Appels Claude API (Anthropic)                        │
-│  → Appels Backend Audio HDS                             │
-└──────────────────────┬──────────────────────────────────┘
-                       │ HTTPS (API privée)
-┌──────────────────────▼──────────────────────────────────┐
-│  BACKEND AUDIO — Docker sur OVH HDS 🇫🇷                 │
-│  Node.js · PostgreSQL · Redis · Nginx SSL               │
-│  ⚠️  Données vocales MNA — JAMAIS hors HDS              │
-│  → Chiffrement AES-256 · Pseudonymisation               │
-└─────────────────────────────────────────────────────────┘
-```
+  # ── BACKEND AUDIO SOUVERAIN ──────────────────────────────
+  audio-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.audio
+      target: production
+    container_name: monmiroir-audio
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      AUDIO_STORAGE_PATH: /app/storage/audio
+    volumes:
+      # Stockage audio chiffré — persistant sur serveur HDS
+      - audio_data:/app/storage/audio
+      - audio_temp:/app/storage/temp
+      - audio_logs:/app/logs
+    networks:
+      - monmiroir-internal
+    # Pas de port public — accessible uniquement via nginx
+    expose:
+      - "4000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          memory: 256M
 
----
+  # ── BASE DE DONNÉES POSTGRESQL CHIFFRÉE ─────────────────
+  database:
+    image: postgres:16-alpine
+    container_name: monmiroir-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: monmiroir_prod
+      POSTGRES_USER: monmiroir_prod
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - monmiroir-internal
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monmiroir_prod"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
-## 1. SÉPARATION TEST / PRODUCTION
+  # ── REVERSE PROXY NGINX (SSL + Sécurité) ─────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: monmiroir-nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - monmiroir-internal
+      - monmiroir-external
+    depends_on:
+      - audio-backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 64M
 
-### Structure des fichiers .env
+  # ── REDIS (Cache sessions & rate limiting) ───────────────
+  redis:
+    image: redis:7-alpine
+    container_name: monmiroir-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+    volumes:
+      - redis_data:/data
+    networks:
+      - monmiroir-internal
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
-```
-monmiroir/
-├── .env.test          ← Données fictives, clés de test
-├── .env.production    ← Données réelles, clés prod (JAMAIS sur GitHub)
-├── .env.example       ← Template vide pour les nouveaux développeurs
-└── .gitignore         ← Contient : .env*, !.env.example
-```
+# ── VOLUMES PERSISTANTS (Données souveraines HDS) ─────────
+volumes:
+  audio_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      # ⚠️  Chemin sur serveur OVH HDS certifié
+      device: /data/monmiroir/audio
+  audio_temp:
+    driver: local
+  audio_logs:
+    driver: local
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/monmiroir/database
+  redis_data:
+    driver: local
+  nginx_logs:
+    driver: local
 
-### .gitignore obligatoire
-
-```gitignore
-# Variables d'environnement — NE JAMAIS COMMITTER
-.env
-.env.local
-.env.test
-.env.production
-.env.staging
-
-# Sauf le template vide
-!.env.example
-
-# Données audio MNA
-/storage/audio/
-/storage/temp/
-```
-
-### Lancer en mode TEST
-
-```bash
-# Copier le template
-cp .env.example .env.test
-
-# Remplir les valeurs de test
-nano .env.test
-
-# Démarrer en mode test
-NODE_ENV=test node --env-file=.env.test server.js
-
-# Ou avec Docker
-docker compose --env-file .env.test up
-```
-
-### Lancer en mode PRODUCTION
-
-```bash
-# Démarrer en production (variables depuis Vercel ou serveur HDS)
-NODE_ENV=production docker compose --env-file .env.production up -d
-```
-
----
-
-## 2. FRONTEND — DÉPLOIEMENT VERCEL / NETLIFY
-
-### Option A : Vercel (recommandé)
-
-```bash
-# 1. Installer Vercel CLI
-npm install -g vercel
-
-# 2. Connexion
-vercel login
-
-# 3. Déployer
-cd monmiroir-frontend
-vercel --prod
-
-# 4. Configurer les variables d'environnement
-# Dashboard Vercel → Settings → Environment Variables
-# Ajouter :
-# NEXT_PUBLIC_ANTHROPIC_API_KEY  → votre clé (attention : exposée côté client)
-# NEXT_PUBLIC_AUDIO_API_URL      → https://audio.monmiroir-hds.fr
-# NEXT_PUBLIC_APP_ENV            → production
-```
-
-> ⚠️ **Sécurité** : La clé Anthropic côté frontend est exposée dans le navigateur.
-> Pour la production institutionnelle, passez par un **proxy backend** qui cache la clé.
-
-### Option B : Netlify
-
-```bash
-# 1. Installer Netlify CLI
-npm install -g netlify-cli
-
-# 2. Connexion et déploiement
-netlify login
-netlify deploy --prod --dir=out
-
-# 3. Variables d'environnement
-# Dashboard Netlify → Site Settings → Environment Variables
-```
-
-### vercel.json (configuration)
-
-```json
-{
-  "version": 2,
-  "name": "monmiroir",
-  "builds": [
-    { "src": "package.json", "use": "@vercel/next" }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.anthropic.com https://audio.monmiroir-hds.fr" }
-      ]
-    }
-  ]
-}
-```
-
----
-
-## 3. BACKEND AUDIO — DÉPLOIEMENT DOCKER HDS
-
-### Prérequis serveur OVH HDS
-
-```
-- Serveur certifié HDS (Hébergeur de Données de Santé)
-- Ubuntu 22.04 LTS minimum
-- Docker Engine 24+ et Docker Compose v2
-- SSL/TLS avec certificat valide
-- Pare-feu : seuls les ports 80 et 443 ouverts
-```
-
-### Installation sur serveur HDS
-
-```bash
-# 1. Connexion au serveur HDS
-ssh admin@votre-serveur-hds.ovh.fr
-
-# 2. Installer Docker
-curl -fsSL https://get.docker.com | sh
-usermod -aG docker $USER
-
-# 3. Cloner le projet backend
-git clone https://github.com/monmiroir-toulouse/monmiroir-backend.git
-cd monmiroir-backend
-
-# 4. Configurer les variables de production
-cp .env.example .env.production
-nano .env.production
-# → Remplir toutes les valeurs réelles
-
-# 5. Créer les dossiers de données souveraines
-sudo mkdir -p /data/monmiroir/audio
-sudo mkdir -p /data/monmiroir/database
-sudo chown -R 1001:1001 /data/monmiroir
-
-# 6. Démarrer les services
-docker compose --env-file .env.production up -d
-
-# 7. Vérifier l'état
-docker compose ps
-docker compose logs -f audio-backend
-```
-
-### Commandes de maintenance
-
-```bash
-# Voir les logs en temps réel
-docker compose logs -f audio-backend
-
-# Redémarrer un service
-docker compose restart audio-backend
-
-# Mettre à jour l'application
-git pull origin main
-docker compose --env-file .env.production build audio-backend
-docker compose --env-file .env.production up -d audio-backend
-
-# Sauvegarder la base de données
-docker exec monmiroir-db pg_dump -U monmiroir_prod monmiroir_prod > backup_$(date +%Y%m%d).sql
-
-# Nettoyer les fichiers audio temporaires
-docker exec monmiroir-audio find /app/storage/temp -mtime +1 -delete
-```
-
----
-
-## 4. SÉCURITÉ RGPD — CHECKLIST DÉPLOIEMENT
-
-### Avant tout déploiement en production :
-
-- [ ] `.env.production` jamais commité sur GitHub
-- [ ] Clé API Anthropic via proxy backend (pas exposée frontend)
-- [ ] Base de données sur serveur HDS certifié (OVH)
-- [ ] Volumes Docker montés sur `/data/monmiroir/` (chiffré)
-- [ ] SSL/TLS actif sur tous les endpoints
-- [ ] Pseudonymisation activée (`PSEUDONYMISATION=true`)
-- [ ] DPO désigné et email configuré
-- [ ] Logs sans données identifiantes
-- [ ] Rétention données configurée (`DATA_RETENTION_DAYS=365`)
-- [ ] Sauvegardes automatiques planifiées (cron)
-- [ ] Pare-feu configuré (ports 80/443 uniquement)
-- [ ] Audit de sécurité initial effectué
-
-### Séparation des données TEST / PROD
-
-| Élément | TEST | PRODUCTION |
-|---|---|---|
-| Données MNA | Fictives uniquement | Pseudonymisées réelles |
-| Clé Anthropic | Clé de test limitée | Clé production |
-| Base de données | Locale / Docker local | OVH HDS France |
-| Audio | Dossier local temporaire | Volume Docker HDS |
-| Logs | Niveau DEBUG complet | Niveau WARN anonymisé |
-| Rétention | 7 jours | 365 jours |
-| CORS | localhost | Domaines institutionnels |
-
----
-
-## 5. ARCHITECTURE RÉSEAU FINALE
-
-```
-Internet
-    │
-    ▼ :443
-┌─────────────┐     ┌──────────────────────────────┐
-│   Vercel    │────▶│   Anthropic API (Claude)      │
-│  (Frontend) │     │   api.anthropic.com           │
-│  React/Next │     └──────────────────────────────┘
-└──────┬──────┘
-       │ HTTPS API privée
-       ▼ :443
-┌─────────────────────────────────────────────────┐
-│              OVH HDS 🇫🇷 (Souverain)            │
-│  ┌─────────┐  ┌──────────┐  ┌────────────────┐  │
-│  │  Nginx  │  │  Audio   │  │  PostgreSQL    │  │
-│  │  :443   │─▶│ Backend  │─▶│  + Redis       │  │
-│  │  SSL    │  │ :4000    │  │  (chiffrés)    │  │
-│  └─────────┘  └──────────┘  └────────────────┘  │
-│         Réseau interne Docker uniquement         │
-└─────────────────────────────────────────────────┘
-```
-
----
-
-*Mon Miroir · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026*
+# ── RÉSEAUX ───────────────────────────────────────────────
+networks:
+  monmiroir-internal:
+    # Réseau interne — aucun accès externe direct
+    internal: true
+    driver: bridge
+  monmiroir-external:
+    # Réseau externe — uniquement nginx
+    driver: bridge
