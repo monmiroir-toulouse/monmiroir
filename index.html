@@ -1,642 +1,730 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mon Miroir — IA pour MNA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --noir: #0d0d0f;
-      --navy: #1e3a5f;
-      --or: #c9a84c;
-      --or-clair: #e8d5a3;
-      --creme: #f5f0e8;
-      --blanc: #ffffff;
-      --gris: #6b6b6b;
-      --vert: #3a6b4a;
-      --vert-clair: #6aab7a;
-      --rouge: #8b3a3a;
-      --rouge-clair: #c47a7a;
-      --bleu: #4a7fa5;
-      --ligne: rgba(201,168,76,0.2);
+      --bordeaux:     #6B1A2A;
+      --bordeaux-mid: #8B2A3E;
+      --bordeaux-pale:#F4E8EB;
+      --bordeaux-line:#D4A0AA;
+      --blanc:        #FFFFFF;
+      --gris-fond:    #F7F5F3;
+      --gris-clair:   #EAE7E4;
+      --gris:         #888078;
+      --gris-fonce:   #3A3530;
+      --noir:         #1A1614;
+      --ligne:        rgba(107,26,42,0.12);
     }
- 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
- 
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      background: var(--noir);
-      color: var(--creme);
+      background: var(--gris-fond);
+      color: var(--gris-fonce);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       min-height: 100vh;
     }
- 
+
     /* ── HEADER ── */
     header {
-      background: var(--noir);
+      background: var(--blanc);
       border-bottom: 1px solid var(--ligne);
-      padding: 0 24px;
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
+      height: 68px;
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
     }
- 
+
     .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      color: var(--blanc);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--noir);
+      letter-spacing: 0.5px;
     }
-    .logo span { color: var(--or); }
- 
+    .logo span { color: var(--bordeaux); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
     .header-badge {
       font-size: 10px;
       letter-spacing: 2px;
-      color: var(--or);
-      border: 1px solid var(--ligne);
-      padding: 4px 12px;
+      color: var(--bordeaux);
+      border: 1px solid var(--bordeaux-line);
+      padding: 5px 14px;
       text-transform: uppercase;
+      background: var(--bordeaux-pale);
     }
- 
+
     /* ── HERO ── */
     .hero {
+      background: var(--blanc);
+      border-bottom: 1px solid var(--ligne);
       text-align: center;
-      padding: 80px 20px 60px;
+      padding: 72px 20px 56px;
       position: relative;
       overflow: hidden;
     }
     .hero::before {
       content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 65%);
-      pointer-events: none;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--bordeaux);
     }
+
     .hero-tag {
       display: inline-block;
-      border: 1px solid var(--or);
-      color: var(--or);
+      background: var(--bordeaux-pale);
+      border: 1px solid var(--bordeaux-line);
+      color: var(--bordeaux);
       font-size: 10px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 5px 14px;
-      margin-bottom: 24px;
-      animation: fadeUp 0.6s ease both;
+      padding: 6px 16px;
+      margin-bottom: 28px;
     }
+
     .hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 7vw, 72px);
-      font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 16px;
-      animation: fadeUp 0.6s 0.1s ease both;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 6vw, 66px);
+      font-weight: 600;
+      color: var(--noir);
+      line-height: 1.15;
+      margin-bottom: 18px;
     }
-    .hero h1 span { color: var(--or); }
+    .hero h1 em {
+      color: var(--bordeaux);
+      font-style: italic;
+    }
+
     .hero p {
       font-size: 15px;
       color: var(--gris);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
-      animation: fadeUp 0.6s 0.2s ease both;
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
     }
- 
-    /* Sélecteur de langue */
+
+    /* ── LANGUE ── */
     .lang-switch {
       display: inline-flex;
       border: 1px solid var(--ligne);
       overflow: hidden;
-      animation: fadeUp 0.6s 0.3s ease both;
+      background: var(--blanc);
     }
     .lang-btn {
       background: none;
       border: none;
+      border-right: 1px solid var(--ligne);
       color: var(--gris);
       font-family: 'DM Sans', sans-serif;
       font-size: 12px;
       letter-spacing: 2px;
-      padding: 8px 20px;
+      padding: 9px 22px;
       cursor: pointer;
       transition: all 0.2s;
       text-transform: uppercase;
     }
-    .lang-btn.active { background: var(--or); color: var(--noir); }
-    .lang-btn:hover:not(.active) { color: var(--or); }
- 
-    /* ── AGENTS GRID ── */
-    .agents-section {
-      padding: 20px 20px 60px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
- 
-    .section-label {
-      text-align: center;
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--or);
-      margin-bottom: 32px;
-    }
- 
-    .agents-grid {
+    .lang-btn:last-child { border-right: none; }
+    .lang-btn.active { background: var(--bordeaux); color: var(--blanc); }
+    .lang-btn:hover:not(.active) { background: var(--bordeaux-pale); color: var(--bordeaux); }
+
+    /* ── PANNEAU CONFIG ── */
+    .config-panel {
+      max-width: 1140px;
+      margin: 28px auto 0;
+      padding: 0 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
- 
-    .agent-card {
+    @media(max-width:700px) { .config-panel { grid-template-columns: 1fr; } }
+
+    .config-card {
+      background: var(--blanc);
       border: 1px solid var(--ligne);
-      background: #111214;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.3s;
-      animation: fadeUp 0.6s ease both;
+      padding: 18px 22px;
     }
-    .agent-card:hover { border-color: var(--or); }
- 
-    .agent-header {
-      padding: 24px 24px 16px;
-      border-bottom: 1px solid var(--ligne);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .agent-icon {
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      border: 1px solid;
-      flex-shrink: 0;
-    }
-    .agent-icon.designer { border-color: var(--vert-clair); background: rgba(106,171,122,0.08); }
-    .agent-icon.scenariste { border-color: var(--rouge-clair); background: rgba(139,58,58,0.08); }
-    .agent-icon.pilote { border-color: var(--bleu); background: rgba(74,127,165,0.08); }
- 
-    .agent-meta { flex: 1; }
-    .agent-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 17px;
-      margin-bottom: 2px;
-    }
-    .agent-name.designer { color: var(--vert-clair); }
-    .agent-name.scenariste { color: var(--rouge-clair); }
-    .agent-name.pilote { color: var(--bleu); }
- 
-    .agent-phase {
+
+    .config-title {
       font-size: 10px;
       letter-spacing: 2px;
-      color: var(--gris);
       text-transform: uppercase;
-    }
- 
-    .agent-status {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--vert-clair);
-      box-shadow: 0 0 6px var(--vert-clair);
-      animation: pulse 2s infinite;
-    }
- 
-    /* ── CHAT ── */
-    .chat-body {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      height: 320px;
+      color: var(--bordeaux);
+      margin-bottom: 12px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--ligne) transparent;
-    }
- 
-    .msg {
-      max-width: 88%;
-      padding: 10px 14px;
-      font-size: 13px;
-      line-height: 1.6;
-      animation: fadeUp 0.3s ease;
-    }
-    .msg.ai {
-      align-self: flex-start;
-      background: #1a1c1f;
-      border: 1px solid var(--ligne);
-      color: var(--creme);
-      border-radius: 0 8px 8px 8px;
-    }
-    .msg.user {
-      align-self: flex-end;
-      background: var(--or);
-      color: var(--noir);
-      border-radius: 8px 0 8px 8px;
-      font-weight: 400;
-    }
- 
-    .typing {
-      align-self: flex-start;
-      padding: 12px 16px;
-      background: #1a1c1f;
-      border: 1px solid var(--ligne);
-      border-radius: 0 8px 8px 8px;
-    }
-    .typing span {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--or);
-      margin: 0 2px;
-      animation: bounce 1.2s infinite;
-    }
-    .typing span:nth-child(2) { animation-delay: 0.2s; }
-    .typing span:nth-child(3) { animation-delay: 0.4s; }
- 
-    /* ── INPUT ── */
-    .chat-footer {
-      padding: 12px 16px;
-      border-top: 1px solid var(--ligne);
-      display: flex;
+      align-items: center;
       gap: 8px;
     }
-    .chat-input {
+    .config-title::after {
+      content: '';
       flex: 1;
-      background: #1a1c1f;
-      border: 1px solid var(--ligne);
-      color: var(--creme);
+      height: 1px;
+      background: var(--ligne);
+    }
+
+    .config-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .field {
+      flex: 1;
+      min-width: 160px;
+      background: var(--gris-fond);
+      border: 1px solid var(--gris-clair);
+      color: var(--gris-fonce);
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       outline: none;
       transition: border-color 0.2s;
     }
-    .chat-input:focus { border-color: var(--or); }
-    .chat-input::placeholder { color: var(--gris); }
- 
-    .send-btn {
-      background: var(--or);
+    .field:focus { border-color: var(--bordeaux); }
+    .field::placeholder { color: var(--gris); }
+
+    .btn-primary {
+      background: var(--bordeaux);
       border: none;
-      color: var(--noir);
+      color: var(--blanc);
       font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 1px;
-      padding: 10px 18px;
+      letter-spacing: 1.5px;
+      padding: 9px 18px;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: background 0.2s;
       text-transform: uppercase;
+      white-space: nowrap;
     }
-    .send-btn:hover { opacity: 0.85; }
-    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
- 
-    /* ── CLÉ API ── */
-    .api-section {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
+    .btn-primary:hover { background: var(--bordeaux-mid); }
+
+    .config-note {
+      font-size: 11px;
+      color: var(--gris);
+      margin-top: 8px;
+      line-height: 1.5;
     }
-    .api-box {
-      border: 1px solid var(--ligne);
-      padding: 20px 24px;
+
+    /* Toggle voix */
+    .tts-row {
       display: flex;
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
     }
-    .api-label {
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle { position: relative; width: 40px; height: 21px; cursor: pointer; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .t-track { position: absolute; inset: 0; background: var(--gris-clair); border: 1px solid var(--ligne); transition: 0.25s; }
+    .t-thumb { position: absolute; width: 13px; height: 13px; top: 3px; left: 3px; background: var(--gris); transition: 0.25s; }
+    input:checked ~ .t-track { background: var(--bordeaux-pale); border-color: var(--bordeaux-line); }
+    input:checked ~ .t-thumb { left: 22px; background: var(--bordeaux); }
+    .toggle-label { font-size: 12px; color: var(--gris); }
+
+    .voice-sel {
+      background: var(--gris-fond);
+      border: 1px solid var(--gris-clair);
+      color: var(--gris-fonce);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      padding: 7px 10px;
+      outline: none;
+      max-width: 200px;
+      flex: 1;
+    }
+    .voice-sel:focus { border-color: var(--bordeaux); }
+
+    .speed-wrap { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gris); }
+    input[type=range] { -webkit-appearance: none; width: 80px; height: 2px; background: var(--gris-clair); outline: none; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--bordeaux); cursor: pointer; }
+
+    /* ── AGENTS ── */
+    .agents-wrap {
+      max-width: 1140px;
+      margin: 28px auto 60px;
+      padding: 0 24px;
+    }
+
+    .agents-label {
       font-size: 10px;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--or);
+      color: var(--bordeaux);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .agent-card {
+      background: var(--blanc);
+      border: 1px solid var(--ligne);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    .agent-card:hover {
+      border-color: var(--bordeaux-line);
+      box-shadow: 0 4px 20px rgba(107,26,42,0.08);
+    }
+
+    .agent-header {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--ligne);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .agent-icon {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      border: 1px solid;
       flex-shrink: 0;
     }
-    .api-input {
+    .agent-icon.designer  { border-color: #A0855B; background: #FBF6F0; }
+    .agent-icon.scenariste{ border-color: var(--bordeaux-line); background: var(--bordeaux-pale); }
+    .agent-icon.pilote    { border-color: #5B7A9A; background: #EEF3F8; }
+
+    .agent-meta { flex: 1; }
+    .agent-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .agent-name.designer  { color: #7A5A30; }
+    .agent-name.scenariste{ color: var(--bordeaux); }
+    .agent-name.pilote    { color: #2A4A6A; }
+    .agent-phase { font-size: 10px; letter-spacing: 2px; color: var(--gris); text-transform: uppercase; }
+
+    .agent-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4CAF7A;
+      box-shadow: 0 0 5px #4CAF7A;
+      animation: blink 2s infinite;
+    }
+
+    /* ── CHAT ── */
+    .chat-body {
       flex: 1;
-      min-width: 200px;
-      background: #1a1c1f;
+      padding: 14px;
+      overflow-y: auto;
+      height: 310px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gris-clair) transparent;
+      background: var(--gris-fond);
+    }
+
+    .msg { max-width: 88%; font-size: 13px; line-height: 1.65; }
+    .msg.ai  { align-self: flex-start; }
+    .msg.user{ align-self: flex-end; }
+
+    .msg-bubble { padding: 10px 14px; }
+    .msg.ai  .msg-bubble {
+      background: var(--blanc);
       border: 1px solid var(--ligne);
-      color: var(--creme);
+      color: var(--gris-fonce);
+      border-radius: 0 10px 10px 10px;
+      white-space: pre-wrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .msg.user .msg-bubble {
+      background: var(--bordeaux);
+      color: var(--blanc);
+      border-radius: 10px 0 10px 10px;
+    }
+
+    .speak-btn {
+      background: none;
+      border: 1px solid var(--ligne);
+      color: var(--bordeaux);
+      font-size: 11px;
+      padding: 3px 9px;
+      cursor: pointer;
+      margin-top: 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .speak-btn:hover { background: var(--bordeaux-pale); }
+    .speak-btn.playing { background: var(--bordeaux-pale); border-color: var(--bordeaux-line); }
+
+    .typing {
+      align-self: flex-start;
+      padding: 11px 15px;
+      background: var(--blanc);
+      border: 1px solid var(--ligne);
+      border-radius: 0 10px 10px 10px;
+    }
+    .typing span {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--bordeaux);
+      margin: 0 2px;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    .chat-footer {
+      padding: 10px 14px;
+      border-top: 1px solid var(--ligne);
+      display: flex;
+      gap: 8px;
+      background: var(--blanc);
+    }
+    .chat-input {
+      flex: 1;
+      background: var(--gris-fond);
+      border: 1px solid var(--gris-clair);
+      color: var(--gris-fonce);
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       outline: none;
       transition: border-color 0.2s;
     }
-    .api-input:focus { border-color: var(--or); }
-    .api-input::placeholder { color: var(--gris); }
-    .api-save {
-      background: none;
-      border: 1px solid var(--or);
-      color: var(--or);
+    .chat-input:focus { border-color: var(--bordeaux); }
+    .chat-input::placeholder { color: var(--gris); }
+
+    .send-btn {
+      background: var(--bordeaux);
+      border: none;
+      color: var(--blanc);
       font-family: 'DM Sans', sans-serif;
       font-size: 11px;
+      font-weight: 500;
       letter-spacing: 1px;
-      padding: 10px 20px;
+      padding: 9px 16px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s;
       text-transform: uppercase;
     }
-    .api-save:hover { background: var(--or); color: var(--noir); }
-    .api-note { font-size: 11px; color: var(--gris); width: 100%; }
- 
+    .send-btn:hover { background: var(--bordeaux-mid); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
     /* ── FOOTER ── */
     footer {
+      background: var(--blanc);
       border-top: 1px solid var(--ligne);
-      padding: 24px;
-      text-align: center;
-      font-size: 11px;
-      color: var(--gris);
-      letter-spacing: 1px;
+      padding: 22px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    footer span { color: var(--or); }
- 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.4; }
-    }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40%            { transform: translateY(-6px); }
-    }
- 
-    @media (max-width: 600px) {
-      .agents-grid { grid-template-columns: 1fr; }
-      .api-box { flex-direction: column; align-items: stretch; }
-    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--bordeaux); font-weight: 600; }
+    .footer-info { font-size: 11px; color: var(--gris); letter-spacing: 0.5px; }
+
+    @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
- 
+
 <!-- HEADER -->
 <header>
   <div class="logo">Mon <span>Miroir</span></div>
-  <div class="header-badge">MNA · Toulouse · 2026</div>
+  <div class="header-right">
+    <div class="header-badge">Tribunal · Toulouse · 2026</div>
+  </div>
 </header>
- 
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-tag">Intelligence Artificielle Clinique</div>
-  <h1>Trois agents IA<br/>au service du <span>MNA</span></h1>
-  <p>Restaurer l'identité, construire le récit, produire le CV Interactif — sous supervision humaine.</p>
+  <h1>Trois agents IA<br/>au service du <em>MNA</em></h1>
+  <p>Restaurer l'identité, construire le récit de vie, produire le CV Interactif — sous supervision humaine et institutionnelle.</p>
   <div class="lang-switch">
-    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
-    <button class="lang-btn" onclick="setLang('ar')">AR</button>
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn active" onclick="setLang('fr',this)">FR</button>
+    <button class="lang-btn" onclick="setLang('ar',this)">AR</button>
+    <button class="lang-btn" onclick="setLang('en',this)">EN</button>
   </div>
 </section>
- 
-<!-- CLÉ API -->
-<div class="api-section">
-  <div class="api-box">
-    <div class="api-label">🔑 Clé API</div>
-    <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." />
-    <button class="api-save" onclick="saveApiKey()">Enregistrer</button>
-    <p class="api-note">⚠️ Votre clé API Anthropic est stockée localement dans votre navigateur. Elle n'est jamais envoyée ailleurs.</p>
+
+<!-- CONFIG -->
+<div class="config-panel">
+
+  <div class="config-card">
+    <div class="config-title">🔑 Clé API Anthropic</div>
+    <div class="config-row">
+      <input class="field" type="password" id="apiKeyInput" placeholder="sk-ant-api03-…"/>
+      <button class="btn-primary" onclick="saveApiKey()">Enregistrer</button>
+    </div>
+    <p class="config-note">Votre clé est stockée uniquement dans votre navigateur, jamais transmise à des tiers.</p>
   </div>
+
+  <div class="config-card">
+    <div class="config-title">🔊 Synthèse vocale</div>
+    <div class="tts-row">
+      <div class="toggle-wrap">
+        <label class="toggle">
+          <input type="checkbox" id="ttsEnabled" onchange="ttsAuto=this.checked"/>
+          <div class="t-track"></div>
+          <div class="t-thumb"></div>
+        </label>
+        <span class="toggle-label">Lecture auto</span>
+      </div>
+      <select class="voice-sel" id="voiceSelect" onchange="updateVoice()">
+        <option>Chargement…</option>
+      </select>
+      <div class="speed-wrap">
+        <span>Vitesse</span>
+        <input type="range" id="speedSlider" min="0.6" max="1.6" step="0.1" value="1.0"
+               oninput="speechRate=parseFloat(this.value);document.getElementById('speedVal').textContent=speechRate.toFixed(1)+'×'"/>
+        <span id="speedVal">1.0×</span>
+      </div>
+    </div>
+  </div>
+
 </div>
- 
+
 <!-- AGENTS -->
-<section class="agents-section">
-  <p class="section-label">Les 3 agents du dispositif</p>
+<div class="agents-wrap">
+  <p class="agents-label">Les 3 agents du dispositif</p>
   <div class="agents-grid">
- 
-    <!-- AGENT 1 : DESIGNER -->
-    <div class="agent-card" style="animation-delay:0.1s">
+
+    <!-- DESIGNER -->
+    <div class="agent-card">
       <div class="agent-header">
         <div class="agent-icon designer">🎨</div>
         <div class="agent-meta">
           <div class="agent-name designer">IA Designer</div>
           <div class="agent-phase">Phase 1 — Semaines 1–4</div>
         </div>
-        <div class="agent-status"></div>
+        <div class="agent-dot"></div>
       </div>
       <div class="chat-body" id="chat-designer"></div>
       <div class="chat-footer">
-        <input class="chat-input" id="input-designer" type="text" placeholder="Décrivez votre image idéale…" onkeydown="if(event.key==='Enter') sendMessage('designer')"/>
+        <input class="chat-input" id="input-designer" type="text" placeholder="Décrivez votre image idéale…" onkeydown="if(event.key==='Enter')sendMessage('designer')"/>
         <button class="send-btn" id="btn-designer" onclick="sendMessage('designer')">Envoyer</button>
       </div>
     </div>
- 
-    <!-- AGENT 2 : SCÉNARISTE -->
-    <div class="agent-card" style="animation-delay:0.2s">
+
+    <!-- SCÉNARISTE -->
+    <div class="agent-card">
       <div class="agent-header">
         <div class="agent-icon scenariste">✍️</div>
         <div class="agent-meta">
           <div class="agent-name scenariste">IA Scénariste</div>
           <div class="agent-phase">Phase 2 — Semaines 5–8</div>
         </div>
-        <div class="agent-status"></div>
+        <div class="agent-dot"></div>
       </div>
       <div class="chat-body" id="chat-scenariste"></div>
       <div class="chat-footer">
-        <input class="chat-input" id="input-scenariste" type="text" placeholder="Parlez de votre parcours…" onkeydown="if(event.key==='Enter') sendMessage('scenariste')"/>
+        <input class="chat-input" id="input-scenariste" type="text" placeholder="Parlez de votre parcours…" onkeydown="if(event.key==='Enter')sendMessage('scenariste')"/>
         <button class="send-btn" id="btn-scenariste" onclick="sendMessage('scenariste')">Envoyer</button>
       </div>
     </div>
- 
-    <!-- AGENT 3 : PILOTE -->
-    <div class="agent-card" style="animation-delay:0.3s">
+
+    <!-- PILOTE -->
+    <div class="agent-card">
       <div class="agent-header">
         <div class="agent-icon pilote">🧑‍⚕️</div>
         <div class="agent-meta">
           <div class="agent-name pilote">Pilote Humain</div>
           <div class="agent-phase">Supervision continue</div>
         </div>
-        <div class="agent-status"></div>
+        <div class="agent-dot"></div>
       </div>
       <div class="chat-body" id="chat-pilote"></div>
       <div class="chat-footer">
-        <input class="chat-input" id="input-pilote" type="text" placeholder="Notes de supervision…" onkeydown="if(event.key==='Enter') sendMessage('pilote')"/>
+        <input class="chat-input" id="input-pilote" type="text" placeholder="Notes de supervision…" onkeydown="if(event.key==='Enter')sendMessage('pilote')"/>
         <button class="send-btn" id="btn-pilote" onclick="sendMessage('pilote')">Envoyer</button>
       </div>
     </div>
- 
+
   </div>
-</section>
- 
+</div>
+
 <!-- FOOTER -->
 <footer>
-  <span>Mon Miroir</span> · Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026
+  <div class="footer-logo">Mon Miroir</div>
+  <div class="footer-info">Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026</div>
 </footer>
- 
+
 <script>
-  // ── ÉTAT GLOBAL ──
   var currentLang = 'fr';
   var apiKey = localStorage.getItem('monmiroir_api_key') || '';
-  var histories = { designer: [], scenariste: [], pilote: [] };
- 
-  // ── PROMPTS SYSTÈME ──
+  var histories = { designer:[], scenariste:[], pilote:[] };
+  var ttsAuto = false;
+  var selectedVoice = null;
+  var speechRate = 1.0;
+  var currentUtt = null;
+
   var systemPrompts = {
-    designer: {
-      fr: `Tu es l'IA Designer de "Mon Miroir", une application clinique pour les Mineurs Non Accompagnés (MNA) à Toulouse. Ton rôle est de restaurer l'image et l'identité visuelle du jeune. Tu l'aides à se décrire, à choisir des symboles culturels qui lui ressemblent, à construire une identité visuelle personnelle digne et valorisante. Tu es bienveillant, doux, patient. Tu poses des questions simples et courtes. Tu travailles en français, arabe ou anglais selon la langue choisie. Ne fais jamais de jugement. Accueille chaque réponse avec chaleur.`,
-      ar: `أنت المصمم الذكي لتطبيق "مرآتي" للقاصرين غير المصحوبين. مهمتك استعادة صورة الشاب وهويته البصرية. كن لطيفاً وصبوراً. اطرح أسئلة قصيرة وبسيطة باللغة العربية.`,
-      en: `You are the AI Designer of "Mon Miroir", a clinical app for Unaccompanied Minors in Toulouse. Your role is to restore the young person's image and visual identity. Be warm, gentle, and patient. Ask short, simple questions in English.`
+    designer:{
+      fr:`Tu es l'IA Designer de "Mon Miroir", application clinique pour Mineurs Non Accompagnés à Toulouse. Aide le jeune à construire son identité visuelle : se décrire, choisir des symboles culturels, créer une image personnelle digne. Sois bienveillant, doux, patient. Questions courtes et simples. Jamais de jugement.`,
+      ar:`أنت المصمم الذكي لتطبيق "مرآتي". ساعد الشاب على بناء هويته البصرية. كن لطيفاً وصبوراً. اطرح أسئلة قصيرة بالعربية.`,
+      en:`You are the AI Designer of "Mon Miroir". Help the young person build their visual identity. Be warm and patient. Ask short questions in English.`
     },
-    scenariste: {
-      fr: `Tu es l'IA Scénariste de "Mon Miroir". Ton rôle est de conduire un entretien guidé avec le Mineur Non Accompagné pour construire son récit de vie et son CV Interactif. Tu poses des questions ouvertes sur son pays d'origine, ses compétences, ses rêves, son parcours d'exil. Tu transformes ce récit en projet d'insertion structuré. Tu es empathique, respectueux, et tu valorises chaque expérience. Tu travailles en français, arabe ou anglais selon la langue choisie. Ne minimise jamais la souffrance exprimée.`,
-      ar: `أنت كاتب السيناريو الذكي لتطبيق "مرآتي". مهمتك إجراء مقابلة موجهة مع القاصر غير المصحوب لبناء سيرته الذاتية التفاعلية. اطرح أسئلة مفتوحة بلطف واحترام باللغة العربية.`,
-      en: `You are the AI Screenwriter of "Mon Miroir". Your role is to conduct a guided interview with the Unaccompanied Minor to build their life story and Interactive CV. Ask open-ended questions with empathy and respect in English.`
+    scenariste:{
+      fr:`Tu es l'IA Scénariste de "Mon Miroir". Conduis un entretien guidé pour construire le récit de vie du MNA et son CV Interactif. Questions ouvertes sur l'origine, les compétences, les rêves, le parcours. Sois empathique et respectueux. Ne minimise jamais la souffrance.`,
+      ar:`أنت كاتب السيناريو الذكي. أجر مقابلة موجهة لبناء السيرة الذاتية التفاعلية. أسئلة مفتوحة بلطف واحترام بالعربية.`,
+      en:`You are the AI Screenwriter of "Mon Miroir". Conduct a guided interview to build the young person's life story and Interactive CV. Ask open questions with empathy in English.`
     },
-    pilote: {
-      fr: `Tu es l'assistant du Pilote humain de "Mon Miroir" — l'interprète judiciaire-psychologue qui supervise les sessions des agents IA. Tu l'aides à : noter ses observations cliniques, rédiger des signalements si nécessaire, synthétiser les avancées du jeune, préparer les rapports pour les magistrats du Tribunal pour Enfants de Toulouse. Tu es professionnel, précis, et tu utilises le vocabulaire clinique et juridique approprié.`,
-      ar: `أنت مساعد المشرف البشري لتطبيق "مرآتي". ساعده في تدوين ملاحظاته السريرية وإعداد التقارير للقضاة باللغة العربية.`,
-      en: `You are the assistant of the human Supervisor of "Mon Miroir" — the judicial interpreter-psychologist. Help them note clinical observations, draft reports for magistrates, and synthesize the young person's progress in English.`
+    pilote:{
+      fr:`Tu es l'assistant du Pilote humain de "Mon Miroir" — l'interprète judiciaire-psychologue. Aide à rédiger observations cliniques, signalements, synthèses et rapports pour les magistrats du Tribunal pour Enfants de Toulouse. Style professionnel et précis.`,
+      ar:`أنت مساعد المشرف البشري. ساعده في تدوين الملاحظات السريرية وإعداد التقارير للقضاة بالعربية.`,
+      en:`You are the Supervisor's assistant. Help write clinical notes, reports for magistrates, and progress summaries in English.`
     }
   };
- 
-  var welcomeMessages = {
-    designer: {
-      fr: `🎨 Bonjour ! Je suis l'IA Designer de Mon Miroir.\n\nMon rôle est de vous aider à construire votre identité visuelle — quelque chose qui vous ressemble et dont vous pouvez être fier.\n\nCommençons doucement : si vous deviez choisir une couleur qui vous représente aujourd'hui, laquelle serait-ce ? Et pourquoi ?`,
-      ar: `🎨 مرحباً! أنا المصمم الذكي لتطبيق "مرآتي".\n\nما اللون الذي يعبر عنك اليوم؟`,
-      en: `🎨 Hello! I'm the AI Designer of Mon Miroir.\n\nIf you had to choose a colour that represents you today, which one would it be? And why?`
+
+  var welcome = {
+    designer:{
+      fr:`🎨 Bonjour ! Je suis l'IA Designer de Mon Miroir.\n\nMon rôle est de vous aider à construire votre identité visuelle — quelque chose qui vous ressemble vraiment.\n\nPour commencer : si vous deviez choisir une couleur qui vous représente aujourd'hui, laquelle serait-ce ? Et pourquoi ?`,
+      ar:`🎨 مرحباً! أنا المصمم الذكي لتطبيق "مرآتي".\n\nما اللون الذي يعبّر عنك اليوم؟ ولماذا؟`,
+      en:`🎨 Hello! I'm the AI Designer of Mon Miroir.\n\nWhich colour represents you today, and why?`
     },
-    scenariste: {
-      fr: `✍️ Bonjour ! Je suis l'IA Scénariste de Mon Miroir.\n\nJe suis là pour vous aider à raconter votre histoire — votre pays, votre parcours, vos compétences, vos rêves.\n\nChaque histoire mérite d'être entendue. Alors commençons : d'où venez-vous ? Et qu'est-ce qui vous a donné la force d'arriver jusqu'ici ?`,
-      ar: `✍️ مرحباً! أنا كاتب السيناريو الذكي.\n\nمن أين أنت؟ وما الذي أعطاك القوة للوصول إلى هنا؟`,
-      en: `✍️ Hello! I'm the AI Screenwriter of Mon Miroir.\n\nI'm here to help you tell your story. Where are you from? And what gave you the strength to get here?`
+    scenariste:{
+      fr:`✍️ Bonjour ! Je suis l'IA Scénariste de Mon Miroir.\n\nJe suis là pour vous aider à raconter votre histoire — votre pays, votre parcours, vos compétences, vos rêves.\n\nCommençons : d'où venez-vous ? Et qu'est-ce qui vous a donné la force d'arriver jusqu'ici ?`,
+      ar:`✍️ مرحباً! أنا كاتب السيناريو الذكي.\n\nمن أين أنت؟ وما الذي أعطاك القوة للوصول إلى هنا؟`,
+      en:`✍️ Hello! I'm the AI Screenwriter of Mon Miroir.\n\nWhere are you from? And what gave you the strength to get here?`
     },
-    pilote: {
-      fr: `🧑‍⚕️ Bonjour, Pilote.\n\nJe suis votre assistant de supervision. Je peux vous aider à :\n• Rédiger vos observations cliniques\n• Préparer un signalement\n• Synthétiser le parcours d'un jeune\n• Préparer un rapport pour le Tribunal\n\nQue souhaitez-vous faire ?`,
-      ar: `🧑‍⚕️ مرحباً بك، أيها المشرف.\n\nكيف يمكنني مساعدتك اليوم؟`,
-      en: `🧑‍⚕️ Hello, Supervisor.\n\nI can help you write clinical observations, prepare reports for magistrates, or synthesize a young person's progress. What would you like to do?`
+    pilote:{
+      fr:`🧑‍⚕️ Bonjour, Pilote.\n\nJe suis votre assistant de supervision. Je peux vous aider à :\n• Rédiger vos observations cliniques\n• Préparer un signalement\n• Synthétiser le parcours d'un jeune\n• Rédiger un rapport pour le Tribunal\n\nQue souhaitez-vous faire ?`,
+      ar:`🧑‍⚕️ مرحباً بك، أيها المشرف.\n\nكيف يمكنني مساعدتك اليوم؟`,
+      en:`🧑‍⚕️ Hello, Supervisor.\n\nHow can I assist you today — clinical notes, reports, or progress summary?`
     }
   };
- 
-  // ── INITIALISATION ──
-  function init() {
-    if (apiKey) {
-      document.getElementById('apiKeyInput').value = apiKey;
+
+  // ── VOIX ──
+  function loadVoices() {
+    if (!window.speechSynthesis) return;
+    var voices = speechSynthesis.getVoices();
+    var sel = document.getElementById('voiceSelect');
+    sel.innerHTML = '';
+    var codes = {fr:['fr'],ar:['ar'],en:['en']}[currentLang]||['fr'];
+    var list = voices.filter(function(v){return codes.some(function(c){return v.lang.toLowerCase().startsWith(c);});});
+    if(!list.length) list = voices;
+    list.forEach(function(v){
+      var o=document.createElement('option');
+      o.value=v.name; o.textContent=v.name+' ('+v.lang+')';
+      sel.appendChild(o);
+    });
+    selectedVoice = list[0]||null;
+  }
+  function updateVoice(){
+    var n=document.getElementById('voiceSelect').value;
+    selectedVoice=speechSynthesis.getVoices().find(function(v){return v.name===n;})||null;
+  }
+  function speak(text,btn){
+    if(!window.speechSynthesis) return;
+    if(currentUtt&&btn&&btn.classList.contains('playing')){
+      speechSynthesis.cancel(); btn.classList.remove('playing'); btn.textContent='▶ Écouter'; currentUtt=null; return;
     }
-    ['designer', 'scenariste', 'pilote'].forEach(function(agent) {
-      addMessage(agent, 'ai', welcomeMessages[agent][currentLang]);
-    });
+    speechSynthesis.cancel();
+    var clean=text.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim();
+    var u=new SpeechSynthesisUtterance(clean);
+    u.rate=speechRate; u.pitch=1; u.volume=1;
+    if(selectedVoice) u.voice=selectedVoice;
+    u.lang={fr:'fr-FR',ar:'ar-SA',en:'en-US'}[currentLang]||'fr-FR';
+    if(btn){btn.classList.add('playing');btn.textContent='⏹ Stop';}
+    u.onend=u.onerror=function(){if(btn){btn.classList.remove('playing');btn.textContent='▶ Écouter';}currentUtt=null;};
+    currentUtt=u; speechSynthesis.speak(u);
   }
- 
-  // ── LANGUE ──
-  function setLang(lang) {
-    currentLang = lang;
-    document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
-    event.target.classList.add('active');
-    // Réinitialiser les chats
-    ['designer', 'scenariste', 'pilote'].forEach(function(agent) {
-      histories[agent] = [];
-      document.getElementById('chat-' + agent).innerHTML = '';
-      addMessage(agent, 'ai', welcomeMessages[agent][lang]);
-    });
-  }
- 
-  // ── CLÉ API ──
-  function saveApiKey() {
-    var val = document.getElementById('apiKeyInput').value.trim();
-    if (!val) { alert('Veuillez entrer votre clé API.'); return; }
-    apiKey = val;
-    localStorage.setItem('monmiroir_api_key', apiKey);
-    alert('✅ Clé API enregistrée !');
-  }
- 
+
   // ── MESSAGES ──
-  function addMessage(agent, role, text) {
-    var container = document.getElementById('chat-' + agent);
-    var div = document.createElement('div');
-    div.className = 'msg ' + role;
-    div.textContent = text;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  }
- 
-  function addTyping(agent) {
-    var container = document.getElementById('chat-' + agent);
-    var div = document.createElement('div');
-    div.className = 'typing';
-    div.id = 'typing-' + agent;
-    div.innerHTML = '<span></span><span></span><span></span>';
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  }
- 
-  function removeTyping(agent) {
-    var el = document.getElementById('typing-' + agent);
-    if (el) el.remove();
-  }
- 
-  // ── ENVOI MESSAGE ──
-  async function sendMessage(agent) {
-    if (!apiKey) {
-      alert('⚠️ Veuillez d\'abord entrer votre clé API Anthropic ci-dessus.');
-      return;
+  function addMessage(agent,role,text){
+    var c=document.getElementById('chat-'+agent);
+    var w=document.createElement('div'); w.className='msg '+role;
+    var b=document.createElement('div'); b.className='msg-bubble'; b.textContent=text;
+    w.appendChild(b);
+    if(role==='ai'){
+      var sb=document.createElement('button'); sb.className='speak-btn'; sb.textContent='▶ Écouter';
+      sb.onclick=function(){speak(text,sb);};
+      w.appendChild(sb);
+      if(ttsAuto) setTimeout(function(){speak(text,sb);},400);
     }
-    var input = document.getElementById('input-' + agent);
-    var btn = document.getElementById('btn-' + agent);
-    var text = input.value.trim();
-    if (!text) return;
- 
-    addMessage(agent, 'user', text);
-    histories[agent].push({ role: 'user', content: text });
-    input.value = '';
-    btn.disabled = true;
-    addTyping(agent);
- 
-    try {
-      var response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompts[agent][currentLang],
-          messages: histories[agent]
-        })
+    c.appendChild(w); c.scrollTop=c.scrollHeight;
+  }
+  function addTyping(agent){
+    var c=document.getElementById('chat-'+agent);
+    var d=document.createElement('div'); d.className='typing'; d.id='typing-'+agent;
+    d.innerHTML='<span></span><span></span><span></span>';
+    c.appendChild(d); c.scrollTop=c.scrollHeight;
+  }
+  function removeTyping(agent){var e=document.getElementById('typing-'+agent);if(e)e.remove();}
+
+  // ── API ──
+  function saveApiKey(){
+    var v=document.getElementById('apiKeyInput').value.trim();
+    if(!v){alert('Veuillez entrer votre clé API.');return;}
+    apiKey=v; localStorage.setItem('monmiroir_api_key',v); alert('✅ Clé API enregistrée !');
+  }
+
+  async function sendMessage(agent){
+    if(!apiKey){alert('⚠️ Entrez d\'abord votre clé API.');return;}
+    var inp=document.getElementById('input-'+agent);
+    var btn=document.getElementById('btn-'+agent);
+    var txt=inp.value.trim(); if(!txt)return;
+    addMessage(agent,'user',txt);
+    histories[agent].push({role:'user',content:txt});
+    inp.value=''; btn.disabled=true; addTyping(agent);
+    try{
+      var r=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompts[agent][currentLang],messages:histories[agent]})
       });
- 
-      var data = await response.json();
-      var reply = (data.content && data.content[0] && data.content[0].text)
-        ? data.content[0].text
-        : 'Je suis là, continue…';
- 
-      histories[agent].push({ role: 'assistant', content: reply });
-      removeTyping(agent);
-      addMessage(agent, 'ai', reply);
- 
-    } catch(err) {
-      removeTyping(agent);
-      addMessage(agent, 'ai', '❌ Erreur de connexion. Vérifiez votre clé API.');
-    }
- 
-    btn.disabled = false;
-    input.focus();
+      var d=await r.json();
+      var rep=(d.content&&d.content[0]&&d.content[0].text)?d.content[0].text:'Je suis là, continue…';
+      histories[agent].push({role:'assistant',content:rep});
+      removeTyping(agent); addMessage(agent,'ai',rep);
+    }catch(e){removeTyping(agent);addMessage(agent,'ai','❌ Erreur de connexion.');}
+    btn.disabled=false; inp.focus();
   }
- 
-  // ── DÉMARRAGE ──
-  init();
+
+  // ── LANGUE ──
+  function setLang(lang,btn){
+    currentLang=lang;
+    document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    loadVoices();
+    ['designer','scenariste','pilote'].forEach(function(a){
+      histories[a]=[]; document.getElementById('chat-'+a).innerHTML='';
+      addMessage(a,'ai',welcome[a][lang]);
+    });
+  }
+
+  // ── INIT ──
+  if(apiKey) document.getElementById('apiKeyInput').value=apiKey;
+  if(window.speechSynthesis){speechSynthesis.onvoiceschanged=loadVoices;loadVoices();}
+  ['designer','scenariste','pilote'].forEach(function(a){addMessage(a,'ai',welcome[a]['fr']);});
 </script>
-<<hr>
-
-<h2>Entrer en contact</h2>
-
-<p>
-Vous êtes magistrat, éducateur, professionnel ou intéressé par la démarche ?
-<br><br>
-Le projet <strong>Mon Miroir</strong> est en cours de développement.
-</p>
-
-<p>
-Je reste disponible pour échanger ou présenter le projet.
-</p>
-
-<a href="mailto:tonemail@gmail.com" style="display:inline-block;padding:10px 20px;background:#333;color:#fff;text-decoration:none;border-radius:5px;">
-Me contacter
-</a>
->
+</body>
 </html>
