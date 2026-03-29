@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon Miroir — Portail Magistrat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bordeaux:     #6B1A2A;
+      --bordeaux-mid: #8B2A3E;
+      --bordeaux-pale:#F4E8EB;
+      --bordeaux-line:#D4A0AA;
+      --blanc:        #FFFFFF;
+      --gris-fond:    #F7F5F3;
+      --gris-clair:   #EAE7E4;
+      --gris:         #888078;
+      --gris-fonce:   #3A3530;
+      --noir:         #1A1614;
+      --vert:         #2E7D32;
+      --vert-pale:    #E8F5E9;
+      --orange:       #E65100;
+      --orange-pale:  #FFF3E0;
+      --ligne:        rgba(107,26,42,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--gris-fond); color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; }
+
+    header { background:var(--bordeaux); padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(107,26,42,0.3); }
+    .logo { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--blanc); }
+    .logo span { color:var(--bordeaux-pale); }
+    .header-right { display:flex; align-items:center; gap:16px; }
+    .ws-status { display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.8); }
+    .ws-dot { width:8px; height:8px; border-radius:50%; background:#ccc; transition:background 0.3s; }
+    .ws-dot.connecte { background:#4CAF50; box-shadow:0 0 6px #4CAF50; animation:pulse 2s infinite; }
+    .ws-dot.erreur { background:#f44336; }
+    .badge-role { font-size:10px; letter-spacing:2px; color:var(--bordeaux-pale); border:1px solid rgba(255,255,255,0.3); padding:5px 14px; text-transform:uppercase; }
+
+    /* NOTIFICATION TOAST */
+    .toast-container { position:fixed; top:80px; right:20px; z-index:1000; display:flex; flex-direction:column; gap:10px; max-width:380px; }
+
+    .toast {
+      background:var(--blanc);
+      border:1px solid var(--ligne);
+      border-left:4px solid var(--bordeaux);
+      padding:16px 18px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.12);
+      animation:slideIn 0.4s ease;
+      position:relative;
+    }
+    .toast.urgent { border-left-color: var(--orange); background: var(--orange-pale); }
+    .toast.rapport { border-left-color: var(--vert); }
+
+    .toast-titre { font-size:13px; font-weight:500; color:var(--gris-fonce); margin-bottom:4px; }
+    .toast-message { font-size:12px; color:var(--gris); line-height:1.5; }
+    .toast-meta { font-size:10px; color:var(--bordeaux); margin-top:8px; letter-spacing:1px; }
+    .toast-close { position:absolute; top:10px; right:12px; background:none; border:none; cursor:pointer; color:var(--gris); font-size:16px; }
+    .toast-close:hover { color:var(--bordeaux); }
+
+    /* DASHBOARD */
+    .dashboard { max-width:1140px; margin:28px auto; padding:0 24px; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
+    @media(max-width:700px){ .stats-row{ grid-template-columns:repeat(2,1fr); } }
+
+    .stat-card { background:var(--blanc); border:1px solid var(--ligne); padding:20px; text-align:center; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:600; color:var(--bordeaux); line-height:1; }
+    .stat-label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-top:6px; }
+
+    /* DOSSIERS */
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--bordeaux); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+    .section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
+
+    .dossiers-list { display:flex; flex-direction:column; gap:10px; }
+
+    .dossier-card {
+      background:var(--blanc);
+      border:1px solid var(--ligne);
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      transition:border-color 0.3s, box-shadow 0.3s;
+    }
+    .dossier-card.nouveau {
+      border-color:var(--bordeaux-line);
+      box-shadow:0 2px 12px rgba(107,26,42,0.1);
+      animation:highlight 1s ease;
+    }
+    .dossier-card.urgent { border-left:4px solid var(--orange); }
+
+    .dossier-badge {
+      width:42px; height:42px;
+      background:var(--bordeaux-pale);
+      border:1px solid var(--bordeaux-line);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Cormorant Garamond',serif;
+      font-size:14px; font-weight:600;
+      color:var(--bordeaux);
+      flex-shrink:0;
+    }
+    .dossier-info { flex:1; }
+    .dossier-pseudo { font-weight:500; font-size:14px; color:var(--gris-fonce); }
+    .dossier-meta { font-size:11px; color:var(--gris); margin-top:3px; }
+    .dossier-statut {
+      font-size:10px; letter-spacing:1px; text-transform:uppercase;
+      padding:4px 10px; border:1px solid;
+    }
+    .statut-nouveau { color:var(--bordeaux); border-color:var(--bordeaux-line); background:var(--bordeaux-pale); }
+    .statut-lu { color:var(--gris); border-color:var(--gris-clair); }
+    .statut-urgent { color:var(--orange); border-color:#FFCC80; background:var(--orange-pale); }
+
+    .dossier-time { font-size:11px; color:var(--gris); text-align:right; min-width:80px; }
+
+    /* CONNEXION */
+    .connexion-panel { max-width:480px; margin:80px auto; padding:0 24px; }
+    .connexion-card { background:var(--blanc); border:1px solid var(--ligne); padding:40px; }
+    .connexion-titre { font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--bordeaux); margin-bottom:8px; }
+    .connexion-sub { font-size:13px; color:var(--gris); margin-bottom:28px; line-height:1.6; }
+    .form-group { margin-bottom:16px; }
+    .form-label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-bottom:6px; display:block; }
+    .form-input { width:100%; background:var(--gris-fond); border:1px solid var(--gris-clair); color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 14px; outline:none; transition:border-color 0.2s; }
+    .form-input:focus { border-color:var(--bordeaux); }
+    .btn-connexion { width:100%; background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; letter-spacing:2px; padding:12px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; margin-top:8px; }
+    .btn-connexion:hover { background:var(--bordeaux-mid); }
+
+    footer { background:var(--blanc); border-top:1px solid var(--ligne); padding:20px 32px; display:flex; justify-content:space-between; align-items:center; margin-top:40px; }
+    .footer-logo { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--bordeaux); font-weight:600; }
+    .footer-info { font-size:11px; color:var(--gris); }
+
+    @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes highlight { 0%{background:#FFF9C4} 100%{background:var(--blanc)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  </style>
+</head>
+<body>
+
+<!-- TOASTS (notifications temps réel) -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- VUE CONNEXION -->
+<div id="vueConnexion">
+  <div style="background:var(--bordeaux);height:4px;"></div>
+  <div class="connexion-panel">
+    <div class="connexion-card">
+      <div class="connexion-titre">Mon Miroir</div>
+      <p class="connexion-sub">Portail sécurisé — Magistrats et Éducateurs<br/>Tribunal pour Enfants de Toulouse</p>
+      <div class="form-group">
+        <label class="form-label">Identifiant</label>
+        <input class="form-input" type="text" id="loginId" placeholder="votre.identifiant"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" id="loginPwd" placeholder="••••••••"/>
+      </div>
+      <button class="btn-connexion" onclick="seConnecter()">Se connecter</button>
+      <p style="font-size:11px;color:var(--gris);margin-top:12px;text-align:center;">
+        Mode démo : identifiant <strong>magistrat.test</strong> / mdp <strong>test</strong>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- VUE DASHBOARD -->
+<div id="vueDashboard" style="display:none;">
+
+  <header>
+    <div class="logo">Mon <span>Miroir</span> — Portail Magistrat</div>
+    <div class="header-right">
+      <div class="ws-status">
+        <div class="ws-dot" id="wsDot"></div>
+        <span id="wsLabel">Connexion...</span>
+      </div>
+      <div class="badge-role">Magistrat</div>
+    </div>
+  </header>
+
+  <div class="dashboard">
+
+    <!-- Statistiques -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Dossiers total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statNouveaux" style="color:#E65100;">0</div>
+        <div class="stat-label">Nouveaux</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statRapports" style="color:#2E7D32;">0</div>
+        <div class="stat-label">Rapports disponibles</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statConnectes">0</div>
+        <div class="stat-label">Sessions actives</div>
+      </div>
+    </div>
+
+    <!-- Liste des dossiers -->
+    <div class="section-title">Dossiers MNA</div>
+    <div class="dossiers-list" id="dossiersList">
+      <div style="text-align:center;padding:40px;color:var(--gris);font-size:13px;">
+        En attente de nouveaux dossiers...<br/>
+        <small>Les notifications arrivent en temps réel dès qu'un MNA termine son entretien.</small>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Mon Miroir</div>
+    <div class="footer-info">Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026</div>
+  </footer>
+
+</div>
+
+<script>
+  var BACKEND_WS  = 'wss://monmiroir-backend.onrender.com/ws';
+  var BACKEND_API = 'https://monmiroir-backend.onrender.com';
+  var ws = null;
+  var token = null;
+  var dossiers = [];
+  var stats = { total:0, nouveaux:0, rapports:0, connectes:0 };
+
+  // ── CONNEXION ──────────────────────────────────
+  function seConnecter() {
+    var id  = document.getElementById('loginId').value.trim();
+    var pwd = document.getElementById('loginPwd').value.trim();
+    if (!id || !pwd) { alert('Identifiant et mot de passe requis.'); return; }
+
+    // Mode démo
+    if (id === 'magistrat.test') {
+      token = 'demo_token';
+      afficherDashboard();
+      return;
+    }
+
+    fetch(BACKEND_API + '/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identifiant: id, motDePasse: pwd, role: 'magistrat' })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.token) { token = d.token; afficherDashboard(); }
+      else { alert('Identifiants incorrects.'); }
+    })
+    .catch(function() { token = 'demo_token'; afficherDashboard(); });
+  }
+
+  function afficherDashboard() {
+    document.getElementById('vueConnexion').style.display = 'none';
+    document.getElementById('vueDashboard').style.display = 'block';
+    connecterWebSocket();
+  }
+
+  // ── WEBSOCKET ──────────────────────────────────
+  function connecterWebSocket() {
+    var url = BACKEND_WS + '?role=magistrat&token=' + (token || 'demo');
+    ws = new WebSocket(url);
+
+    ws.onopen = function() {
+      document.getElementById('wsDot').className = 'ws-dot connecte';
+      document.getElementById('wsLabel').textContent = 'En ligne';
+      console.log('[WS] Connecté au backend');
+    };
+
+    ws.onmessage = function(event) {
+      try {
+        var msg = JSON.parse(event.data);
+        traiterMessage(msg);
+      } catch(e) {
+        console.error('[WS] Erreur parsing:', e);
+      }
+    };
+
+    ws.onclose = function() {
+      document.getElementById('wsDot').className = 'ws-dot erreur';
+      document.getElementById('wsLabel').textContent = 'Déconnecté';
+      // Reconnexion automatique après 5s
+      setTimeout(connecterWebSocket, 5000);
+    };
+
+    ws.onerror = function() {
+      document.getElementById('wsDot').className = 'ws-dot erreur';
+      document.getElementById('wsLabel').textContent = 'Erreur';
+    };
+  }
+
+  // ── TRAITEMENT MESSAGES ────────────────────────
+  function traiterMessage(msg) {
+    console.log('[WS] Message reçu:', msg.type);
+
+    if (msg.type === 'nouveau_dossier') {
+      ajouterDossier(msg);
+      afficherToast(msg.titre, msg.message, msg.urgent ? 'urgent' : 'normal', msg.pseudonyme);
+      stats.total++;
+      stats.nouveaux++;
+      mettreAJourStats();
+    }
+
+    if (msg.type === 'rapport_disponible') {
+      afficherToast(msg.titre, msg.message, 'rapport', msg.id_rapport);
+      stats.rapports++;
+      mettreAJourStats();
+    }
+
+    if (msg.type === 'connexion') {
+      console.log('[WS] Bienvenue:', msg.message);
+    }
+  }
+
+  // ── DOSSIERS ───────────────────────────────────
+  function ajouterDossier(msg) {
+    var liste = document.getElementById('dossiersList');
+
+    // Vider le message "en attente" si c'est le premier
+    if (dossiers.length === 0) liste.innerHTML = '';
+
+    var now = new Date();
+    var heure = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+    var card = document.createElement('div');
+    card.className = 'dossier-card nouveau' + (msg.urgent ? ' urgent' : '');
+    card.id = 'dossier-' + Date.now();
+
+    var initiales = msg.pseudonyme ? msg.pseudonyme.substring(0,3).toUpperCase() : 'MNA';
+    var agentLabel = { designer:'Designer', scenariste:'Scénariste', superviseur:'Superviseur' }[msg.agent] || msg.agent;
+    var langueLabel = { fr:'Français', ar:'Arabe', en:'Anglais' }[msg.langue] || msg.langue;
+
+    card.innerHTML = `
+      <div class="dossier-badge">${initiales}</div>
+      <div class="dossier-info">
+        <div class="dossier-pseudo">${msg.pseudonyme || 'MNA-XXXX'}</div>
+        <div class="dossier-meta">Agent : ${agentLabel} · Langue : ${langueLabel}</div>
+      </div>
+      <div class="dossier-statut ${msg.urgent ? 'statut-urgent' : 'statut-nouveau'}">
+        ${msg.urgent ? 'URGENT' : 'NOUVEAU'}
+      </div>
+      <div class="dossier-time">${heure}</div>
+    `;
+
+    // Insérer en haut de la liste
+    liste.insertBefore(card, liste.firstChild);
+    dossiers.unshift(msg);
+
+    // Retirer le badge "nouveau" après 10s
+    setTimeout(function() {
+      card.classList.remove('nouveau');
+      card.querySelector('.dossier-statut').className = 'dossier-statut statut-lu';
+      card.querySelector('.dossier-statut').textContent = 'LU';
+      if (stats.nouveaux > 0) { stats.nouveaux--; mettreAJourStats(); }
+    }, 10000);
+  }
+
+  // ── TOAST ──────────────────────────────────────
+  function afficherToast(titre, message, type, meta) {
+    var container = document.getElementById('toastContainer');
+    var toast = document.createElement('div');
+    toast.className = 'toast' + (type === 'urgent' ? ' urgent' : type === 'rapport' ? ' rapport' : '');
+
+    toast.innerHTML = `
+      <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+      <div class="toast-titre">${titre}</div>
+      <div class="toast-message">${message}</div>
+      <div class="toast-meta">${meta || ''} · ${new Date().toLocaleTimeString('fr-FR')}</div>
+    `;
+
+    container.appendChild(toast);
+
+    // Son de notification
+    jouerSon(type === 'urgent');
+
+    // Auto-suppression après 8s
+    setTimeout(function() {
+      if (toast.parentElement) toast.remove();
+    }, 8000);
+  }
+
+  function jouerSon(urgent) {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = urgent ? 880 : 660;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch(e) {}
+  }
+
+  function mettreAJourStats() {
+    document.getElementById('statTotal').textContent = stats.total;
+    document.getElementById('statNouveaux').textContent = stats.nouveaux;
+    document.getElementById('statRapports').textContent = stats.rapports;
+  }
+
+  // ── DEMO ───────────────────────────────────────
+  // Simuler une notification après 3s (mode démo)
+  function demoNotification() {
+    setTimeout(function() {
+      traiterMessage({
+        type      : 'nouveau_dossier',
+        titre     : 'Nouveau Dossier MNA',
+        message   : 'Un entretien vient d\'être complété. (Démonstration)',
+        pseudonyme: 'MNA-2026-001',
+        agent     : 'scenariste',
+        langue    : 'fr',
+        urgent    : false
+      });
+    }, 3000);
+  }
+
+  // Connexion automatique en mode démo si on vient de GitHub Pages
+  if (window.location.hostname.includes('github.io')) {
+    token = 'demo_token';
+    afficherDashboard();
+    demoNotification();
+  }
+</script>
+</body>
+</html>
