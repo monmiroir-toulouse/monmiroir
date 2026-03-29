@@ -1,14 +1,12 @@
 {
   "name": "monmiroir-backend",
-  "version": "1.0.0",
-  "description": "Backend API Mon Miroir — Tribunal pour Enfants de Toulouse",
+  "version": "1.1.0",
+  "description": "Backend API + WebSocket Mon Miroir — Tribunal pour Enfants de Toulouse",
   "main": "server.js",
   "scripts": {
-    "start"        : "node server.js",
-    "dev"          : "nodemon server.js",
-    "audit-check"  : "npm audit --audit-level=high",
-    "prestart"     : "npm audit --audit-level=critical",
-    "predeploy"    : "npm audit --audit-level=high"
+    "start"    : "node server.js",
+    "dev"      : "nodemon server.js",
+    "predeploy": "npm audit --audit-level=high"
   },
   "dependencies": {
     "cors"              : "^2.8.5",
@@ -17,14 +15,13 @@
     "express-rate-limit": "^7.3.1",
     "helmet"            : "^7.1.0",
     "jsonwebtoken"      : "^9.0.2",
-    "nodemailer"        : "^6.9.14"
+    "nodemailer"        : "^6.9.14",
+    "ws"                : "^8.17.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  },
+  "engines": { "node": ">=18.0.0" },
   "author": "Si Mohamed ANAYA — Tribunal pour Enfants de Toulouse",
   "license": "PRIVATE"
 }
