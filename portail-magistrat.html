@@ -38,19 +38,9 @@
 
     /* NOTIFICATION TOAST */
     .toast-container { position:fixed; top:80px; right:20px; z-index:1000; display:flex; flex-direction:column; gap:10px; max-width:380px; }
-
-    .toast {
-      background:var(--blanc);
-      border:1px solid var(--ligne);
-      border-left:4px solid var(--bordeaux);
-      padding:16px 18px;
-      box-shadow:0 4px 20px rgba(0,0,0,0.12);
-      animation:slideIn 0.4s ease;
-      position:relative;
-    }
+    .toast { background:var(--blanc); border:1px solid var(--ligne); border-left:4px solid var(--bordeaux); padding:16px 18px; box-shadow:0 4px 20px rgba(0,0,0,0.12); animation:slideIn 0.4s ease; position:relative; }
     .toast.urgent { border-left-color: var(--orange); background: var(--orange-pale); }
     .toast.rapport { border-left-color: var(--vert); }
-
     .toast-titre { font-size:13px; font-weight:500; color:var(--gris-fonce); margin-bottom:4px; }
     .toast-message { font-size:12px; color:var(--gris); line-height:1.5; }
     .toast-meta { font-size:10px; color:var(--bordeaux); margin-top:8px; letter-spacing:1px; }
@@ -67,49 +57,66 @@
     .stat-num { font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:600; color:var(--bordeaux); line-height:1; }
     .stat-label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-top:6px; }
 
+    /* AGENTS */
+    .agents-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:28px; }
+    @media(max-width:700px){ .agents-grid{ grid-template-columns:1fr; } }
+
+    .agent-card {
+      background:var(--blanc);
+      border:1px solid var(--ligne);
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      transition:border-color 0.2s, box-shadow 0.2s;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+    }
+    .agent-card:hover {
+      border-color:var(--bordeaux-line);
+      box-shadow:0 4px 16px rgba(107,26,42,0.12);
+    }
+    .agent-icon { font-size:28px; }
+    .agent-nom { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--bordeaux); }
+    .agent-desc { font-size:12px; color:var(--gris); line-height:1.5; }
+    .agent-phase { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--bordeaux); border:1px solid var(--bordeaux-line); padding:3px 10px; align-self:flex-start; background:var(--bordeaux-pale); }
+    .btn-lancer {
+      margin-top:6px;
+      background:var(--bordeaux);
+      color:var(--blanc);
+      border:none;
+      font-family:'DM Sans',sans-serif;
+      font-size:11px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      padding:8px 16px;
+      cursor:pointer;
+      transition:background 0.2s;
+      text-decoration:none;
+      display:inline-block;
+      text-align:center;
+    }
+    .btn-lancer:hover { background:var(--bordeaux-mid); }
+
     /* DOSSIERS */
     .section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--bordeaux); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
     .section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
 
     .dossiers-list { display:flex; flex-direction:column; gap:10px; }
 
-    .dossier-card {
-      background:var(--blanc);
-      border:1px solid var(--ligne);
-      padding:18px 22px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      transition:border-color 0.3s, box-shadow 0.3s;
-    }
-    .dossier-card.nouveau {
-      border-color:var(--bordeaux-line);
-      box-shadow:0 2px 12px rgba(107,26,42,0.1);
-      animation:highlight 1s ease;
-    }
+    .dossier-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 22px; display:flex; align-items:center; gap:16px; transition:border-color 0.3s, box-shadow 0.3s; }
+    .dossier-card.nouveau { border-color:var(--bordeaux-line); box-shadow:0 2px 12px rgba(107,26,42,0.1); animation:highlight 1s ease; }
     .dossier-card.urgent { border-left:4px solid var(--orange); }
 
-    .dossier-badge {
-      width:42px; height:42px;
-      background:var(--bordeaux-pale);
-      border:1px solid var(--bordeaux-line);
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Cormorant Garamond',serif;
-      font-size:14px; font-weight:600;
-      color:var(--bordeaux);
-      flex-shrink:0;
-    }
+    .dossier-badge { width:42px; height:42px; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:600; color:var(--bordeaux); flex-shrink:0; }
     .dossier-info { flex:1; }
     .dossier-pseudo { font-weight:500; font-size:14px; color:var(--gris-fonce); }
     .dossier-meta { font-size:11px; color:var(--gris); margin-top:3px; }
-    .dossier-statut {
-      font-size:10px; letter-spacing:1px; text-transform:uppercase;
-      padding:4px 10px; border:1px solid;
-    }
+    .dossier-statut { font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border:1px solid; }
     .statut-nouveau { color:var(--bordeaux); border-color:var(--bordeaux-line); background:var(--bordeaux-pale); }
     .statut-lu { color:var(--gris); border-color:var(--gris-clair); }
     .statut-urgent { color:var(--orange); border-color:#FFCC80; background:var(--orange-pale); }
-
     .dossier-time { font-size:11px; color:var(--gris); text-align:right; min-width:80px; }
 
     /* CONNEXION */
@@ -135,7 +142,6 @@
 </head>
 <body>
 
-<!-- TOASTS (notifications temps réel) -->
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- VUE CONNEXION -->
@@ -197,6 +203,36 @@
       </div>
     </div>
 
+    <!-- Les 3 Agents -->
+    <div class="section-title">Les 3 Agents IA</div>
+    <div class="agents-grid">
+
+      <div class="agent-card">
+        <div class="agent-icon">🎨</div>
+        <div class="agent-nom">IA Designer</div>
+        <div class="agent-phase">Phase 1 — Semaines 1–4</div>
+        <div class="agent-desc">Valorise l'image de soi du jeune. Portrait numérique, dignité visuelle, identité graphique personnelle.</div>
+        <a class="btn-lancer" href="index.html#designer" target="_blank">Lancer une session</a>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-icon">✍️</div>
+        <div class="agent-nom">IA Scénariste</div>
+        <div class="agent-phase">Phase 2 — Récit de vie</div>
+        <div class="agent-desc">Guide la construction du récit de vie. Transforme le trauma en narration. Projection vers l'avenir.</div>
+        <a class="btn-lancer" href="index.html#scenariste" target="_blank">Lancer une session</a>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-icon">🧑‍⚕️</div>
+        <div class="agent-nom">Pilote Humain</div>
+        <div class="agent-phase">Supervision continue</div>
+        <div class="agent-desc">Si Mohamed ANAYA oriente et supervise les 3 agents IA. Garant de la dimension clinique, culturelle et éthique.</div>
+        <a class="btn-lancer" href="index.html#pilote" target="_blank">Accéder</a>
+      </div>
+
+    </div>
+
     <!-- Liste des dossiers -->
     <div class="section-title">Dossiers MNA</div>
     <div class="dossiers-list" id="dossiersList">
@@ -223,19 +259,11 @@
   var dossiers = [];
   var stats = { total:0, nouveaux:0, rapports:0, connectes:0 };
 
-  // ── CONNEXION ──────────────────────────────────
   function seConnecter() {
     var id  = document.getElementById('loginId').value.trim();
     var pwd = document.getElementById('loginPwd').value.trim();
     if (!id || !pwd) { alert('Identifiant et mot de passe requis.'); return; }
-
-    // Mode démo
-    if (id === 'magistrat.test') {
-      token = 'demo_token';
-      afficherDashboard();
-      return;
-    }
-
+    if (id === 'magistrat.test') { token = 'demo_token'; afficherDashboard(); return; }
     fetch(BACKEND_API + '/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -255,80 +283,49 @@
     connecterWebSocket();
   }
 
-  // ── WEBSOCKET ──────────────────────────────────
   function connecterWebSocket() {
     var url = BACKEND_WS + '?role=magistrat&token=' + (token || 'demo');
     ws = new WebSocket(url);
-
     ws.onopen = function() {
       document.getElementById('wsDot').className = 'ws-dot connecte';
       document.getElementById('wsLabel').textContent = 'En ligne';
-      console.log('[WS] Connecté au backend');
     };
-
     ws.onmessage = function(event) {
-      try {
-        var msg = JSON.parse(event.data);
-        traiterMessage(msg);
-      } catch(e) {
-        console.error('[WS] Erreur parsing:', e);
-      }
+      try { traiterMessage(JSON.parse(event.data)); } catch(e) {}
     };
-
     ws.onclose = function() {
       document.getElementById('wsDot').className = 'ws-dot erreur';
       document.getElementById('wsLabel').textContent = 'Déconnecté';
-      // Reconnexion automatique après 5s
       setTimeout(connecterWebSocket, 5000);
     };
-
     ws.onerror = function() {
       document.getElementById('wsDot').className = 'ws-dot erreur';
       document.getElementById('wsLabel').textContent = 'Erreur';
     };
   }
 
-  // ── TRAITEMENT MESSAGES ────────────────────────
   function traiterMessage(msg) {
-    console.log('[WS] Message reçu:', msg.type);
-
     if (msg.type === 'nouveau_dossier') {
       ajouterDossier(msg);
       afficherToast(msg.titre, msg.message, msg.urgent ? 'urgent' : 'normal', msg.pseudonyme);
-      stats.total++;
-      stats.nouveaux++;
-      mettreAJourStats();
+      stats.total++; stats.nouveaux++; mettreAJourStats();
     }
-
     if (msg.type === 'rapport_disponible') {
       afficherToast(msg.titre, msg.message, 'rapport', msg.id_rapport);
-      stats.rapports++;
-      mettreAJourStats();
-    }
-
-    if (msg.type === 'connexion') {
-      console.log('[WS] Bienvenue:', msg.message);
+      stats.rapports++; mettreAJourStats();
     }
   }
 
-  // ── DOSSIERS ───────────────────────────────────
   function ajouterDossier(msg) {
     var liste = document.getElementById('dossiersList');
-
-    // Vider le message "en attente" si c'est le premier
     if (dossiers.length === 0) liste.innerHTML = '';
-
     var now = new Date();
     var heure = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-
     var card = document.createElement('div');
     card.className = 'dossier-card nouveau' + (msg.urgent ? ' urgent' : '');
-    card.id = 'dossier-' + Date.now();
-
     var initiales = msg.pseudonyme ? msg.pseudonyme.substring(0,3).toUpperCase() : 'MNA';
     var agentLabel = { designer:'Designer', scenariste:'Scénariste', superviseur:'Superviseur' }[msg.agent] || msg.agent;
     var langueLabel = { fr:'Français', ar:'Arabe', en:'Anglais' }[msg.langue] || msg.langue;
-
     card.innerHTML = `
       <div class="dossier-badge">${initiales}</div>
       <div class="dossier-info">
@@ -340,12 +337,8 @@
       </div>
       <div class="dossier-time">${heure}</div>
     `;
-
-    // Insérer en haut de la liste
     liste.insertBefore(card, liste.firstChild);
     dossiers.unshift(msg);
-
-    // Retirer le badge "nouveau" après 10s
     setTimeout(function() {
       card.classList.remove('nouveau');
       card.querySelector('.dossier-statut').className = 'dossier-statut statut-lu';
@@ -354,28 +347,19 @@
     }, 10000);
   }
 
-  // ── TOAST ──────────────────────────────────────
   function afficherToast(titre, message, type, meta) {
     var container = document.getElementById('toastContainer');
     var toast = document.createElement('div');
     toast.className = 'toast' + (type === 'urgent' ? ' urgent' : type === 'rapport' ? ' rapport' : '');
-
     toast.innerHTML = `
       <button class="toast-close" onclick="this.parentElement.remove()">×</button>
       <div class="toast-titre">${titre}</div>
       <div class="toast-message">${message}</div>
       <div class="toast-meta">${meta || ''} · ${new Date().toLocaleTimeString('fr-FR')}</div>
     `;
-
     container.appendChild(toast);
-
-    // Son de notification
     jouerSon(type === 'urgent');
-
-    // Auto-suppression après 8s
-    setTimeout(function() {
-      if (toast.parentElement) toast.remove();
-    }, 8000);
+    setTimeout(function() { if (toast.parentElement) toast.remove(); }, 8000);
   }
 
   function jouerSon(urgent) {
@@ -383,14 +367,12 @@
       var ctx = new (window.AudioContext || window.webkitAudioContext)();
       var osc = ctx.createOscillator();
       var gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.frequency.value = urgent ? 880 : 660;
       osc.type = 'sine';
       gain.gain.setValueAtTime(0.3, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
     } catch(e) {}
   }
 
@@ -400,23 +382,16 @@
     document.getElementById('statRapports').textContent = stats.rapports;
   }
 
-  // ── DEMO ───────────────────────────────────────
-  // Simuler une notification après 3s (mode démo)
   function demoNotification() {
     setTimeout(function() {
       traiterMessage({
-        type      : 'nouveau_dossier',
-        titre     : 'Nouveau Dossier MNA',
-        message   : 'Un entretien vient d\'être complété. (Démonstration)',
-        pseudonyme: 'MNA-2026-001',
-        agent     : 'scenariste',
-        langue    : 'fr',
-        urgent    : false
+        type: 'nouveau_dossier', titre: 'Nouveau Dossier MNA',
+        message: 'Un entretien vient d\'être complété. (Démonstration)',
+        pseudonyme: 'MNA-2026-001', agent: 'scenariste', langue: 'fr', urgent: false
       });
     }, 3000);
   }
 
-  // Connexion automatique en mode démo si on vient de GitHub Pages
   if (window.location.hostname.includes('github.io')) {
     token = 'demo_token';
     afficherDashboard();
