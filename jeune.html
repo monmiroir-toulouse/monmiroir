@@ -28,12 +28,16 @@ Tu peux écrire en français, en darija, ou comme tu veux.
 
 <script>
 function envoyer() {
-  let texte = document.querySelector("textarea").value;
+  let textarea = document.querySelector("textarea");
+  let texte = textarea.value;
 
   document.getElementById("message").innerText =
     "Merci. Ta parole a été prise en compte.\n\nTu as écrit :\n" + texte;
+
+  textarea.value = "";
 }
 </script>
+
 
 
 </body>
