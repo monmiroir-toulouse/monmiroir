@@ -3,6 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Mon Miroir - Espace jeune</title>
+  <script>
+function envoyer() {
+  let textarea = document.querySelector("textarea");
+  let texte = textarea.value.trim();
+
+  if (texte === "") {
+    document.getElementById("message").textContent = "Tu peux écrire quelque chose avant d’envoyer.";
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Merci. Ta parole a été prise en compte.";
+
+  textarea.value = "";
+}
+</script>
 </head>
 
 <body style="font-family: Arial; padding:20px;">
