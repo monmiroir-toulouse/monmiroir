@@ -22,7 +22,15 @@ Tu peux écrire en français, en darija, ou comme tu veux.
 
 <br><br>
 
-<button style="padding:10px 20px;">Envoyer</button>
+<button onclick="envoyer()" style="padding:10px 20px;">Envoyer</button>
+
+<p id="message" style="margin-top:15px;color:green;"></p>
+
+<script>
+function envoyer() {
+  document.getElementById("message").innerText = "Merci. Ta parole a été prise en compte.";
+}
+</script>
 
 </body>
 </html>
