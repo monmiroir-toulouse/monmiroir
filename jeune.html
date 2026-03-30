@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Mon Miroir - Espace jeune</title>
-  <script>
-function envoyer() {
-  let textarea = document.querySelector("textarea");
-  let texte = textarea.value.trim();
-  <p style="font-weight:bold;">
-💬 Commence ici… raconte-moi ton histoire :
-</p
-
-  if (texte === "") {
-    document.getElementById("message").textContent = "Tu peux écrire quelque chose avant d’envoyer.";
-    return;
-  }
-
-  document.getElementById("message").textContent =
-    "Merci. Ta parole a été prise en compte.";
-
-  textarea.value = "";
-}
-</script>
+  <meta charset="UTF-8">
+  <title>Mon Miroir - Espace jeune</title>
 </head>
 
-<button type="button" onclick="envoyer()" style="padding:12px 25px; font-size:16px;">
-Envoyer mon histoire
-</button>
+<body style="font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:30px;">
 
-</p>
+  <div style="max-width:700px; margin:40px auto; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
 
-<p>
-Tu peux écrire en français, en darija, ou comme tu veux.
-</p>
+    <h2 style="text-align:center; margin-bottom:20px;">Parle librement</h2>
 
-<textarea rows="10" style="width:100%;"></textarea>
+    <p style="font-size:16px; line-height:1.6;">
+      Ici, tu peux raconter ton parcours comme tu veux.
+      Il n’y a pas de bonne ou mauvaise réponse.
+    </p>
 
-<br><br>
+    <p style="font-size:16px; line-height:1.6;">
+      Tu peux écrire en français, en darija, ou comme tu veux.
+    </p>
 
-<button onclick="envoyer()" style="padding:10px 20px;">Envoyer</button>
+    <p style="font-weight:bold; margin-top:25px;">
+      💬 Commence ici… raconte-moi ton histoire :
+    </p>
 
-<p id="message" style="margin-top:15px;color:green;"></p>
+    <textarea rows="10" style="width:100%; padding:15px; font-size:16px; border:1px solid #ccc; border-radius:8px; resize:vertical;"></textarea>
 
-<script>
-function envoyer() {
-  let textarea = document.querySelector("textarea");
-  let texte = textarea.value.trim();
+    <br><br>
 
-  if (texte === "") {
-    document.getElementById("message").textContent = "Tu peux écrire quelque chose avant d’envoyer.";
-    return;
-  }
+    <button type="button" onclick="envoyer()" style="padding:12px 25px; font-size:16px; background:#2c7be5; color:white; border:none; border-radius:8px; cursor:pointer;">
+      Envoyer mon histoire
+    </button>
 
+    <p id="message" style="margin-top:20px; color:green; font-weight:bold;"></p>
 
+  </div>
+
+  <script>
+    function envoyer() {
+      let textarea = document.querySelector("textarea");
+      let texte = textarea.value.trim();
+
+      if (texte === "") {
+        document.getElementById("message").textContent = "Tu peux écrire quelque chose avant d’envoyer.";
+        return;
+      }
+
+      document.getElementById("message").textContent =
+        "Merci. Ta parole a été prise en compte.";
+
+      textarea.value = "";
+    }
+  </script>
 
 </body>
 </html>
