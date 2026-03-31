@@ -470,7 +470,7 @@ RÈGLES ABSOLUES :
     document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active');});
     btn.classList.add('active');
     loadVoices();
-    ['designer','scenariste','pilote'].forEach(function(a){
+    ['thomas','amelie'].forEach(function(a){
       histories[a]=[]; document.getElementById('chat-'+a).innerHTML='';
       addMessage(a,'ai',welcome[a][lang]);
     });
