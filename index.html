@@ -473,6 +473,7 @@ RÈGLES ABSOLUES :
     ['thomas','amelie'].forEach(function(a){
       histories[a]=[]; document.getElementById('chat-'+a).innerHTML='';
       addMessage(a,'ai',welcome[a][lang]);
+      playAudio(rep);
     });
   }
 
