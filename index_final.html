@@ -40,7 +40,8 @@
     .lang-btn.active { background:var(--bordeaux); color:var(--blanc); }
     .lang-btn:hover:not(.active) { background:var(--bordeaux-pale); color:var(--bordeaux); }
 
-    .config-panel { max-width:1140px; margin:28px auto 0; padding:0 24px; }
+    .config-panel { max-width:1140px; margin:28px auto 0; padding:0 24px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:700px){ .config-panel{ grid-template-columns:1fr; } }
     .config-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 22px; }
     .config-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
     .config-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
@@ -48,7 +49,6 @@
     .proxy-status { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:#2E7D52; background:#E8F5EE; border:1px solid #A8D5BC; padding:5px 12px; }
     .proxy-dot { width:6px; height:6px; border-radius:50%; background:#2E7D52; animation:blink 2s infinite; }
 
-    .tts-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 22px; margin-top:12px; }
     .tts-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
     .toggle-wrap { display:flex; align-items:center; gap:8px; }
     .toggle { position:relative; width:40px; height:21px; cursor:pointer; flex-shrink:0; }
@@ -85,19 +85,20 @@
     .canevas-badge { display:inline-flex; align-items:center; gap:6px; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); color:var(--bordeaux); font-size:10px; letter-spacing:1px; padding:3px 10px; margin-top:4px; }
     .agent-dot { width:8px; height:8px; border-radius:50%; background:#4CAF7A; box-shadow:0 0 5px #4CAF7A; animation:blink 2s infinite; }
 
-    /* ✅ Compteur context window */
-    .context-bar { padding:4px 14px; display:flex; align-items:center; justify-content:flex-end; background:var(--gris-fond); border-bottom:1px solid var(--ligne); }
-    .context-counter { font-size:10px; color:var(--gris); letter-spacing:0.5px; }
+    .context-bar { padding:4px 14px; display:flex; align-items:center; justify-content:space-between; background:var(--gris-fond); border-bottom:1px solid var(--ligne); }
+    .context-counter { font-size:10px; color:var(--gris); }
     .context-counter.warn   { color:#B45309; }
     .context-counter.danger { color:var(--bordeaux); font-weight:500; }
+    .persist-badge { font-size:10px; color:#2E7D52; display:flex; align-items:center; gap:4px; }
+    .persist-dot { width:5px; height:5px; border-radius:50%; background:#2E7D52; }
 
-    .chat-body { flex:1; padding:14px; overflow-y:auto; height:320px; display:flex; flex-direction:column; gap:10px; scrollbar-width:thin; scrollbar-color:var(--gris-clair) transparent; background:var(--gris-fond); }
+    .chat-body { flex:1; padding:14px; overflow-y:auto; height:300px; display:flex; flex-direction:column; gap:10px; scrollbar-width:thin; scrollbar-color:var(--gris-clair) transparent; background:var(--gris-fond); }
     .msg { max-width:88%; font-size:13px; line-height:1.65; }
     .msg.ai  { align-self:flex-start; }
     .msg.user{ align-self:flex-end; }
     .msg-bubble { padding:10px 14px; }
     .msg.ai  .msg-bubble { background:var(--blanc); border:1px solid var(--ligne); color:var(--gris-fonce); border-radius:0 10px 10px 10px; white-space:pre-wrap; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
-    .msg.user .msg-bubble { background:var(--bordeaux); color:var(--blanc); border-radius:10px 0 10px 10px; }
+    .msg.user .msg-bubble { background:var(--bordeaux); color:var(--blanc); border-radius:10px 0 10px 10px; white-space:pre-wrap; }
 
     .speak-btn { background:none; border:1px solid var(--ligne); color:var(--bordeaux); font-size:11px; padding:3px 9px; cursor:pointer; margin-top:5px; display:inline-flex; align-items:center; gap:4px; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
     .speak-btn:hover { background:var(--bordeaux-pale); }
@@ -108,13 +109,42 @@
     .typing span:nth-child(2){animation-delay:0.2s;}
     .typing span:nth-child(3){animation-delay:0.4s;}
 
-    .chat-footer { padding:10px 14px; border-top:1px solid var(--ligne); display:flex; gap:8px; background:var(--blanc); }
-    .chat-input { flex:1; background:var(--gris-fond); border:1px solid var(--gris-clair); color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 13px; outline:none; transition:border-color 0.2s; }
-    .chat-input:focus { border-color:var(--bordeaux); }
-    .chat-input::placeholder { color:var(--gris); }
-    .send-btn { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:1px; padding:9px 16px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; }
+    /* ✅ Textarea auto-resize */
+    .chat-footer { padding:10px 14px; border-top:1px solid var(--ligne); display:flex; gap:8px; align-items:flex-end; background:var(--blanc); }
+    .chat-textarea {
+      flex:1;
+      background:var(--gris-fond);
+      border:1px solid var(--gris-clair);
+      color:var(--gris-fonce);
+      font-family:'DM Sans',sans-serif;
+      font-size:13px;
+      padding:9px 13px;
+      outline:none;
+      transition:border-color 0.2s;
+      resize:none;
+      overflow-y:hidden;
+      line-height:1.5;
+      min-height:38px;
+      max-height:120px;
+    }
+    .chat-textarea:focus { border-color:var(--bordeaux); }
+    .chat-textarea::placeholder { color:var(--gris); }
+
+    .send-btn { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:1px; padding:9px 16px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; white-space:nowrap; flex-shrink:0; height:38px; }
     .send-btn:hover { background:var(--bordeaux-mid); }
     .send-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+    /* ✅ Modale confirmation changement de langue */
+    .modal-overlay { position:fixed; inset:0; background:rgba(26,22,20,0.5); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal { background:var(--blanc); border:1px solid var(--ligne); padding:32px; max-width:400px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.15); }
+    .modal h3 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--noir); margin-bottom:10px; }
+    .modal p { font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:24px; }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .btn-cancel { background:transparent; border:1px solid var(--gris-clair); color:var(--gris); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; padding:8px 18px; cursor:pointer; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+    .btn-cancel:hover { border-color:var(--gris); color:var(--gris-fonce); }
+    .btn-confirm { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; padding:8px 18px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; letter-spacing:1px; }
+    .btn-confirm:hover { background:var(--bordeaux-mid); }
 
     footer { background:var(--blanc); border-top:1px solid var(--ligne); padding:22px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
     .footer-logo { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--bordeaux); font-weight:600; }
@@ -126,6 +156,18 @@
 </head>
 <body>
 
+  <!-- ✅ Modale confirmation changement de langue -->
+  <div class="modal-overlay" id="modal-lang">
+    <div class="modal">
+      <h3>Changer de langue ?</h3>
+      <p>Les conversations en cours seront effacées. Cette action est irréversible.<br>Assurez-vous d'avoir sauvegardé les éléments importants avant de continuer.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="cancelLang()">Annuler</button>
+        <button class="btn-confirm" onclick="confirmLang()">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div class="logo">Mon <span>Miroir</span></div>
     <div class="header-badge">Tribunal · Toulouse · 2026</div>
@@ -136,14 +178,13 @@
     <h1>Trois agents IA<br/>au service du <em>MNA</em></h1>
     <p>Restaurer l'identité, construire le récit de vie, produire le CV Interactif — sous supervision humaine et institutionnelle.</p>
     <div class="lang-switch">
-      <button class="lang-btn active" onclick="setLang('fr',this)">FR</button>
-      <button class="lang-btn" onclick="setLang('ar',this)">AR</button>
-      <button class="lang-btn" onclick="setLang('en',this)">EN</button>
+      <button class="lang-btn active" onclick="askLang('fr',this)">FR</button>
+      <button class="lang-btn" onclick="askLang('ar',this)">AR</button>
+      <button class="lang-btn" onclick="askLang('en',this)">EN</button>
     </div>
   </section>
 
   <div class="config-panel">
-    <!-- ✅ Clé API : supprimée du front, remplacée par statut proxy -->
     <div class="config-card">
       <div class="config-title">🔒 Sécurité API</div>
       <div class="proxy-status">
@@ -152,8 +193,7 @@
       </div>
       <p class="config-note">La clé Anthropic est stockée dans les variables d'environnement Vercel. Elle n'est jamais transmise au navigateur.</p>
     </div>
-
-    <div class="tts-card">
+    <div class="config-card">
       <div class="config-title">🔊 Synthèse vocale</div>
       <div class="tts-row">
         <div class="toggle-wrap">
@@ -188,11 +228,14 @@
           <div class="agent-dot"></div>
         </div>
         <div class="context-bar">
-          <span class="context-counter" id="ctx-designer">0 / 40 échanges</span>
+          <span class="context-counter" id="ctx-designer">0 / 20 échanges</span>
+          <span class="persist-badge" id="persist-designer" style="display:none"><span class="persist-dot"></span>Sauvegardé</span>
         </div>
         <div class="chat-body" id="chat-designer"></div>
         <div class="chat-footer">
-          <input class="chat-input" id="input-designer" type="text" placeholder="Décrivez votre image idéale…" onkeydown="if(event.key==='Enter')sendMessage('designer')"/>
+          <textarea class="chat-textarea" id="input-designer" placeholder="Décrivez votre image idéale…" rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage('designer')}"
+            oninput="autoResize(this)"></textarea>
           <button class="send-btn" id="btn-designer" onclick="sendMessage('designer')">Envoyer</button>
         </div>
       </div>
@@ -208,11 +251,14 @@
           <div class="agent-dot"></div>
         </div>
         <div class="context-bar">
-          <span class="context-counter" id="ctx-scenariste">0 / 40 échanges</span>
+          <span class="context-counter" id="ctx-scenariste">0 / 20 échanges</span>
+          <span class="persist-badge" id="persist-scenariste" style="display:none"><span class="persist-dot"></span>Sauvegardé</span>
         </div>
         <div class="chat-body" id="chat-scenariste"></div>
         <div class="chat-footer">
-          <input class="chat-input" id="input-scenariste" type="text" placeholder="Parlez de votre parcours…" onkeydown="if(event.key==='Enter')sendMessage('scenariste')"/>
+          <textarea class="chat-textarea" id="input-scenariste" placeholder="Parlez de votre parcours…" rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage('scenariste')}"
+            oninput="autoResize(this)"></textarea>
           <button class="send-btn" id="btn-scenariste" onclick="sendMessage('scenariste')">Envoyer</button>
         </div>
       </div>
@@ -227,11 +273,14 @@
           <div class="agent-dot"></div>
         </div>
         <div class="context-bar">
-          <span class="context-counter" id="ctx-pilote">0 / 40 échanges</span>
+          <span class="context-counter" id="ctx-pilote">0 / 20 échanges</span>
+          <span class="persist-badge" id="persist-pilote" style="display:none"><span class="persist-dot"></span>Sauvegardé</span>
         </div>
         <div class="chat-body" id="chat-pilote"></div>
         <div class="chat-footer">
-          <input class="chat-input" id="input-pilote" type="text" placeholder="Notes de supervision…" onkeydown="if(event.key==='Enter')sendMessage('pilote')"/>
+          <textarea class="chat-textarea" id="input-pilote" placeholder="Notes de supervision…" rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage('pilote')}"
+            oninput="autoResize(this)"></textarea>
           <button class="send-btn" id="btn-pilote" onclick="sendMessage('pilote')">Envoyer</button>
         </div>
       </div>
@@ -242,36 +291,68 @@
   <footer>
     <div class="footer-logo">Mon Miroir</div>
     <div class="footer-info">Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="pilote.html" style="font-size:10px;color:var(--bordeaux);text-decoration:none;border:1px solid var(--bordeaux-line);padding:5px 14px;background:var(--bordeaux-pale);letter-spacing:1px;text-transform:uppercase;">Tableau de bord →</a>
+      <a href="cv.html" style="font-size:10px;color:var(--bordeaux);text-decoration:none;border:1px solid var(--bordeaux-line);padding:5px 14px;background:var(--bordeaux-pale);letter-spacing:1px;text-transform:uppercase;">CV Interactif →</a>
+      <a href="jeune.html" style="font-size:10px;color:var(--bordeaux);text-decoration:none;border:1px solid var(--bordeaux-line);padding:5px 14px;background:var(--bordeaux-pale);letter-spacing:1px;text-transform:uppercase;">Espace jeune →</a>
+      <a href="partenaires.html" style="font-size:10px;color:var(--bordeaux);text-decoration:none;border:1px solid var(--bordeaux-line);padding:5px 14px;background:var(--bordeaux-pale);letter-spacing:1px;text-transform:uppercase;">Structures partenaires →</a>
+    </div>
   </footer>
 
 <script>
-  var currentLang = 'fr';
-  var histories = { designer:[], scenariste:[], pilote:[] };
-  var ttsAuto = false;
+  var currentLang = localStorage.getItem('monmiroir_lang') || 'fr';
+  var pendingLang = null;
+  var pendingBtn  = null;
+  var histories   = { designer:[], scenariste:[], pilote:[] };
+  var ttsAuto     = false;
   var selectedVoice = null;
-  var speechRate = 1.0;
-  var currentUtt = null;
-
-  // ✅ Context window : max 40 messages (20 échanges), on garde toujours le 1er
+  var speechRate  = 1.0;
+  var currentUtt  = null;
   var MAX_HISTORY = 40;
 
+  // ✅ Clé de stockage par langue pour la persistance
+  function storageKey(agent) { return 'monmiroir_hist_' + agent + '_' + currentLang; }
+
+  // ✅ Sauvegarde l'historique dans localStorage
+  function saveHistory(agent) {
+    try {
+      localStorage.setItem(storageKey(agent), JSON.stringify(histories[agent]));
+      document.getElementById('persist-' + agent).style.display = 'flex';
+    } catch(e) { /* localStorage plein : on ignore */ }
+  }
+
+  // ✅ Charge l'historique depuis localStorage
+  function loadHistory(agent) {
+    try {
+      var raw = localStorage.getItem(storageKey(agent));
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+
+  // ✅ Context window : garde le 1er message + les 39 derniers
   function getTrimmedHistory(agent) {
     var h = histories[agent];
     if (h.length <= MAX_HISTORY) return h;
-    // Garde le 1er message (bienvenue) + les 39 derniers
     return [h[0]].concat(h.slice(h.length - (MAX_HISTORY - 1)));
   }
 
   function updateContextCounter(agent) {
     var count = Math.floor(histories[agent].length / 2);
-    var max = MAX_HISTORY / 2;
-    var el = document.getElementById('ctx-' + agent);
+    var max   = MAX_HISTORY / 2;
+    var el    = document.getElementById('ctx-' + agent);
     el.textContent = count + ' / ' + max + ' échanges';
-    el.className = 'context-counter';
+    el.className   = 'context-counter';
     if (count >= max - 2) el.classList.add('danger');
     else if (count >= max * 0.75) el.classList.add('warn');
   }
 
+  // ✅ Textarea auto-resize
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  // ✅ Optimisation tokens : canevas uniquement pour le scénariste
   var canevas = `MÉTHODE QUOI → COMMENT :
 Pour chaque sujet, pose D'ABORD la question factuelle (QUOI), puis si le jeune est stable, approfondis avec le vécu (COMMENT). Une seule question à la fois.
 
@@ -324,6 +405,7 @@ QUOI 5.5 : À travers tout ce que tu as vécu, est-ce qu'il y a quelque chose qu
 COMMENT 5.5 : Si tu devais donner un conseil à un autre jeune, tu lui dirais quoi ?
 TOUJOURS FINIR SUR LA RÉSILIENCE ET LA FIERTÉ.`;
 
+  // ✅ Optimisation : canevas injecté UNIQUEMENT pour scenariste
   var systemPrompts = {
     designer:{
       fr:`Tu es l'IA Designer de "Mon Miroir", application clinique pour Mineurs Non Accompagnés à Toulouse. Aide le jeune à construire son identité visuelle : se décrire, choisir des symboles culturels, créer une image personnelle digne. Sois bienveillant, doux, patient. Questions courtes. Jamais de jugement.`,
@@ -434,24 +516,33 @@ RÈGLES ABSOLUES :
     var e = document.getElementById('typing-' + agent); if(e) e.remove();
   }
 
+  // ✅ Restitue les messages depuis l'historique dans le DOM
+  function renderHistory(agent) {
+    var c = document.getElementById('chat-' + agent);
+    c.innerHTML = '';
+    histories[agent].forEach(function(msg){
+      addMessage(agent, msg.role === 'user' ? 'user' : 'ai', msg.content);
+    });
+  }
+
   async function sendMessage(agent){
     var inp = document.getElementById('input-' + agent);
     var btn = document.getElementById('btn-' + agent);
     var txt = inp.value.trim(); if(!txt) return;
 
-    // ✅ Alerte si on approche de la limite
     var count = Math.floor(histories[agent].length / 2);
     if(count >= MAX_HISTORY / 2) {
-      var ok = confirm('⚠️ Limite de ' + (MAX_HISTORY/2) + ' échanges atteinte.\nLes plus anciens messages seront effacés pour continuer.\nContinuer ?');
-      if(!ok) return;
+      if(!confirm('⚠️ Limite de ' + (MAX_HISTORY/2) + ' échanges atteinte.\nLes plus anciens messages seront compressés.\nContinuer ?')) return;
     }
 
     addMessage(agent, 'user', txt);
     histories[agent].push({ role:'user', content:txt });
-    inp.value = ''; btn.disabled = true; addTyping(agent);
+    inp.value = '';
+    autoResize(inp);
+    btn.disabled = true;
+    addTyping(agent);
 
     try {
-      // ✅ Appel via proxy — aucune clé dans le navigateur
       var r = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -459,47 +550,80 @@ RÈGLES ABSOLUES :
           model: 'claude-sonnet-4-20250514',
           max_tokens: 1200,
           system: systemPrompts[agent][currentLang],
-          messages: getTrimmedHistory(agent)  // ✅ historique tronqué si nécessaire
+          messages: getTrimmedHistory(agent)
         })
       });
 
       var d = await r.json();
-
-      if(!r.ok) {
-        throw new Error(d.error || 'Erreur API ' + r.status);
-      }
+      if(!r.ok) throw new Error(d.error || 'Erreur API ' + r.status);
 
       var rep = (d.content && d.content[0] && d.content[0].text) ? d.content[0].text : 'Je suis là, continue…';
       histories[agent].push({ role:'assistant', content:rep });
       removeTyping(agent);
       addMessage(agent, 'ai', rep);
       updateContextCounter(agent);
+      saveHistory(agent); // ✅ Persistance après chaque réponse
 
     } catch(e) {
       removeTyping(agent);
-      addMessage(agent, 'ai', '❌ ' + (e.message || 'Erreur de connexion. Vérifiez le proxy.'));
+      addMessage(agent, 'ai', '❌ ' + (e.message || 'Erreur de connexion.'));
     }
 
     btn.disabled = false; inp.focus();
   }
 
-  // ✅ CORRIGÉ : vrais IDs, sans playAudio
-  function setLang(lang, btn){
+  // ✅ Modale confirmation changement de langue
+  function askLang(lang, btn){
+    var hasContent = ['designer','scenariste','pilote'].some(function(a){ return histories[a].length > 1; });
+    if(!hasContent || lang === currentLang) { applyLang(lang, btn); return; }
+    pendingLang = lang; pendingBtn = btn;
+    document.getElementById('modal-lang').classList.add('open');
+  }
+
+  function cancelLang(){
+    pendingLang = null; pendingBtn = null;
+    document.getElementById('modal-lang').classList.remove('open');
+  }
+
+  function confirmLang(){
+    document.getElementById('modal-lang').classList.remove('open');
+    applyLang(pendingLang, pendingBtn);
+    pendingLang = null; pendingBtn = null;
+  }
+
+  function applyLang(lang, btn){
     currentLang = lang;
+    localStorage.setItem('monmiroir_lang', lang);
     document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
+    if(btn) btn.classList.add('active');
     loadVoices();
-    ['designer', 'scenariste', 'pilote'].forEach(function(a){
+    ['designer','scenariste','pilote'].forEach(function(a){
       histories[a] = [];
       document.getElementById('chat-' + a).innerHTML = '';
+      document.getElementById('persist-' + a).style.display = 'none';
       addMessage(a, 'ai', welcome[a][lang]);
       updateContextCounter(a);
     });
   }
 
+  // ✅ Initialisation : restore la langue et les historiques
   if(window.speechSynthesis){ speechSynthesis.onvoiceschanged = loadVoices; loadVoices(); }
-  ['designer', 'scenariste', 'pilote'].forEach(function(a){
-    addMessage(a, 'ai', welcome[a]['fr']);
+
+  // Restaure le bouton de langue actif
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    if(b.textContent.toLowerCase() === currentLang) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+
+  ['designer','scenariste','pilote'].forEach(function(a){
+    var saved = loadHistory(a);
+    if(saved && saved.length > 0) {
+      histories[a] = saved;
+      renderHistory(a);
+      document.getElementById('persist-' + a).style.display = 'flex';
+    } else {
+      addMessage(a, 'ai', welcome[a][currentLang]);
+    }
     updateContextCounter(a);
   });
 </script>

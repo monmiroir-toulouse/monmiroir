@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tableau de bord Pilote — Mon Miroir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bordeaux:     #6B1A2A;
+      --bordeaux-mid: #8B2A3E;
+      --bordeaux-pale:#F4E8EB;
+      --bordeaux-line:#D4A0AA;
+      --blanc:        #FFFFFF;
+      --gris-fond:    #F7F5F3;
+      --gris-clair:   #EAE7E4;
+      --gris:         #888078;
+      --gris-fonce:   #3A3530;
+      --noir:         #1A1614;
+      --ligne:        rgba(107,26,42,0.12);
+      --vert:         #2E7D52;
+      --vert-pale:    #E8F5EE;
+      --orange:       #B45309;
+      --orange-pale:  #FEF3C7;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--gris-fond); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; }
+
+    /* ── HEADER ── */
+    header { background:var(--blanc); border-bottom:1px solid var(--ligne); padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+    .logo { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--noir); text-decoration:none; }
+    .logo span { color:var(--bordeaux); }
+    .header-right { display:flex; align-items:center; gap:12px; }
+    .back-btn { font-size:12px; color:var(--gris); text-decoration:none; border:1px solid var(--gris-clair); padding:6px 14px; transition:all 0.2s; }
+    .back-btn:hover { color:var(--bordeaux); border-color:var(--bordeaux-line); background:var(--bordeaux-pale); }
+    .header-badge { font-size:10px; letter-spacing:2px; color:var(--bordeaux); border:1px solid var(--bordeaux-line); padding:5px 14px; text-transform:uppercase; background:var(--bordeaux-pale); }
+    .alert-bell { position:relative; cursor:pointer; }
+    .alert-count { position:absolute; top:-4px; right:-4px; width:16px; height:16px; background:var(--bordeaux); color:white; border-radius:50%; font-size:10px; font-weight:500; display:flex; align-items:center; justify-content:center; }
+
+    /* ── HERO ── */
+    .hero { background:var(--blanc); border-bottom:1px solid var(--ligne); padding:36px 32px 28px; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--bordeaux); }
+    .hero-tag { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:10px; }
+    .hero-row { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+    .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,3.5vw,36px); font-weight:600; color:var(--noir); line-height:1.2; }
+    .hero h1 em { color:var(--bordeaux); font-style:italic; }
+    .hero-date { font-size:12px; color:var(--gris); }
+
+    /* ── CONTENU ── */
+    .content { max-width:1200px; margin:0 auto; padding:28px 24px 60px; }
+
+    /* ── STATS ── */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    @media(max-width:700px){ .stats-grid{ grid-template-columns:repeat(2,1fr); } }
+    .stat-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 20px; position:relative; overflow:hidden; }
+    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .stat-card.s-total::before { background:var(--bordeaux); }
+    .stat-card.s-cours::before { background:var(--orange); }
+    .stat-card.s-alerte::before { background:#E24B4A; }
+    .stat-card.s-docs::before  { background:var(--vert); }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:600; line-height:1; margin-bottom:4px; }
+    .stat-card.s-total  .stat-num { color:var(--bordeaux); }
+    .stat-card.s-cours  .stat-num { color:var(--orange); }
+    .stat-card.s-alerte .stat-num { color:#E24B4A; }
+    .stat-card.s-docs   .stat-num { color:var(--vert); }
+    .stat-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gris); }
+
+    /* ── ALERTES ── */
+    .alertes-section { margin-bottom:24px; }
+    .section-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
+    .alerte-card { background:var(--blanc); border:1px solid #F09595; border-left:4px solid #E24B4A; padding:14px 18px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .alerte-card.resolved { border-left-color:var(--vert); border-color:#A8D5BC; opacity:0.6; }
+    .alerte-info { flex:1; }
+    .alerte-nom { font-size:14px; font-weight:500; color:var(--noir); }
+    .alerte-msg { font-size:12px; color:var(--gris); margin-top:2px; }
+    .alerte-time { font-size:11px; color:var(--gris); white-space:nowrap; }
+    .btn-resolve { background:transparent; border:1px solid var(--bordeaux-line); color:var(--bordeaux); font-family:'DM Sans',sans-serif; font-size:11px; padding:5px 12px; cursor:pointer; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
+    .btn-resolve:hover { background:var(--bordeaux-pale); }
+
+    /* ── LAYOUT 2 COLONNES ── */
+    .two-col { display:grid; grid-template-columns:1fr 360px; gap:20px; }
+    @media(max-width:900px){ .two-col{ grid-template-columns:1fr; } }
+
+    /* ── TABLEAU JEUNES ── */
+    .jeunes-table { background:var(--blanc); border:1px solid var(--ligne); overflow:hidden; }
+    .table-header { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:10px 16px; background:var(--gris-fond); border-bottom:1px solid var(--ligne); }
+    .th { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gris); font-weight:500; }
+    .jeune-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; border-bottom:1px solid var(--ligne); align-items:center; transition:background 0.15s; cursor:pointer; }
+    .jeune-row:last-child { border-bottom:none; }
+    .jeune-row:hover { background:var(--bordeaux-pale); }
+    .jeune-nom { font-size:13px; font-weight:500; color:var(--noir); }
+    .jeune-pays { font-size:11px; color:var(--gris); margin-top:2px; }
+    .jeune-age { font-size:13px; color:var(--gris-fonce); }
+    .statut-badge { font-size:10px; font-weight:500; padding:3px 9px; border-radius:0; display:inline-block; white-space:nowrap; }
+    .s-encours { background:var(--orange-pale); color:var(--orange); border:1px solid #FCD34D; }
+    .s-termine { background:var(--vert-pale); color:var(--vert); border:1px solid #A8D5BC; }
+    .s-nouveau  { background:var(--bordeaux-pale); color:var(--bordeaux); border:1px solid var(--bordeaux-line); }
+    .s-alerte-badge { background:#FCEBEB; color:#A32D2D; border:1px solid #F7C1C1; }
+    .doc-icons { display:flex; gap:4px; }
+    .doc-icon { width:22px; height:22px; border:1px solid var(--gris-clair); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--gris); title:attr(data-title); }
+    .doc-icon.active { border-color:var(--bordeaux-line); color:var(--bordeaux); background:var(--bordeaux-pale); }
+    .actions-cell { display:flex; gap:6px; }
+    .btn-action { background:transparent; border:1px solid var(--gris-clair); color:var(--gris); font-family:'DM Sans',sans-serif; font-size:10px; padding:4px 8px; cursor:pointer; transition:all 0.2s; }
+    .btn-action:hover { border-color:var(--bordeaux-line); color:var(--bordeaux); background:var(--bordeaux-pale); }
+
+    /* ── COLONNE DROITE ── */
+    .right-col { display:flex; flex-direction:column; gap:16px; }
+
+    /* ── AGENDA ── */
+    .agenda-card { background:var(--blanc); border:1px solid var(--ligne); padding:20px; }
+    .rdv-item { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--ligne); }
+    .rdv-item:last-child { border-bottom:none; padding-bottom:0; }
+    .rdv-date { flex-shrink:0; text-align:center; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); padding:6px 10px; min-width:48px; }
+    .rdv-day { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--bordeaux); line-height:1; }
+    .rdv-month { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--bordeaux); }
+    .rdv-info { flex:1; }
+    .rdv-nom { font-size:13px; font-weight:500; color:var(--noir); }
+    .rdv-type { font-size:11px; color:var(--gris); margin-top:2px; }
+    .rdv-heure { font-size:11px; color:var(--bordeaux); margin-top:3px; font-weight:500; }
+
+    /* Bouton ajouter RDV */
+    .btn-add-rdv { width:100%; background:transparent; border:1px dashed var(--bordeaux-line); color:var(--bordeaux); font-family:'DM Sans',sans-serif; font-size:11px; padding:10px; cursor:pointer; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; margin-top:12px; }
+    .btn-add-rdv:hover { background:var(--bordeaux-pale); }
+
+    /* ── DOCS RÉCENTS ── */
+    .docs-card { background:var(--blanc); border:1px solid var(--ligne); padding:20px; }
+    .doc-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--ligne); }
+    .doc-item:last-child { border-bottom:none; }
+    .doc-type { font-size:10px; font-weight:500; padding:3px 8px; flex-shrink:0; }
+    .doc-type.pdf { background:var(--bordeaux-pale); color:var(--bordeaux); border:1px solid var(--bordeaux-line); }
+    .doc-type.cv  { background:var(--vert-pale); color:var(--vert); border:1px solid #A8D5BC; }
+    .doc-nom { flex:1; font-size:12px; color:var(--gris-fonce); }
+    .doc-date { font-size:11px; color:var(--gris); white-space:nowrap; }
+
+    /* ── MODALE AJOUT JEUNE ── */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,22,20,0.5); z-index:200; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--blanc); border:1px solid var(--ligne); padding:32px; max-width:480px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.15); }
+    .modal h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--noir); margin-bottom:20px; }
+    .modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+    .modal-field { display:flex; flex-direction:column; gap:5px; }
+    .modal-field.full { grid-column:1/-1; }
+    .modal-field label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gris); }
+    .modal-field input, .modal-field select { font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px; border:1px solid var(--gris-clair); background:var(--gris-fond); color:var(--gris-fonce); outline:none; transition:border-color 0.2s; }
+    .modal-field input:focus, .modal-field select:focus { border-color:var(--bordeaux); }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .btn-cancel { background:transparent; border:1px solid var(--gris-clair); color:var(--gris); font-family:'DM Sans',sans-serif; font-size:12px; padding:9px 18px; cursor:pointer; }
+    .btn-confirm { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; padding:9px 18px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; }
+    .btn-confirm:hover { background:var(--bordeaux-mid); }
+
+    /* ── MODALE RDV ── */
+    .rdv-modal { background:var(--blanc); border:1px solid var(--ligne); padding:28px; max-width:400px; width:90%; }
+    .rdv-modal h3 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--noir); margin-bottom:16px; }
+
+    /* ── BARRE ACTIONS ── */
+    .actions-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+    .btn-primary { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:1.5px; padding:10px 20px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; }
+    .btn-primary:hover { background:var(--bordeaux-mid); }
+    .search-input { flex:1; min-width:180px; font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px; border:1px solid var(--gris-clair); background:var(--blanc); color:var(--gris-fonce); outline:none; transition:border-color 0.2s; }
+    .search-input:focus { border-color:var(--bordeaux); }
+    .filter-sel { font-family:'DM Sans',sans-serif; font-size:12px; padding:9px 12px; border:1px solid var(--gris-clair); background:var(--blanc); color:var(--gris-fonce); outline:none; cursor:pointer; }
+
+    footer { background:var(--blanc); border-top:1px solid var(--ligne); padding:22px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .footer-logo { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--bordeaux); font-weight:600; }
+    .footer-info { font-size:11px; color:var(--gris); }
+  </style>
+</head>
+<body>
+
+  <!-- Modale ajout jeune -->
+  <div class="modal-overlay" id="modal-jeune">
+    <div class="modal">
+      <h3>Nouveau jeune suivi</h3>
+      <div class="modal-grid">
+        <div class="modal-field"><label>Prénom</label><input type="text" id="new-prenom" placeholder="Prénom…"/></div>
+        <div class="modal-field"><label>Âge</label><input type="text" id="new-age" placeholder="Ex : 16 ans"/></div>
+        <div class="modal-field"><label>Pays d'origine</label><input type="text" id="new-pays" placeholder="Ex : Guinée"/></div>
+        <div class="modal-field"><label>Statut</label>
+          <select id="new-statut">
+            <option value="nouveau">Nouveau</option>
+            <option value="encours">En cours</option>
+            <option value="termine">Terminé</option>
+          </select>
+        </div>
+        <div class="modal-field full"><label>Note initiale</label><input type="text" id="new-note" placeholder="Contexte, observations…"/></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-jeune')">Annuler</button>
+        <button class="btn-confirm" onclick="ajouterJeune()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale ajout RDV -->
+  <div class="modal-overlay" id="modal-rdv">
+    <div class="rdv-modal">
+      <h3>Nouveau rendez-vous</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+        <div class="modal-field"><label>Jeune</label><input type="text" id="rdv-jeune" placeholder="Prénom du jeune…"/></div>
+        <div class="modal-field"><label>Type</label>
+          <select id="rdv-type">
+            <option>Entretien IA Scénariste</option>
+            <option>Entretien IA Designer</option>
+            <option>Audience tribunal</option>
+            <option>Bilan de suivi</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="modal-field"><label>Date</label><input type="date" id="rdv-date"/></div>
+          <div class="modal-field"><label>Heure</label><input type="time" id="rdv-heure"/></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-rdv')">Annuler</button>
+        <button class="btn-confirm" onclick="ajouterRdv()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <a class="logo" href="index.html">Mon <span>Miroir</span></a>
+    <div class="header-right">
+      <a class="back-btn" href="index.html">← Agents</a>
+      <div class="alert-bell" onclick="scrollToAlertes()">
+        🔔 <span class="alert-count" id="alert-count">2</span>
+      </div>
+      <div class="header-badge">Tableau de bord Pilote</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-tag">Supervision · Pilote humain</div>
+    <div class="hero-row">
+      <h1>Vue d'ensemble<br/><em>des jeunes suivis</em></h1>
+      <div class="hero-date" id="hero-date"></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <!-- Alertes -->
+    <div class="alertes-section" id="section-alertes">
+      <div class="section-title">Alertes de détresse</div>
+      <div id="alertes-list"></div>
+    </div>
+
+    <!-- Tableau + colonne droite -->
+    <div class="two-col">
+
+      <div>
+        <div class="section-title">Jeunes suivis</div>
+        <div class="actions-bar">
+          <button class="btn-primary" onclick="openModal('modal-jeune')">+ Nouveau jeune</button>
+          <input class="search-input" type="text" placeholder="Rechercher…" oninput="renderTable()"/>
+          <select class="filter-sel" id="filter-statut" onchange="renderTable()">
+            <option value="">Tous les statuts</option>
+            <option value="nouveau">Nouveau</option>
+            <option value="encours">En cours</option>
+            <option value="termine">Terminé</option>
+            <option value="alerte">Alerte</option>
+          </select>
+        </div>
+        <div class="jeunes-table">
+          <div class="table-header">
+            <span class="th">Jeune</span>
+            <span class="th">Âge</span>
+            <span class="th">Statut</span>
+            <span class="th">Docs</span>
+            <span class="th">Actions</span>
+          </div>
+          <div id="jeunes-tbody"></div>
+        </div>
+      </div>
+
+      <div class="right-col">
+
+        <!-- Agenda -->
+        <div class="agenda-card">
+          <div class="section-title">Agenda</div>
+          <div id="agenda-list"></div>
+          <button class="btn-add-rdv" onclick="openModal('modal-rdv')">+ Ajouter un rendez-vous</button>
+        </div>
+
+        <!-- Docs récents -->
+        <div class="docs-card">
+          <div class="section-title">Documents récents</div>
+          <div id="docs-list"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Mon Miroir</div>
+    <div class="footer-info">Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026</div>
+  </footer>
+
+<script>
+  // ── DONNÉES ──────────────────────────────────────────
+  var jeunes = [
+    { id:1, prenom:"Moussa",   pays:"Guinée",       age:"16 ans", statut:"encours", pdf:true,  cv:true,  note:"Entretien phase 2 en cours" },
+    { id:2, prenom:"Ibrahim",  pays:"Mali",          age:"15 ans", statut:"alerte",  pdf:false, cv:false, note:"Détresse signalée lors entretien" },
+    { id:3, prenom:"Fatou",    pays:"Sénégal",       age:"17 ans", statut:"termine", pdf:true,  cv:true,  note:"Dossier complet transmis" },
+    { id:4, prenom:"Youssef",  pays:"Maroc",         age:"14 ans", statut:"nouveau", pdf:false, cv:false, note:"Premier contact" },
+    { id:5, prenom:"Mamadou",  pays:"Côte d'Ivoire", age:"16 ans", statut:"encours", pdf:true,  cv:false, note:"CV en cours de constitution" },
+  ];
+
+  var alertes = [
+    { id:1, jeune:"Ibrahim", msg:"Détresse signalée pendant l'entretien Scénariste — thème exil", time:"Aujourd'hui 14h32", resolved:false },
+    { id:2, jeune:"Youssef",  msg:"Silence prolongé et pleurs lors de la session Designer", time:"Hier 10h15", resolved:false },
+    { id:3, jeune:"Fatou",    msg:"Évocation de violence — pause effectuée", time:"12/03/2026", resolved:true },
+  ];
+
+  var rdvs = [
+    { jeune:"Moussa",  type:"Entretien IA Scénariste", date:"2026-04-02", heure:"09:00" },
+    { jeune:"Ibrahim", type:"Bilan de suivi",           date:"2026-04-03", heure:"14:30" },
+    { jeune:"Youssef", type:"Audience tribunal",        date:"2026-04-07", heure:"10:00" },
+  ];
+
+  var docs = [
+    { type:"PDF",  nom:"Récit_Moussa.pdf",   date:"Aujourd'hui" },
+    { type:"CV",   nom:"CV_Fatou.pdf",        date:"Hier" },
+    { type:"PDF",  nom:"Récit_Mamadou.pdf",  date:"29/03/2026" },
+    { type:"CV",   nom:"CV_Moussa.pdf",       date:"28/03/2026" },
+  ];
+
+  // ── DATE ──────────────────────────────────────────────
+  var jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  var mois  = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var now   = new Date();
+  document.getElementById('hero-date').textContent =
+    jours[now.getDay()] + ' ' + now.getDate() + ' ' + mois[now.getMonth()] + ' ' + now.getFullYear();
+
+  // ── STATS ─────────────────────────────────────────────
+  function renderStats() {
+    var total   = jeunes.length;
+    var encours = jeunes.filter(function(j){ return j.statut==='encours'; }).length;
+    var alertesNb = alertes.filter(function(a){ return !a.resolved; }).length;
+    var docs_nb = jeunes.filter(function(j){ return j.pdf||j.cv; }).length;
+    document.getElementById('alert-count').textContent = alertesNb;
+    document.getElementById('stats-grid').innerHTML =
+      stat('s-total',  total,   'Jeunes suivis') +
+      stat('s-cours',  encours, 'En cours') +
+      stat('s-alerte', alertesNb, 'Alertes actives') +
+      stat('s-docs',   docs_nb, 'Avec documents');
+  }
+  function stat(cls, num, label) {
+    return '<div class="stat-card '+cls+'"><div class="stat-num">'+num+'</div><div class="stat-label">'+label+'</div></div>';
+  }
+
+  // ── ALERTES ───────────────────────────────────────────
+  function renderAlertes() {
+    var html = alertes.map(function(a){
+      return '<div class="alerte-card'+(a.resolved?' resolved':'') +'">' +
+        '<div class="alerte-info">' +
+          '<div class="alerte-nom">'+a.jeune+'</div>' +
+          '<div class="alerte-msg">'+a.msg+'</div>' +
+        '</div>' +
+        '<div class="alerte-time">'+a.time+'</div>' +
+        (!a.resolved ? '<button class="btn-resolve" onclick="resolveAlerte('+a.id+')">Résoudre</button>' : '<span style="font-size:11px;color:var(--vert)">✓ Résolu</span>') +
+      '</div>';
+    }).join('');
+    document.getElementById('alertes-list').innerHTML = html;
+  }
+
+  function resolveAlerte(id) {
+    alertes.forEach(function(a){ if(a.id===id) a.resolved=true; });
+    renderAlertes(); renderStats();
+  }
+
+  // ── TABLEAU JEUNES ────────────────────────────────────
+  var statutLabels = { nouveau:'Nouveau', encours:'En cours', termine:'Terminé', alerte:'Alerte' };
+  var statutClass  = { nouveau:'s-nouveau', encours:'s-encours', termine:'s-termine', alerte:'s-alerte-badge' };
+
+  function renderTable() {
+    var q  = document.querySelector('.search-input').value.toLowerCase();
+    var sf = document.getElementById('filter-statut').value;
+    var list = jeunes.filter(function(j){
+      if (q  && j.prenom.toLowerCase().indexOf(q) < 0 && j.pays.toLowerCase().indexOf(q) < 0) return false;
+      if (sf && j.statut !== sf) return false;
+      return true;
+    });
+    document.getElementById('jeunes-tbody').innerHTML = list.map(function(j){
+      return '<div class="jeune-row" onclick="ouvrirJeune('+j.id+')">' +
+        '<div><div class="jeune-nom">'+j.prenom+'</div><div class="jeune-pays">'+j.pays+'</div></div>' +
+        '<div class="jeune-age">'+j.age+'</div>' +
+        '<div><span class="statut-badge '+statutClass[j.statut]+'">'+statutLabels[j.statut]+'</span></div>' +
+        '<div class="doc-icons">' +
+          '<div class="doc-icon'+(j.pdf?' active':'') +'" title="PDF">P</div>' +
+          '<div class="doc-icon'+(j.cv?' active':'') +'" title="CV">C</div>' +
+        '</div>' +
+        '<div class="actions-cell">' +
+          '<button class="btn-action" onclick="event.stopPropagation();window.location=\'jeune.html\'">Entretien</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function ouvrirJeune(id) {
+    var j = jeunes.find(function(x){ return x.id===id; });
+    if(j) alert('Dossier : ' + j.prenom + '\n' + j.pays + ' · ' + j.age + '\nNote : ' + j.note);
+  }
+
+  // ── AGENDA ────────────────────────────────────────────
+  var moisCourt = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  function renderAgenda() {
+    document.getElementById('agenda-list').innerHTML = rdvs.map(function(r){
+      var d = new Date(r.date);
+      return '<div class="rdv-item">' +
+        '<div class="rdv-date"><div class="rdv-day">'+d.getDate()+'</div><div class="rdv-month">'+moisCourt[d.getMonth()]+'</div></div>' +
+        '<div class="rdv-info">' +
+          '<div class="rdv-nom">'+r.jeune+'</div>' +
+          '<div class="rdv-type">'+r.type+'</div>' +
+          '<div class="rdv-heure">'+r.heure+'</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // ── DOCS ──────────────────────────────────────────────
+  function renderDocs() {
+    document.getElementById('docs-list').innerHTML = docs.map(function(d){
+      return '<div class="doc-item">' +
+        '<span class="doc-type '+d.type.toLowerCase()+'">'+d.type+'</span>' +
+        '<span class="doc-nom">'+d.nom+'</span>' +
+        '<span class="doc-date">'+d.date+'</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  // ── MODALES ───────────────────────────────────────────
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  function ajouterJeune() {
+    var p = document.getElementById('new-prenom').value.trim();
+    if(!p) return;
+    jeunes.push({
+      id: jeunes.length+1,
+      prenom: p,
+      pays: document.getElementById('new-pays').value.trim() || '—',
+      age:  document.getElementById('new-age').value.trim()  || '—',
+      statut: document.getElementById('new-statut').value,
+      pdf: false, cv: false,
+      note: document.getElementById('new-note').value.trim()
+    });
+    closeModal('modal-jeune');
+    ['new-prenom','new-age','new-pays','new-note'].forEach(function(id){ document.getElementById(id).value=''; });
+    renderTable(); renderStats();
+  }
+
+  function ajouterRdv() {
+    var j = document.getElementById('rdv-jeune').value.trim();
+    if(!j) return;
+    rdvs.push({
+      jeune: j,
+      type:  document.getElementById('rdv-type').value,
+      date:  document.getElementById('rdv-date').value,
+      heure: document.getElementById('rdv-heure').value
+    });
+    rdvs.sort(function(a,b){ return new Date(a.date)-new Date(b.date); });
+    closeModal('modal-rdv');
+    renderAgenda();
+  }
+
+  function scrollToAlertes() {
+    document.getElementById('section-alertes').scrollIntoView({ behavior:'smooth' });
+  }
+
+  // ── INIT ──────────────────────────────────────────────
+  renderStats(); renderAlertes(); renderTable(); renderAgenda(); renderDocs();
+</script>
+</body>
+</html>

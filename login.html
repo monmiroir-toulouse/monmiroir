@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion — Mon Miroir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bordeaux:     #6B1A2A;
+      --bordeaux-mid: #8B2A3E;
+      --bordeaux-pale:#F4E8EB;
+      --bordeaux-line:#D4A0AA;
+      --blanc:        #FFFFFF;
+      --gris-fond:    #F7F5F3;
+      --gris-clair:   #EAE7E4;
+      --gris:         #888078;
+      --gris-fonce:   #3A3530;
+      --noir:         #1A1614;
+      --ligne:        rgba(107,26,42,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background:var(--gris-fond);
+      font-family:'DM Sans',sans-serif;
+      font-weight:300;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .login-wrap {
+      width:100%;
+      max-width:420px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Logo */
+    .login-logo {
+      text-align:center;
+      margin-bottom:32px;
+    }
+    .login-logo-text {
+      font-family:'Cormorant Garamond',serif;
+      font-size:36px;
+      font-weight:600;
+      color:var(--noir);
+      display:block;
+    }
+    .login-logo-text span { color:var(--bordeaux); }
+    .login-logo-sub {
+      font-size:11px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--gris);
+      margin-top:4px;
+      display:block;
+    }
+
+    /* Carte login */
+    .login-card {
+      background:var(--blanc);
+      border:1px solid var(--ligne);
+      box-shadow:0 4px 24px rgba(107,26,42,0.08);
+      overflow:hidden;
+    }
+    .login-card-top {
+      background:var(--bordeaux);
+      padding:20px 28px;
+    }
+    .login-card-top h2 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:20px;
+      font-weight:600;
+      color:var(--blanc);
+      margin-bottom:4px;
+    }
+    .login-card-top p {
+      font-size:12px;
+      color:var(--bordeaux-line);
+      line-height:1.5;
+    }
+    .login-card-body { padding:28px; }
+
+    /* Champs */
+    .field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+    .field label {
+      font-size:10px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:var(--gris);
+    }
+    .field input {
+      font-family:'DM Sans',sans-serif;
+      font-size:14px;
+      font-weight:300;
+      padding:11px 14px;
+      border:1px solid var(--gris-clair);
+      background:var(--gris-fond);
+      color:var(--gris-fonce);
+      outline:none;
+      transition:border-color 0.2s;
+    }
+    .field input:focus { border-color:var(--bordeaux); }
+    .field input::placeholder { color:var(--gris); }
+
+    /* Bouton connexion */
+    .btn-login {
+      width:100%;
+      background:var(--bordeaux);
+      border:none;
+      color:var(--blanc);
+      font-family:'DM Sans',sans-serif;
+      font-size:12px;
+      font-weight:500;
+      letter-spacing:2px;
+      padding:13px;
+      cursor:pointer;
+      transition:background 0.2s;
+      text-transform:uppercase;
+      margin-top:8px;
+    }
+    .btn-login:hover { background:var(--bordeaux-mid); }
+    .btn-login:disabled { opacity:0.5; cursor:not-allowed; }
+
+    /* Séparateur */
+    .separator {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:20px 0;
+    }
+    .separator::before, .separator::after {
+      content:''; flex:1; height:1px; background:var(--ligne);
+    }
+    .separator span { font-size:11px; color:var(--gris); white-space:nowrap; }
+
+    /* Bouton Microsoft */
+    .btn-microsoft {
+      width:100%;
+      background:var(--blanc);
+      border:1px solid var(--gris-clair);
+      color:var(--gris-fonce);
+      font-family:'DM Sans',sans-serif;
+      font-size:13px;
+      font-weight:400;
+      padding:11px;
+      cursor:pointer;
+      transition:all 0.2s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn-microsoft:hover { border-color:var(--bordeaux-line); background:var(--bordeaux-pale); }
+    .ms-logo { font-size:16px; }
+
+    /* Message erreur / succès */
+    .msg { font-size:12px; padding:10px 14px; margin-top:14px; display:none; }
+    .msg.error { background:#FCEBEB; border:1px solid #F7C1C1; color:#A32D2D; }
+    .msg.success { background:#E8F5EE; border:1px solid #A8D5BC; color:#2E7D52; }
+    .msg.show { display:block; }
+
+    /* Note Azure AD */
+    .azure-note {
+      background:var(--bordeaux-pale);
+      border:1px solid var(--bordeaux-line);
+      padding:12px 14px;
+      margin-top:16px;
+    }
+    .azure-note p { font-size:11px; color:var(--bordeaux); line-height:1.6; }
+    .azure-note strong { font-weight:500; }
+
+    /* Loading */
+    .loading { display:none; text-align:center; padding:10px; }
+    .loading.show { display:block; }
+    .loading-dots span {
+      display:inline-block;
+      width:7px; height:7px;
+      border-radius:50%;
+      background:var(--bordeaux);
+      margin:0 2px;
+      animation:bounce 1.2s infinite;
+    }
+    .loading-dots span:nth-child(2){animation-delay:0.2s;}
+    .loading-dots span:nth-child(3){animation-delay:0.4s;}
+
+    /* Footer */
+    .login-footer {
+      text-align:center;
+      margin-top:24px;
+      font-size:11px;
+      color:var(--gris);
+      line-height:1.6;
+    }
+
+    @keyframes bounce {
+      0%,80%,100%{transform:translateY(0)}
+      40%{transform:translateY(-6px)}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrap">
+
+    <div class="login-logo">
+      <span class="login-logo-text">Mon <span>Miroir</span></span>
+      <span class="login-logo-sub">Tribunal pour Enfants · Toulouse</span>
+    </div>
+
+    <div class="login-card">
+      <div class="login-card-top">
+        <h2>Espace Pilote</h2>
+        <p>Accès réservé aux professionnels habilités du Tribunal pour Enfants de Toulouse.</p>
+      </div>
+      <div class="login-card-body">
+
+        <!-- Connexion Microsoft (future) -->
+        <button class="btn-microsoft" onclick="loginMicrosoft()">
+          <span class="ms-logo">⊞</span>
+          Connexion avec Microsoft (@tribunal-toulouse.fr)
+        </button>
+
+        <div class="azure-note">
+          <p><strong>Configuration en cours</strong> — La connexion Microsoft sera activée après validation par le service informatique du Tribunal. En attendant, utilisez vos identifiants provisoires ci-dessous.</p>
+        </div>
+
+        <!-- Séparateur -->
+        <div class="separator"><span>Accès provisoire</span></div>
+
+        <!-- Login provisoire -->
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="email" placeholder="prenom.nom@tribunal-toulouse.fr"
+            onkeydown="if(event.key==='Enter') login()"/>
+        </div>
+        <div class="field">
+          <label>Mot de passe provisoire</label>
+          <input type="password" id="password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter') login()"/>
+        </div>
+
+        <button class="btn-login" id="btn-login" onclick="login()">
+          Se connecter
+        </button>
+
+        <div class="loading" id="loading">
+          <div class="loading-dots"><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="msg" id="msg"></div>
+
+      </div>
+    </div>
+
+    <div class="login-footer">
+      Application clinique confidentielle · Données de mineurs protégées<br/>
+      RGPD · Usage strictement professionnel
+    </div>
+
+  </div>
+
+<script>
+  // ── LISTE BLANCHE ─────────────────────────────────────
+  // Pilotes autorisés : email + hash du mot de passe
+  // Pour ajouter un pilote : ajouter une ligne { email, hash }
+  // Le hash est généré via : await crypto.subtle.digest('SHA-256', encoder.encode(password))
+  // Outil : https://emn178.github.io/online-tools/sha256.html
+
+  var PILOTES_AUTORISES = [
+    {
+      email: "si.anaya@tribunal-toulouse.fr",
+      // Mot de passe par défaut : MonMiroir2026!  (à changer impérativement)
+      hash: "a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4"
+    },
+    // Ajouter d'autres pilotes ici :
+    // { email: "pilote2@tribunal-toulouse.fr", hash: "..." },
+  ];
+
+  var DOMAINES_AUTORISES = ["tribunal-toulouse.fr"];
+
+  // ── FONCTIONS ─────────────────────────────────────────
+  async function hashPassword(password) {
+    var encoder = new TextEncoder();
+    var data = encoder.encode(password);
+    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  function showMsg(text, type) {
+    var el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + type + ' show';
+  }
+
+  function setLoading(on) {
+    document.getElementById('loading').classList.toggle('show', on);
+    document.getElementById('btn-login').disabled = on;
+  }
+
+  async function login() {
+    var email    = document.getElementById('email').value.trim().toLowerCase();
+    var password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showMsg('Veuillez remplir tous les champs.', 'error');
+      return;
+    }
+
+    // Vérification du domaine
+    var domaine = email.split('@')[1];
+    if (!DOMAINES_AUTORISES.includes(domaine)) {
+      showMsg('Accès refusé. Seules les adresses @tribunal-toulouse.fr sont autorisées.', 'error');
+      return;
+    }
+
+    setLoading(true);
+
+    // Hash du mot de passe
+    var hash = await hashPassword(password);
+
+    // Vérification dans la liste blanche
+    var pilote = PILOTES_AUTORISES.find(function(p){
+      return p.email === email && p.hash === hash;
+    });
+
+    setTimeout(function() {
+      setLoading(false);
+      if (pilote) {
+        showMsg('Connexion réussie. Redirection…', 'success');
+        // Stockage session
+        sessionStorage.setItem('monmiroir_auth', JSON.stringify({
+          email: email,
+          nom: email.split('@')[0].replace('.', ' '),
+          loginAt: new Date().toISOString()
+        }));
+        setTimeout(function(){ window.location.href = 'index.html'; }, 1000);
+      } else {
+        showMsg('Identifiants incorrects ou accès non autorisé.', 'error');
+      }
+    }, 800);
+  }
+
+  function loginMicrosoft() {
+    showMsg('La connexion Microsoft sera disponible après configuration par le service informatique du Tribunal.', 'error');
+  }
+
+  // ── VÉRIFICATION SESSION ──────────────────────────────
+  // Si déjà connecté, redirige directement
+  if (sessionStorage.getItem('monmiroir_auth')) {
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

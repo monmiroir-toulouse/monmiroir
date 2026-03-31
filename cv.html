@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CV Interactif — Mon Miroir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bordeaux:     #6B1A2A;
+      --bordeaux-mid: #8B2A3E;
+      --bordeaux-pale:#F4E8EB;
+      --bordeaux-line:#D4A0AA;
+      --blanc:        #FFFFFF;
+      --gris-fond:    #F7F5F3;
+      --gris-clair:   #EAE7E4;
+      --gris:         #888078;
+      --gris-fonce:   #3A3530;
+      --noir:         #1A1614;
+      --ligne:        rgba(107,26,42,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--gris-fond); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; }
+
+    header { background:var(--blanc); border-bottom:1px solid var(--ligne); padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 1px 8px rgba(0,0,0,0.06); }
+    .logo { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--noir); text-decoration:none; }
+    .logo span { color:var(--bordeaux); }
+    .header-right { display:flex; align-items:center; gap:12px; }
+    .back-btn { font-size:12px; color:var(--gris); text-decoration:none; border:1px solid var(--gris-clair); padding:6px 14px; transition:all 0.2s; }
+    .back-btn:hover { color:var(--bordeaux); border-color:var(--bordeaux-line); background:var(--bordeaux-pale); }
+    .header-badge { font-size:10px; letter-spacing:2px; color:var(--bordeaux); border:1px solid var(--bordeaux-line); padding:5px 14px; text-transform:uppercase; background:var(--bordeaux-pale); }
+
+    .hero { background:var(--blanc); border-bottom:1px solid var(--ligne); padding:48px 32px 36px; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--bordeaux); }
+    .hero-tag { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:14px; }
+    .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,4vw,42px); font-weight:600; color:var(--noir); line-height:1.2; margin-bottom:10px; }
+    .hero h1 em { color:var(--bordeaux); font-style:italic; }
+    .hero p { font-size:14px; color:var(--gris); max-width:520px; line-height:1.7; }
+
+    .layout { max-width:1100px; margin:32px auto 60px; padding:0 24px; display:grid; grid-template-columns:1fr 380px; gap:24px; }
+    @media(max-width:860px){ .layout{ grid-template-columns:1fr; } }
+
+    /* ── FORMULAIRE ── */
+    .form-col { display:flex; flex-direction:column; gap:16px; }
+
+    .card { background:var(--blanc); border:1px solid var(--ligne); padding:24px 28px; }
+    .card-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .card-label::after { content:''; flex:1; height:1px; background:var(--ligne); }
+
+    .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:500px){ .field-grid{ grid-template-columns:1fr; } }
+    .field { display:flex; flex-direction:column; gap:5px; }
+    .field.full { grid-column:1/-1; }
+    .field label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gris); }
+    .field input, .field textarea, .field select {
+      font-family:'DM Sans',sans-serif; font-size:13px; font-weight:300;
+      padding:9px 12px; border:1px solid var(--gris-clair);
+      background:var(--gris-fond); color:var(--gris-fonce);
+      outline:none; transition:border-color 0.2s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--bordeaux); }
+    .field input::placeholder, .field textarea::placeholder { color:var(--gris); }
+    .field textarea { resize:vertical; min-height:90px; line-height:1.6; }
+
+    /* Tags dynamiques */
+    .tags-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+    .tag { display:flex; align-items:center; gap:5px; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); color:var(--bordeaux); font-size:12px; padding:4px 10px; }
+    .tag button { background:none; border:none; color:var(--bordeaux); cursor:pointer; font-size:14px; line-height:1; padding:0; }
+    .tag-input-row { display:flex; gap:8px; margin-top:8px; }
+    .tag-input-row input { flex:1; font-family:'DM Sans',sans-serif; font-size:13px; padding:7px 12px; border:1px solid var(--gris-clair); background:var(--gris-fond); color:var(--gris-fonce); outline:none; transition:border-color 0.2s; }
+    .tag-input-row input:focus { border-color:var(--bordeaux); }
+    .btn-add { background:transparent; border:1px solid var(--bordeaux-line); color:var(--bordeaux); font-family:'DM Sans',sans-serif; font-size:11px; padding:7px 14px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; transition:all 0.2s; }
+    .btn-add:hover { background:var(--bordeaux-pale); }
+
+    /* Entrées répétables */
+    .entries { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+    .entry { background:var(--gris-fond); border:1px solid var(--gris-clair); padding:12px 14px; display:flex; gap:10px; align-items:flex-start; }
+    .entry-content { flex:1; font-size:13px; color:var(--gris-fonce); line-height:1.5; }
+    .entry-meta { font-size:11px; color:var(--gris); margin-top:3px; }
+    .btn-remove { background:none; border:none; color:var(--gris); cursor:pointer; font-size:16px; line-height:1; flex-shrink:0; transition:color 0.2s; }
+    .btn-remove:hover { color:var(--bordeaux); }
+
+    .btn-primary { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:1.5px; padding:10px 20px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; }
+    .btn-primary:hover { background:var(--bordeaux-mid); }
+
+    /* ── APERÇU CV ── */
+    .preview-col { position:sticky; top:88px; align-self:start; }
+    .preview-card { background:var(--blanc); border:1px solid var(--ligne); }
+
+    .cv-header { background:var(--bordeaux); padding:20px 22px; }
+    .cv-logo { font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+    .cv-name { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--blanc); line-height:1.1; }
+    .cv-sub { font-size:11px; color:var(--bordeaux-line); margin-top:4px; }
+
+    .cv-body { padding:16px 20px; }
+    .cv-section { margin-bottom:16px; }
+    .cv-section-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--bordeaux); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .cv-section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
+    .cv-tags { display:flex; flex-wrap:wrap; gap:5px; }
+    .cv-tag { font-size:11px; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); color:var(--bordeaux); padding:3px 9px; }
+    .cv-text { font-size:12px; color:var(--gris-fonce); line-height:1.6; }
+    .cv-entry { margin-bottom:7px; }
+    .cv-entry-title { font-size:12px; font-weight:500; color:var(--noir); }
+    .cv-entry-meta { font-size:11px; color:var(--gris); }
+    .cv-empty { font-size:11px; color:var(--gris); font-style:italic; }
+
+    .preview-actions { padding:14px 20px; border-top:1px solid var(--ligne); display:flex; gap:8px; }
+    .btn-pdf { background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; letter-spacing:1px; padding:10px 18px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; flex:1; }
+    .btn-pdf:hover { background:var(--bordeaux-mid); }
+    .btn-reset { background:transparent; border:1px solid var(--gris-clair); color:var(--gris); font-family:'DM Sans',sans-serif; font-size:11px; padding:10px 14px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:all 0.2s; }
+    .btn-reset:hover { border-color:var(--bordeaux-line); color:var(--bordeaux); }
+
+    footer { background:var(--blanc); border-top:1px solid var(--ligne); padding:22px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .footer-logo { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--bordeaux); font-weight:600; }
+    .footer-info { font-size:11px; color:var(--gris); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Mon <span>Miroir</span></a>
+  <div class="header-right">
+    <a class="back-btn" href="index.html">← Retour</a>
+    <div class="header-badge">CV Interactif</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Pilote — saisie du CV</div>
+  <h1>CV <em>Interactif</em> du jeune</h1>
+  <p>Remplissez les sections ci-dessous. L'aperçu se met à jour en temps réel. Exportez en PDF quand le CV est finalisé.</p>
+</div>
+
+<div class="layout">
+
+  <!-- ── FORMULAIRE ── -->
+  <div class="form-col">
+
+    <!-- Identité -->
+    <div class="card">
+      <div class="card-label">Identité</div>
+      <div class="field-grid">
+        <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Prénom…" oninput="update()"/></div>
+        <div class="field"><label>Âge</label><input type="text" id="f-age" placeholder="Ex : 16 ans" oninput="update()"/></div>
+        <div class="field"><label>Pays d'origine</label><input type="text" id="f-pays" placeholder="Ex : Guinée" oninput="update()"/></div>
+        <div class="field"><label>Date du document</label><input type="text" id="f-date" oninput="update()"/></div>
+        <div class="field full"><label>Situation actuelle</label><input type="text" id="f-situation" placeholder="Ex : MNA, pris en charge par l'ASE de Toulouse" oninput="update()"/></div>
+      </div>
+    </div>
+
+    <!-- Compétences & langues -->
+    <div class="card">
+      <div class="card-label">Compétences & langues</div>
+      <div class="field">
+        <label>Langues parlées</label>
+        <div class="tags-wrap" id="tags-langues"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-langue" placeholder="Ex : Arabe, Français, Bambara…" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('langues','input-langue');}"/>
+          <button class="btn-add" onclick="addTag('langues','input-langue')">+ Ajouter</button>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Compétences pratiques</label>
+        <div class="tags-wrap" id="tags-competences"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-competence" placeholder="Ex : Menuiserie, Cuisine, Informatique…" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('competences','input-competence');}"/>
+          <button class="btn-add" onclick="addTag('competences','input-competence')">+ Ajouter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expériences & formations -->
+    <div class="card">
+      <div class="card-label">Expériences & formations</div>
+      <div class="entries" id="entries-exp"></div>
+      <div class="field-grid">
+        <div class="field"><label>Intitulé</label><input type="text" id="exp-titre" placeholder="Ex : Apprenti menuisier"/></div>
+        <div class="field"><label>Période / lieu</label><input type="text" id="exp-meta" placeholder="Ex : 2022, Conakry"/></div>
+        <div class="field full"><label>Description</label><textarea id="exp-desc" placeholder="Décrivez brièvement…" rows="2"></textarea></div>
+      </div>
+      <button class="btn-add" style="margin-top:10px" onclick="addEntry('exp')">+ Ajouter une expérience</button>
+    </div>
+
+    <!-- Rêves & projet de vie -->
+    <div class="card">
+      <div class="card-label">Rêves & projet de vie</div>
+      <div class="field-grid">
+        <div class="field full">
+          <label>Projet professionnel</label>
+          <textarea id="f-projet" placeholder="Ex : Devenir mécanicien, continuer à apprendre le français, obtenir un CAP…" oninput="update()"></textarea>
+        </div>
+        <div class="field full">
+          <label>Dans 5 ans…</label>
+          <textarea id="f-5ans" placeholder="Comment le jeune se projette dans l'avenir…" oninput="update()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résilience & forces -->
+    <div class="card">
+      <div class="card-label">Résilience & forces</div>
+      <div class="entries" id="entries-forces"></div>
+      <div class="field-grid">
+        <div class="field full"><label>Force identifiée</label><input type="text" id="force-titre" placeholder="Ex : Persévérance, Adaptabilité, Courage…"/></div>
+        <div class="field full"><label>Illustration concrète</label><textarea id="force-desc" placeholder="Ex : A traversé seul un voyage de 3 mois…" rows="2"></textarea></div>
+      </div>
+      <button class="btn-add" style="margin-top:10px" onclick="addEntry('force')">+ Ajouter une force</button>
+    </div>
+
+    <!-- Signature Pilote -->
+    <div class="card">
+      <div class="card-label">Signature du Pilote</div>
+      <div class="field-grid">
+        <div class="field"><label>Nom du Pilote</label><input type="text" id="f-pilote" placeholder="Nom Prénom…" oninput="update()"/></div>
+        <div class="field"><label>Fonction</label><input type="text" id="f-fonction" placeholder="Ex : Psychologue clinicien…" oninput="update()"/></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── APERÇU CV ── -->
+  <div class="preview-col">
+    <div class="preview-card">
+      <div class="cv-header">
+        <div class="cv-logo">Mon Miroir</div>
+        <div class="cv-name" id="cv-name">Prénom du jeune</div>
+        <div class="cv-sub" id="cv-sub">—</div>
+      </div>
+      <div class="cv-body">
+
+        <div class="cv-section" id="cv-sec-langues">
+          <div class="cv-section-title">Compétences & langues</div>
+          <div class="cv-tags" id="cv-langues"></div>
+          <div class="cv-tags" id="cv-competences" style="margin-top:5px"></div>
+        </div>
+
+        <div class="cv-section" id="cv-sec-exp">
+          <div class="cv-section-title">Expériences & formations</div>
+          <div id="cv-exp"><span class="cv-empty">Aucune entrée</span></div>
+        </div>
+
+        <div class="cv-section" id="cv-sec-projet">
+          <div class="cv-section-title">Rêves & projet de vie</div>
+          <div class="cv-text" id="cv-projet"><span class="cv-empty">—</span></div>
+          <div class="cv-text" id="cv-5ans" style="margin-top:6px"></div>
+        </div>
+
+        <div class="cv-section" id="cv-sec-forces">
+          <div class="cv-section-title">Résilience & forces</div>
+          <div id="cv-forces"><span class="cv-empty">Aucune entrée</span></div>
+        </div>
+
+        <div class="cv-section">
+          <div class="cv-section-title">Pilote référent</div>
+          <div class="cv-text" id="cv-pilote"><span class="cv-empty">—</span></div>
+        </div>
+
+      </div>
+      <div class="preview-actions">
+        <button class="btn-pdf" onclick="genererPDF()">⬇ Exporter en PDF</button>
+        <button class="btn-reset" onclick="resetForm()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">Mon Miroir</div>
+  <div class="footer-info">Tribunal pour Enfants de Toulouse · Si Mohamed ANAYA · 2026</div>
+</footer>
+
+<script>
+  var tags    = { langues:[], competences:[] };
+  var entries = { exp:[], force:[] };
+
+  // Date auto
+  var t = new Date();
+  document.getElementById('f-date').value =
+    ('0'+t.getDate()).slice(-2)+'/'+('0'+(t.getMonth()+1)).slice(-2)+'/'+t.getFullYear();
+
+  function v(id){ return document.getElementById(id).value.trim(); }
+
+  function addTag(group, inputId) {
+    var val = document.getElementById(inputId).value.trim();
+    if (!val) return;
+    tags[group].push(val);
+    document.getElementById(inputId).value = '';
+    renderTags(group);
+    update();
+  }
+
+  function removeTag(group, i) {
+    tags[group].splice(i, 1);
+    renderTags(group);
+    update();
+  }
+
+  function renderTags(group) {
+    var wrap = document.getElementById('tags-' + group);
+    wrap.innerHTML = tags[group].map(function(t, i){
+      return '<span class="tag">' + t + '<button onclick="removeTag(\''+group+'\','+i+')">×</button></span>';
+    }).join('');
+  }
+
+  function addEntry(type) {
+    var titre, meta, desc;
+    if (type === 'exp') {
+      titre = v('exp-titre'); meta = v('exp-meta'); desc = v('exp-desc');
+      if (!titre) { document.getElementById('exp-titre').focus(); return; }
+      entries.exp.push({ titre:titre, meta:meta, desc:desc });
+      document.getElementById('exp-titre').value = '';
+      document.getElementById('exp-meta').value  = '';
+      document.getElementById('exp-desc').value  = '';
+    } else {
+      titre = v('force-titre'); desc = v('force-desc');
+      if (!titre) { document.getElementById('force-titre').focus(); return; }
+      entries.force.push({ titre:titre, desc:desc });
+      document.getElementById('force-titre').value = '';
+      document.getElementById('force-desc').value  = '';
+    }
+    renderEntries(type);
+    update();
+  }
+
+  function removeEntry(type, i) {
+    entries[type].splice(i, 1);
+    renderEntries(type);
+    update();
+  }
+
+  function renderEntries(type) {
+    var wrap = document.getElementById('entries-' + (type === 'exp' ? 'exp' : 'forces'));
+    var list = entries[type];
+    wrap.innerHTML = list.map(function(e, i){
+      return '<div class="entry">' +
+        '<div class="entry-content">' +
+          '<div style="font-size:13px;font-weight:500;color:var(--gris-fonce)">' + e.titre + '</div>' +
+          (e.meta ? '<div class="entry-meta">' + e.meta + '</div>' : '') +
+          (e.desc ? '<div style="font-size:12px;color:var(--gris);margin-top:3px">' + e.desc + '</div>' : '') +
+        '</div>' +
+        '<button class="btn-remove" onclick="removeEntry(\''+type+'\','+i+')">×</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function update() {
+    var prenom = v('f-prenom') || 'Prénom du jeune';
+    var age    = v('f-age');
+    var pays   = v('f-pays');
+    var date   = v('f-date');
+
+    document.getElementById('cv-name').textContent = prenom;
+    var sub = [age, pays, date].filter(Boolean).join(' · ');
+    document.getElementById('cv-sub').textContent = sub || '—';
+
+    // Langues & compétences
+    document.getElementById('cv-langues').innerHTML = tags.langues.map(function(t){
+      return '<span class="cv-tag">' + t + '</span>';
+    }).join('') || '<span class="cv-empty">—</span>';
+
+    document.getElementById('cv-competences').innerHTML = tags.competences.map(function(t){
+      return '<span class="cv-tag" style="background:var(--gris-fond);border-color:var(--gris-clair);color:var(--gris-fonce)">' + t + '</span>';
+    }).join('');
+
+    // Expériences
+    document.getElementById('cv-exp').innerHTML = entries.exp.length
+      ? entries.exp.map(function(e){
+          return '<div class="cv-entry"><div class="cv-entry-title">' + e.titre + '</div>' +
+            (e.meta ? '<div class="cv-entry-meta">' + e.meta + '</div>' : '') +
+            (e.desc ? '<div class="cv-text" style="margin-top:2px">' + e.desc + '</div>' : '') + '</div>';
+        }).join('')
+      : '<span class="cv-empty">Aucune entrée</span>';
+
+    // Projet de vie
+    var projet = v('f-projet');
+    var ans5   = v('f-5ans');
+    document.getElementById('cv-projet').innerHTML = projet
+      ? '<span style="color:var(--gris-fonce)">' + projet + '</span>'
+      : '<span class="cv-empty">—</span>';
+    document.getElementById('cv-5ans').innerHTML = ans5
+      ? '<span style="font-size:11px;color:var(--gris)">Dans 5 ans : </span><span style="font-size:12px;color:var(--gris-fonce)">' + ans5 + '</span>'
+      : '';
+
+    // Forces
+    document.getElementById('cv-forces').innerHTML = entries.force.length
+      ? entries.force.map(function(e){
+          return '<div class="cv-entry"><div class="cv-entry-title">' + e.titre + '</div>' +
+            (e.desc ? '<div class="cv-text" style="margin-top:2px">' + e.desc + '</div>' : '') + '</div>';
+        }).join('')
+      : '<span class="cv-empty">Aucune entrée</span>';
+
+    // Pilote
+    var pilote   = v('f-pilote');
+    var fonction = v('f-fonction');
+    document.getElementById('cv-pilote').innerHTML = pilote
+      ? pilote + (fonction ? ' · <span style="color:var(--gris)">' + fonction + '</span>' : '')
+      : '<span class="cv-empty">—</span>';
+  }
+
+  function resetForm() {
+    if (!confirm('Réinitialiser tout le formulaire ?')) return;
+    ['f-prenom','f-age','f-pays','f-situation','f-projet','f-5ans','f-pilote','f-fonction'].forEach(function(id){
+      document.getElementById(id).value = '';
+    });
+    tags = { langues:[], competences:[] };
+    entries = { exp:[], force:[] };
+    renderTags('langues'); renderTags('competences');
+    renderEntries('exp'); renderEntries('force');
+    update();
+  }
+
+  function genererPDF() {
+    var prenom   = v('f-prenom') || 'Anonyme';
+    var age      = v('f-age');
+    var pays     = v('f-pays');
+    var date     = v('f-date');
+    var situation= v('f-situation');
+    var projet   = v('f-projet');
+    var ans5     = v('f-5ans');
+    var pilote   = v('f-pilote') || '—';
+    var fonction = v('f-fonction') || '—';
+
+    var { jsPDF } = window.jspdf;
+    var doc = new jsPDF({ unit:'mm', format:'a4' });
+    var W = 210; var mL = 20; var mR = 20; var textW = W - mL - mR;
+    var y = 0;
+
+    function checkPage(need) {
+      if (y + need > 270) { doc.addPage(); y = 20; }
+    }
+
+    function sectionTitle(label) {
+      checkPage(12);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(8);
+      doc.setTextColor(107,26,42);
+      doc.text(label.toUpperCase(), mL, y);
+      doc.setDrawColor(212,160,170);
+      doc.setLineWidth(0.3);
+      doc.line(mL + doc.getTextWidth(label.toUpperCase()) + 3, y-1, W-mR, y-1);
+      y += 6;
+    }
+
+    // ── EN-TÊTE BORDEAUX ──
+    doc.setFillColor(107,26,42);
+    doc.rect(0,0,W,38,'F');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.setTextColor(212,160,170);
+    doc.text('MON MIROIR', mL, 12);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(22);
+    doc.setTextColor(255,255,255);
+    doc.text(prenom, mL, 24);
+    var sub = [age, pays].filter(Boolean).join(' · ');
+    if (sub) {
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(10);
+      doc.setTextColor(212,160,170);
+      doc.text(sub, mL, 32);
+    }
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(8);
+    doc.setTextColor(212,160,170);
+    doc.text('CV Interactif · ' + date, W-mR, 32, { align:'right' });
+
+    y = 46;
+
+    // Situation
+    if (situation) {
+      doc.setFillColor(244,232,235);
+      doc.rect(mL, y, textW, 10, 'F');
+      doc.setFont('helvetica','italic');
+      doc.setFontSize(10);
+      doc.setTextColor(107,26,42);
+      doc.text(situation, mL+5, y+6.5);
+      y += 16;
+    }
+
+    // ── COMPÉTENCES & LANGUES ──
+    if (tags.langues.length || tags.competences.length) {
+      sectionTitle('Compétences & langues');
+      if (tags.langues.length) {
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(9);
+        doc.setTextColor(58,53,48);
+        doc.text('Langues :', mL, y);
+        doc.setFont('helvetica','normal');
+        doc.text(tags.langues.join('  ·  '), mL+22, y);
+        y += 6;
+      }
+      if (tags.competences.length) {
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(9);
+        doc.setTextColor(58,53,48);
+        doc.text('Compétences :', mL, y);
+        doc.setFont('helvetica','normal');
+        var compLines = doc.splitTextToSize(tags.competences.join('  ·  '), textW - 38);
+        doc.text(compLines, mL+38, y);
+        y += compLines.length * 5 + 4;
+      }
+      y += 4;
+    }
+
+    // ── EXPÉRIENCES ──
+    if (entries.exp.length) {
+      sectionTitle('Expériences & formations');
+      entries.exp.forEach(function(e){
+        checkPage(16);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(10);
+        doc.setTextColor(26,22,20);
+        doc.text(e.titre, mL, y);
+        if (e.meta) {
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(9);
+          doc.setTextColor(136,128,120);
+          doc.text(e.meta, W-mR, y, { align:'right' });
+        }
+        y += 5;
+        if (e.desc) {
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(10);
+          doc.setTextColor(58,53,48);
+          var lines = doc.splitTextToSize(e.desc, textW);
+          lines.forEach(function(l){ checkPage(6); doc.text(l, mL, y); y += 5; });
+        }
+        y += 4;
+      });
+    }
+
+    // ── RÊVES & PROJET ──
+    if (projet || ans5) {
+      sectionTitle('Rêves & projet de vie');
+      if (projet) {
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(9);
+        doc.setTextColor(107,26,42);
+        doc.text('Projet :', mL, y); y += 5;
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(10);
+        doc.setTextColor(58,53,48);
+        var pLines = doc.splitTextToSize(projet, textW);
+        pLines.forEach(function(l){ checkPage(6); doc.text(l, mL, y); y += 5; });
+        y += 3;
+      }
+      if (ans5) {
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(9);
+        doc.setTextColor(107,26,42);
+        doc.text('Dans 5 ans :', mL, y); y += 5;
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(10);
+        doc.setTextColor(58,53,48);
+        var aLines = doc.splitTextToSize(ans5, textW);
+        aLines.forEach(function(l){ checkPage(6); doc.text(l, mL, y); y += 5; });
+        y += 3;
+      }
+    }
+
+    // ── RÉSILIENCE & FORCES ──
+    if (entries.force.length) {
+      sectionTitle('Résilience & forces');
+      entries.force.forEach(function(e){
+        checkPage(14);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(10);
+        doc.setTextColor(26,22,20);
+        doc.text(e.titre, mL, y); y += 5;
+        if (e.desc) {
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(10);
+          doc.setTextColor(58,53,48);
+          var lines = doc.splitTextToSize(e.desc, textW);
+          lines.forEach(function(l){ checkPage(6); doc.text(l, mL, y); y += 5; });
+        }
+        y += 4;
+      });
+    }
+
+    // ── SIGNATURE PILOTE ──
+    checkPage(24);
+    doc.setDrawColor(212,160,170);
+    doc.setLineWidth(0.4);
+    doc.line(mL, y, W-mR, y); y += 8;
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.setTextColor(107,26,42);
+    doc.text('PILOTE RÉFÉRENT', mL, y); y += 6;
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    doc.setTextColor(58,53,48);
+    doc.text(pilote + ' · ' + fonction, mL, y); y += 10;
+    doc.setDrawColor(136,128,120);
+    doc.setLineWidth(0.3);
+    doc.line(mL, y, mL+60, y);
+    doc.setFontSize(8);
+    doc.setTextColor(136,128,120);
+    doc.text('Signature', mL, y+4);
+
+    // ── PIED DE PAGE ──
+    var total = doc.internal.getNumberOfPages();
+    for (var i=1; i<=total; i++) {
+      doc.setPage(i);
+      doc.setFillColor(244,232,235);
+      doc.rect(0,287,W,10,'F');
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(8);
+      doc.setTextColor(107,26,42);
+      doc.text('Mon Miroir — CV Interactif — Document confidentiel', mL, 293);
+      doc.text('Page '+i+' / '+total, W-mR, 293, { align:'right' });
+    }
+
+    doc.save('CV_MonMiroir_' + prenom.replace(/ /g,'_') + '.pdf');
+  }
+
+  update();
+</script>
+</body>
+</html>
