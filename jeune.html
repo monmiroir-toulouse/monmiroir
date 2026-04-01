@@ -1,3 +1,6 @@
+
+Copier
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +9,7 @@
   <title>Mon Histoire — Mon Miroir</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <style>
     :root {
       --bg:           #F4E8EB;
@@ -24,9 +28,9 @@
       --texte:        #2A1018;
       --texte-doux:   #7A4A55;
     }
-
+ 
     * { margin:0; padding:0; box-sizing:border-box; }
-
+ 
     body {
       background:var(--bg);
       color:var(--texte);
@@ -35,7 +39,7 @@
       min-height:100vh;
       overflow-x:hidden;
     }
-
+ 
     /* ── FOND ANIMÉ ── */
     body::before {
       content:'';
@@ -47,7 +51,7 @@
       pointer-events:none;
       z-index:0;
     }
-
+ 
     /* ── HEADER ── */
     header {
       position:sticky; top:0; z-index:100;
@@ -60,7 +64,7 @@
       align-items:center;
       justify-content:space-between;
     }
-
+ 
     .logo {
       font-family:'Nunito',sans-serif;
       font-size:22px;
@@ -70,7 +74,7 @@
       letter-spacing:-0.02em;
     }
     .logo em { color:var(--rouge-vif); font-style:normal; }
-
+ 
     .mode-btn {
       background:var(--gris-clair);
       border:1px solid var(--rouge-border);
@@ -83,7 +87,7 @@
       transition:all 0.2s;
     }
     .mode-btn:hover { background:var(--rouge-pale); color:var(--blanc); }
-
+ 
     /* ── LANGUE ── */
     .lang-bar {
       position:relative; z-index:1;
@@ -111,7 +115,7 @@
       box-shadow:0 0 16px rgba(107,26,42,0.25);
     }
     .lang-btn:hover:not(.active) { border-color:var(--rouge-border); color:var(--blanc); }
-
+ 
     /* ── ÉTAPES ── */
     .steps-wrap {
       position:relative; z-index:1;
@@ -119,7 +123,7 @@
       margin:0 auto;
       padding:32px 24px 80px;
     }
-
+ 
     /* Indicateur de progression */
     .progress-bar {
       display:flex;
@@ -146,19 +150,19 @@
       background:var(--or);
       border-color:var(--or);
     }
-
+ 
     /* Carte étape */
     .step-card {
       display:none;
       animation:slideIn 0.4s ease both;
     }
     .step-card.active { display:block; }
-
+ 
     @keyframes slideIn {
       from { opacity:0; transform:translateY(24px); }
       to   { opacity:1; transform:translateY(0); }
     }
-
+ 
     /* Emoji central */
     .step-emoji {
       text-align:center;
@@ -170,7 +174,7 @@
       0%,100% { transform:scale(1); }
       50%      { transform:scale(1.06); }
     }
-
+ 
     /* Question */
     .step-question {
       font-size:clamp(22px,5vw,30px);
@@ -185,7 +189,7 @@
       color:var(--rouge-vif);
       font-family:'Playfair Display',serif;
     }
-
+ 
     .step-hint {
       font-size:15px;
       color:var(--texte-doux);
@@ -193,7 +197,7 @@
       line-height:1.6;
       margin-bottom:28px;
     }
-
+ 
     /* Textarea */
     .step-textarea {
       width:100%;
@@ -216,7 +220,7 @@
       box-shadow:0 0 0 3px rgba(107,26,42,0.08);
     }
     .step-textarea::placeholder { color:var(--gris); }
-
+ 
     /* Compteur caractères */
     .char-count {
       text-align:right;
@@ -225,7 +229,7 @@
       margin-top:8px;
       opacity:0.6;
     }
-
+ 
     /* Boutons action */
     .step-actions {
       display:flex;
@@ -233,7 +237,7 @@
       margin-top:20px;
       flex-wrap:wrap;
     }
-
+ 
     .btn-next {
       flex:1;
       background:var(--rouge);
@@ -253,7 +257,7 @@
     }
     .btn-next:hover { background:var(--rouge-vif); transform:translateY(-2px); box-shadow:0 6px 20px rgba(107,26,42,0.25); }
     .btn-next:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
-
+ 
     .btn-skip {
       background:transparent;
       border:1px solid var(--rouge-border);
@@ -266,7 +270,7 @@
       transition:all 0.2s;
     }
     .btn-skip:hover { border-color:var(--rouge-vif); color:var(--blanc); }
-
+ 
     /* Bouton micro */
     .btn-micro {
       background:var(--bg3);
@@ -293,7 +297,7 @@
       0%,100% { box-shadow:0 0 0 0 rgba(107,26,42,0.3); }
       50%      { box-shadow:0 0 0 8px rgba(192,57,79,0); }
     }
-
+ 
     /* Typing dots */
     .typing-wrap {
       display:none;
@@ -313,7 +317,7 @@
     .typing-dots span:nth-child(2){animation-delay:0.2s;}
     .typing-dots span:nth-child(3){animation-delay:0.4s;}
     .typing-label { font-size:14px; color:var(--texte-doux); }
-
+ 
     /* Réponse IA */
     .response-wrap {
       display:none;
@@ -321,7 +325,7 @@
       animation:slideIn 0.4s ease both;
     }
     .response-wrap.show { display:block; }
-
+ 
     .response-bubble {
       background:var(--bg2);
       border:1px solid var(--rouge-border);
@@ -343,14 +347,14 @@
       color:var(--blanc-doux);
       white-space:pre-wrap;
     }
-
+ 
     .response-actions {
       display:flex;
       gap:10px;
       margin-top:16px;
       flex-wrap:wrap;
     }
-
+ 
     .btn-listen {
       background:var(--or-pale);
       border:1px solid rgba(154,107,42,0.25);
@@ -365,7 +369,7 @@
     }
     .btn-listen:hover { background:rgba(154,107,42,0.18); }
     .btn-listen.playing { background:rgba(154,107,42,0.2); }
-
+ 
     .btn-continue {
       background:var(--rouge-pale);
       border:1px solid var(--rouge-border);
@@ -379,7 +383,7 @@
       transition:all 0.2s;
     }
     .btn-continue:hover { background:var(--rouge); color:var(--blanc); }
-
+ 
     /* Écran de fin */
     .end-screen {
       display:none;
@@ -403,7 +407,7 @@
       margin:0 auto 32px;
     }
     .end-actions { display:flex; flex-direction:column; gap:10px; max-width:320px; margin:0 auto; }
-
+ 
     .btn-pdf {
       background:var(--rouge);
       border:none;
@@ -417,7 +421,7 @@
       transition:all 0.2s;
     }
     .btn-pdf:hover { background:var(--rouge-vif); transform:translateY(-2px); }
-
+ 
     .btn-restart {
       background:transparent;
       border:1px solid var(--rouge-border);
@@ -430,7 +434,7 @@
       transition:all 0.2s;
     }
     .btn-restart:hover { border-color:var(--rouge-vif); color:var(--blanc); }
-
+ 
     /* Modale signature */
     .modal-overlay {
       display:none;
@@ -508,7 +512,7 @@
       transition:background 0.2s;
     }
     .btn-modal-confirm:hover { background:var(--rouge-vif); }
-
+ 
     /* Toast notification */
     .toast {
       position:fixed;
@@ -526,12 +530,12 @@
       white-space:nowrap;
     }
     .toast.show { transform:translateX(-50%) translateY(0); }
-
+ 
     @keyframes bounce {
       0%,80%,100%{transform:translateY(0)}
       40%{transform:translateY(-6px)}
     }
-
+ 
     /* Responsive */
     @media(max-width:480px) {
       .steps-wrap { padding:24px 16px 80px; }
@@ -541,7 +545,7 @@
   </style>
 </head>
 <body>
-
+ 
   <!-- Modale signature Pilote -->
   <div class="modal-overlay" id="modal-sig">
     <div class="modal-sheet">
@@ -561,29 +565,29 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
-
+ 
   <!-- Header -->
   <header>
     <a class="logo" href="index.html">Mon <em>Miroir</em></a>
     <button class="mode-btn" onclick="toggleMode()">☀️ Mode jour</button>
   </header>
-
+ 
   <!-- Sélection langue -->
   <div class="lang-bar">
     <button class="lang-btn active" onclick="setLang('fr',this)">🇫🇷 Français</button>
     <button class="lang-btn" onclick="setLang('ar',this)">🌙 Darija</button>
     <button class="lang-btn" onclick="setLang('en',this)">🌍 English</button>
   </div>
-
+ 
   <!-- Contenu principal -->
   <div class="steps-wrap">
-
+ 
     <!-- Barre de progression -->
     <div class="progress-bar" id="progress-bar"></div>
-
+ 
     <!-- ÉTAPE 0 — Bienvenue -->
     <div class="step-card active" id="step-0">
       <div class="step-emoji">🪞</div>
@@ -593,7 +597,7 @@
         <button class="btn-next" onclick="goStep(1)">Je suis prêt → </button>
       </div>
     </div>
-
+ 
     <!-- ÉTAPE 1 — D'où tu viens -->
     <div class="step-card" id="step-1">
       <div class="step-emoji">🌍</div>
@@ -620,7 +624,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- ÉTAPE 2 — Ta famille -->
     <div class="step-card" id="step-2">
       <div class="step-emoji">👨‍👩‍👧</div>
@@ -647,7 +651,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- ÉTAPE 3 — Le voyage -->
     <div class="step-card" id="step-3">
       <div class="step-emoji">🛤️</div>
@@ -674,7 +678,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- ÉTAPE 4 — Ce que tu sais faire -->
     <div class="step-card" id="step-4">
       <div class="step-emoji">⭐</div>
@@ -701,7 +705,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- ÉTAPE 5 — Tes rêves -->
     <div class="step-card" id="step-5">
       <div class="step-emoji">🌟</div>
@@ -728,7 +732,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- ÉCRAN DE FIN -->
     <div class="end-screen" id="end-screen">
       <div class="end-emoji">🌟</div>
@@ -739,9 +743,9 @@
         <button class="btn-restart" onclick="restart()">Recommencer</button>
       </div>
     </div>
-
+ 
   </div>
-
+ 
 <script>
   var currentLang = 'fr';
   var currentStep = 0;
@@ -754,7 +758,7 @@
   var lastRecit   = '';
   var lastResponse = '';
   var dayMode     = false;
-
+ 
   // ── TRADUCTIONS ───────────────────────────────────────
   var t = {
     fr: {
@@ -824,13 +828,13 @@
       endSub:"Your story has been saved. The people supporting you will understand you better.",
     }
   };
-
+ 
   var systemPrompt = {
     fr:`Tu es l'IA Scénariste de "Mon Miroir", application pour Mineurs Non Accompagnés. Le jeune vient de répondre à une question de son parcours. Réponds avec une seule phrase chaleureuse qui valorise sa réponse, suivie d'une seule question douce pour approfondir. Maximum 3 phrases. Jamais de jugement. Réponds dans la même langue que le jeune.`,
     ar:`أنت مساعد ودود لتطبيق "مرآتي" للأحداث غير المرافقين. الشاب أجاب على سؤال. اشكره بجملة دافئة واطرح سؤالاً واحداً لطيفاً. أجب بالدارجة.`,
     en:`You are the AI assistant of "Mon Miroir", an app for unaccompanied minors. The young person just answered a question. Respond with one warm sentence valuing their answer, then one gentle question. Max 3 sentences. No judgment.`
   };
-
+ 
   // ── INIT ──────────────────────────────────────────────
   function buildProgress() {
     var bar = document.getElementById('progress-bar');
@@ -841,14 +845,14 @@
       bar.appendChild(d);
     }
   }
-
+ 
   function setLang(lang, btn) {
     currentLang = lang;
     document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     applyTranslations();
   }
-
+ 
   function applyTranslations() {
     var tr = t[currentLang];
     for (var i = 0; i <= 5; i++) {
@@ -866,7 +870,7 @@
     if (et) et.textContent = tr.endTitle;
     if (es) es.textContent = tr.endSub;
   }
-
+ 
   function goStep(n) {
     document.getElementById('step-'+currentStep).classList.remove('active');
     currentStep = n;
@@ -875,14 +879,14 @@
     buildProgress();
     window.scrollTo({ top:0, behavior:'smooth' });
   }
-
+ 
   function showEnd() {
     document.querySelectorAll('.step-card').forEach(function(c){ c.classList.remove('active'); });
     document.getElementById('end-screen').classList.add('show');
     buildProgress();
     window.scrollTo({ top:0, behavior:'smooth' });
   }
-
+ 
   function restart() {
     responses = {}; aiReplies = {};
     currentStep = 0;
@@ -900,19 +904,19 @@
     buildProgress();
     window.scrollTo({ top:0, behavior:'smooth' });
   }
-
+ 
   // ── ENVOI ─────────────────────────────────────────────
   async function envoyer(step) {
     var ta = document.getElementById('rep-'+step);
     var txt = ta ? ta.value.trim() : '';
     if (!txt) { goStep(step+1); return; }
-
+ 
     responses[step] = txt;
     lastRecit += '\n\n[Question '+step+'] '+txt;
-
+ 
     var typingEl = document.getElementById('typing-'+step);
     typingEl.classList.add('show');
-
+ 
     try {
       var r = await fetch('/api/chat', {
         method:'POST',
@@ -934,10 +938,10 @@
       // En cas d'erreur, on continue quand même
       goStep(step+1); return;
     }
-
+ 
     typingEl.classList.remove('show');
   }
-
+ 
   // ── COMPTEUR MOTS ─────────────────────────────────────
   function updateChar(step) {
     var ta = document.getElementById('rep-'+step);
@@ -945,7 +949,7 @@
     var cc = document.getElementById('char-'+step);
     if (cc) cc.textContent = words + (words <= 1 ? ' mot' : ' mots');
   }
-
+ 
   // ── SYNTHÈSE VOCALE ───────────────────────────────────
   function lire(step) {
     var text = aiReplies[step] || '';
@@ -962,36 +966,36 @@
     u.onend = u.onerror = function(){ btn.classList.remove('playing'); btn.textContent = '▶ Écouter'; currentUtt = null; };
     currentUtt = u; speechSynthesis.speak(u);
   }
-
+ 
   // ── DICTÉE VOCALE ─────────────────────────────────────
   function toggleMic(step) {
     var btn = document.getElementById('mic-'+step);
     var ta  = document.getElementById('rep-'+step);
-
+ 
     if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
       showToast('Dictée non disponible sur ce navigateur');
       return;
     }
-
+ 
     if (isRecording) {
       recognition.stop(); return;
     }
-
+ 
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
     recognition.lang = {fr:'fr-FR', ar:'ar-SA', en:'en-US'}[currentLang] || 'fr-FR';
     recognition.continuous = true;
     recognition.interimResults = true;
-
+ 
     var base = ta.value;
-
+ 
     recognition.onstart = function() {
       isRecording = true;
       btn.classList.add('recording');
       btn.textContent = '⏹';
       showToast('Parle maintenant…');
     };
-
+ 
     recognition.onresult = function(e) {
       var interim = '';
       var final = '';
@@ -1002,23 +1006,23 @@
       ta.value = base + final + interim;
       updateChar(step);
     };
-
+ 
     recognition.onend = function() {
       isRecording = false;
       btn.classList.remove('recording');
       btn.textContent = '🎤';
       base = ta.value;
     };
-
+ 
     recognition.onerror = function() {
       isRecording = false;
       btn.classList.remove('recording');
       btn.textContent = '🎤';
     };
-
+ 
     recognition.start();
   }
-
+ 
   // ── MODE JOUR/NUIT ────────────────────────────────────
   function toggleMode() {
     dayMode = !dayMode;
@@ -1041,7 +1045,7 @@
       btn.textContent = '☀️ Mode jour';
     }
   }
-
+ 
   // ── TOAST ─────────────────────────────────────────────
   function showToast(msg) {
     var el = document.getElementById('toast');
@@ -1049,19 +1053,46 @@
     el.classList.add('show');
     setTimeout(function(){ el.classList.remove('show'); }, 2500);
   }
-
+ 
   // ── PDF ───────────────────────────────────────────────
   function genererPDF() {
-    var pilote   = document.getElementById('pilote-nom').value.trim() || '—';
-    var fonction = document.getElementById('pilote-fonction').value.trim() || '—';
+    var pilote   = document.getElementById('pilote-nom').value.trim() || '-';
+    var fonction = document.getElementById('pilote-fonction').value.trim() || '-';
     document.getElementById('modal-sig').classList.remove('open');
-
+ 
     var { jsPDF } = window.jspdf;
     var doc = new jsPDF({ unit:'mm', format:'a4' });
     var W=210, mL=20, mR=20, textW=170, y=0;
-
+ 
     function checkPage(n){ if(y+n>270){ doc.addPage(); y=20; } }
-
+ 
+    // Nettoyage pour helvetica (accents -> ASCII)
+    function clean(str) {
+      if (!str) return '';
+      // Garder tel quel si que ASCII
+      var result = '';
+      for (var i=0; i<str.length; i++) {
+        var c = str[i];
+        var code = str.charCodeAt(i);
+        if (code < 128) { result += c; continue; }
+        var map = {
+          192:'A',193:'A',194:'A',195:'A',196:'A',197:'A',
+          199:'C',200:'E',201:'E',202:'E',203:'E',
+          204:'I',205:'I',206:'I',207:'I',209:'N',
+          210:'O',211:'O',212:'O',213:'O',214:'O',
+          217:'U',218:'U',219:'U',220:'U',221:'Y',
+          224:'a',225:'a',226:'a',227:'a',228:'a',229:'a',
+          231:'c',232:'e',233:'e',234:'e',235:'e',
+          236:'i',237:'i',238:'i',239:'i',241:'n',
+          242:'o',243:'o',244:'o',245:'o',246:'o',
+          249:'u',250:'u',251:'u',252:'u',253:'y',255:'y',
+          8217:"'",8216:"'",8220:'"',8221:'"',8211:'-',8212:'-',8230:'...'
+        };
+        result += map[code] || (code > 127 ? '[?]' : c);
+      }
+      return result;
+    }
+ 
     // En-tête bordeaux
     doc.setFillColor(107,26,42);
     doc.rect(0,0,W,38,'F');
@@ -1071,22 +1102,22 @@
     doc.text('MON MIROIR', mL, 12);
     doc.setFontSize(22);
     doc.setTextColor(255,255,255);
-    doc.text('Récit de vie', mL, 26);
+    doc.text('Recit de vie', mL, 26);
     doc.setFont('helvetica','normal');
     doc.setFontSize(9);
     doc.setTextColor(192,100,120);
     doc.text(new Date().toLocaleDateString('fr-FR'), W-mR, 26, { align:'right' });
-
+ 
     y = 46;
-
+ 
     var questions = {
-      1: { fr:"D'où tu viens ?", ar:"من فين أنت؟", en:"Where are you from?" },
-      2: { fr:"Ta famille…", ar:"عيلتك…", en:"Your family…" },
-      3: { fr:"Le voyage…", ar:"الطريق…", en:"The journey…" },
-      4: { fr:"Ce que tu sais faire…", ar:"اللي تعرف تديره…", en:"What you know how to do…" },
-      5: { fr:"Ton rêve…", ar:"حلمك…", en:"Your dream…" },
+      1: { fr:"D'ou tu viens ?",           ar:"Origine / pays",         en:"Where are you from?" },
+      2: { fr:"Ta famille...",              ar:"Ta famille...",           en:"Your family..." },
+      3: { fr:"Le voyage...",               ar:"Le voyage...",            en:"The journey..." },
+      4: { fr:"Ce que tu sais faire...",    ar:"Competences...",          en:"What you know how to do..." },
+      5: { fr:"Ton reve...",                ar:"Ton reve...",             en:"Your dream..." },
     };
-
+ 
     for (var i=1; i<=5; i++) {
       if (!responses[i]) continue;
       checkPage(20);
@@ -1094,25 +1125,26 @@
       doc.setFontSize(10);
       doc.setTextColor(107,26,42);
       var label = (questions[i] && questions[i][currentLang]) ? questions[i][currentLang] : 'Question '+i;
-      doc.text(label, mL, y); y += 6;
+      doc.text(clean(label), mL, y); y += 6;
       doc.setFont('helvetica','normal');
       doc.setFontSize(11);
       doc.setTextColor(58,53,48);
-      var lines = doc.splitTextToSize(responses[i], textW);
+      var cleaned = clean(responses[i]);
+      var lines = doc.splitTextToSize(cleaned, textW);
       lines.forEach(function(l){ checkPage(6); doc.text(l,mL,y); y+=5; });
       y += 6;
     }
-
+ 
     // Signature
     checkPage(24);
     doc.setDrawColor(212,160,170); doc.setLineWidth(0.4);
     doc.line(mL,y,W-mR,y); y+=8;
     doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(107,26,42);
-    doc.text('PILOTE RÉFÉRENT', mL, y); y+=5;
+    doc.text('PILOTE REFERENT', mL, y); y+=5;
     doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(58,53,48);
-    doc.text(pilote+' · '+fonction, mL, y); y+=12;
+    doc.text(clean(pilote)+' - '+clean(fonction), mL, y); y+=12;
     doc.setDrawColor(136,128,120); doc.line(mL,y,mL+60,y);
-
+ 
     // Pied de page
     var total = doc.internal.getNumberOfPages();
     for (var p=1; p<=total; p++) {
@@ -1120,14 +1152,14 @@
       doc.setFillColor(244,232,235);
       doc.rect(0,287,W,10,'F');
       doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(107,26,42);
-      doc.text('Mon Miroir — Récit confidentiel', mL, 293);
+      doc.text('Mon Miroir - Recit confidentiel', mL, 293);
       doc.text('Page '+p+' / '+total, W-mR, 293, { align:'right' });
     }
-
+ 
     doc.save('MonMiroir_Recit.pdf');
-    showToast('PDF téléchargé !');
+    showToast('PDF telecharge !');
   }
-
+ 
   // ── INIT ──────────────────────────────────────────────
   buildProgress();
   applyTranslations();
