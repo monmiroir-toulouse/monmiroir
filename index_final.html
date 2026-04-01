@@ -153,6 +153,7 @@
     @keyframes blink  {0%,100%{opacity:1}50%{opacity:0.3}}
     @keyframes bounce {0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
   </style>
+  <script src="crypto-storage.js"></script>
 </head>
 <body>
 
@@ -300,7 +301,7 @@
   </footer>
 
 <script>
-  var currentLang = localStorage.getItem('monmiroir_lang') || 'fr';
+  var currentLang = 'fr'; // sera mis à jour au chargement
   var pendingLang = null;
   var pendingBtn  = null;
   var histories   = { designer:[], scenariste:[], pilote:[] };
@@ -315,17 +316,15 @@
 
   // ✅ Sauvegarde l'historique dans localStorage
   function saveHistory(agent) {
-    try {
-      localStorage.setItem(storageKey(agent), JSON.stringify(histories[agent]));
-      document.getElementById('persist-' + agent).style.display = 'flex';
-    } catch(e) { /* localStorage plein : on ignore */ }
+    CryptoStorage.setItem(storageKey(agent), histories[agent]).then(function(ok){
+      if (ok) document.getElementById('persist-' + agent).style.display = 'flex';
+    }).catch(function(){ /* ignore */ });
   }
 
   // ✅ Charge l'historique depuis localStorage
-  function loadHistory(agent) {
+  async function loadHistory(agent) {
     try {
-      var raw = localStorage.getItem(storageKey(agent));
-      return raw ? JSON.parse(raw) : null;
+      return await CryptoStorage.getItem(storageKey(agent));
     } catch(e) { return null; }
   }
 
@@ -593,7 +592,7 @@ RÈGLES ABSOLUES :
 
   function applyLang(lang, btn){
     currentLang = lang;
-    localStorage.setItem('monmiroir_lang', lang);
+    CryptoStorage.setItem('monmiroir_lang', lang);
     document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
     if(btn) btn.classList.add('active');
     loadVoices();
