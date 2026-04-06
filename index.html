@@ -452,7 +452,7 @@ RÈGLES ABSOLUES :
 
     try {
       // ✅ Appel via proxy — aucune clé dans le navigateur
-      var r = await fetch('/api/chat', {
+      var r = await fetch('https://monmiroir.vercel.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
