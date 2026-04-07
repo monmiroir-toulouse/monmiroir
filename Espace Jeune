@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Miroir - Espace Jeune</title>
+    <style>
+        :root {
+            --soft-blue: #e3f2fd;
+            --main-blue: #2196f3;
+            --text-dark: #333;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--soft-blue); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        
+        /* Zone de l'Avatar */
+        #avatar-container { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+        .avatar-circle { width: 180px; height: 180px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; background: white; }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Zone de Dialogue */
+        #chat-zone { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .bubble { max-width: 80%; padding: 12px 18px; border-radius: 20px; font-size: 1.1rem; line-height: 1.4; }
+        .bot { background: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user { background: var(--main-blue); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+        /* Contrôles */
+        #controls { padding: 30px; display: flex; justify-content: center; background: white; border-top-left-radius: 30px; border-top-right-radius: 30px; }
+        .mic-btn { width: 70px; height: 70px; border-radius: 50%; background: #ff5252; border: none; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(255,82,82,0.4); transition: transform 0.2s; }
+        .mic-btn:active { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+    <div id="avatar-container">
+        <div class="avatar-circle">
+            <!-- Votre photo/vidéo de référence ici -->
+            <img src="votre-image.jpg" alt="Votre Interprète">
+        </div>
+        <div id="status-wave"></div> <!-- Animation d'onde sonore ici -->
+    </div>
+
+    <div id="chat-zone">
+        <div class="bubble bot">Bonjour. Je suis là pour t'écouter. Comment t'appelles-tu ?</div>
+    </div>
+
+    <div id="controls">
+        <button class="mic-btn" onclick="startRecognition()">🎤</button>
+    </div>
+
+</body>
+</html>
