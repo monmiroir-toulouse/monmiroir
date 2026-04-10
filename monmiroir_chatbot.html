@@ -481,7 +481,7 @@ async function sendMsg() {
     const data = await res.json();
     const reply = data.content?.[0]?.text || "Je t'écoute…";
     history.push({ role: 'assistant', content: reply });
-
+if (window.MonMiroir) MonMiroir.speak(reply);
     typing.style.display = 'none';
 
     const aiDiv = document.createElement('div');
@@ -505,5 +505,6 @@ async function sendMsg() {
   sendBtn.disabled = false;
 }
 </script>
+  <script src="avatar-mediator.js"></script>
 </body>
 </html>
