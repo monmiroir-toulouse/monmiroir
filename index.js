@@ -1,3 +1,3 @@
 module.exports = (req, res) => {
-  res.send('Mon Miroir API');
+  res.status(200).json({ status: 'ok' });
 };
