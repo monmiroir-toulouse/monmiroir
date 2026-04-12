@@ -805,7 +805,8 @@ async function sendModalMessage() {
     });
 
     const data = await resp.json();
-    const reply = data.content?.[0]?.text || '...';
+console.log('REPONSE:', JSON.stringify(data));
+const reply = data.content?.[0]?.text || '...';
     hideModalTyping();
     addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[currentAgent].push({ role: 'assistant', content: reply });
