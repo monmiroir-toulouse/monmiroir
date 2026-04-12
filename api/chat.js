@@ -17,28 +17,17 @@ export default async function handler(req, res) {
   }
  
   try {
-    const { system, messages } = req.body;
- 
-   const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: system,
-        messages: messages
-      })
-    });
- 
-    const data = await response.json();
-    return res.status(200).json(data);
- 
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-}
- 
+    const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    system: ag.system,
+    messages: agentHistory[currentAgent]
+  })
+});
+
+const data = await resp.json();
+const reply = data.content?.[0]?.text || '...';
+hideModalTyping();
+addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+agentHistory[currentAgent].push({ role: 'assistant', content: reply });
