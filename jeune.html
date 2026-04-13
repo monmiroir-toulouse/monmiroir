@@ -53,7 +53,14 @@ function addButton(text) {
 
     btn.onclick = function () {
         addMessage(text, "user");
-        botResponse(text);
+       function botResponse(text) {
+
+    addMessage("Tu préfères :", "bot");
+
+    addButton("Raconter");
+    addButton("Parler de moi");
+    addButton("Je ne sais pas");
+}(text);
     };
 
     document.getElementById("chat").appendChild(btn);
