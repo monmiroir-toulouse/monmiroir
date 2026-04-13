@@ -1,67 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Mon Miroir</title>
-
-<style>
-body {
-    font-family: Arial;
-    background: #f5f5f5;
-}
-
-#chat {
-    width: 400px;
-    height: 500px;
-    background: white;
-    margin: 20px auto;
-    padding: 10px;
-    overflow-y: auto;
-    border-radius: 10px;
-}
-
-.message {
-    margin: 10px 0;
-}
-
-.bot {
-    color: blue;
-}
-
-.user {
-    text-align: right;
-    color: green;
-}
-
-#inputZone {
-    width: 400px;
-    margin: auto;
-    display: flex;
-}
-
-#input {
-    flex: 1;
-    padding: 10px;
-}
-
-button {
-    padding: 10px;
-}
-</style>
-
-</head>
-
-<body>
-
-<div id="chat"></div>
-
-<div id="inputZone">
-    <input id="input" placeholder="Écris ici..." />
-    <button onclick="send()">Envoyer</button>
-</div>
-
-<script>
-
 let step = 0;
 
 function addMessage(text, sender) {
@@ -69,6 +5,22 @@ function addMessage(text, sender) {
     div.className = "message " + sender;
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
+}
+
+function addButton(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
+
+    btn.style.display = "block";
+    btn.style.margin = "6px 0";
+    btn.style.padding = "10px";
+
+    btn.onclick = function () {
+        addMessage(text, "user");
+        botResponse(text);
+    };
+
+    document.getElementById("chat").appendChild(btn);
 }
 
 function send() {
@@ -86,9 +38,12 @@ function send() {
 function botResponse(userText) {
 
     if (step === 0) {
-    addMessage("Salut, moi c’est Thomas. Tu veux raconter ce qui s’est passé ou parler de toi ?", "bot");
-    step++;
-}
+        addMessage("Tu préfères :", "bot");
+
+        addButton("Raconter ce qui s’est passé");
+        addButton("Parler de moi");
+
+        step++;
     }
 
     else if (step === 1) {
@@ -101,30 +56,10 @@ function botResponse(userText) {
         step++;
     }
 
-    else if (step === 3) {
-        addMessage("Merci. On peut continuer si tu veux.", "bot");
+    else {
+        addMessage("Merci. On continue si tu veux.", "bot");
     }
 }
 
 // message de départ
-addMessage("Salut. Moi c’est Thomas.\nJe suis là pour t’aider à raconter ton histoire.\nTu peux écrire ce que tu veux.\nOn commence ?", "bot");
-
-</script>
-
-</body>
-</html>
-function addButton(text) {
-    let btn = document.createElement("button");
-    btn.innerText = text;
-
-    btn.style.display = "block";
-    btn.style.margin = "6px 0";
-    btn.style.padding = "10px";
-
-    btn.onclick = function () {
-        addMessage(text, "user");
-        botResponse(text);
-    };
-
-    document.getElementById("chat").appendChild(btn);
-}
+addMessage("Salut. Moi c’est Thomas.\nJe suis là pour t’aider à raconter ton histoire.\nOn commence ?", "bot");
