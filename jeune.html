@@ -6,7 +6,6 @@ function addMessage(text, sender) {
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
 }
-
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
@@ -19,6 +18,27 @@ function addButton(text) {
         addMessage(text, "user");
         botResponse(text);
     };
+
+    document.getElementById("chat").appendChild(btn);
+}
+🧠 Pourquoi ça cassait tout
+
+En JavaScript :
+
+function doit être écrit exactement comme ça
+si une lettre manque → le navigateur ignore la fonction
+donc aucun bouton ne peut s’afficher
+🧪 Maintenant fais ça
+remplace ton code
+sauvegarde
+recharge la page
+❓ Et tu me dis juste :
+
+👉 “oui ça marche”
+ou
+👉 “non toujours pas”
+
+Si ça bloque encore, je te fais une version ultra simple sans erreur possible 👍
 
     document.getElementById("chat").appendChild(btn);
 }
