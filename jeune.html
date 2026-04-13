@@ -6,28 +6,21 @@
 
 <script>
 
-window.onload = function () {
+document.getElementById("chat").innerHTML = "JS MARCHE ✔️";
 
-    document.getElementById("chat").innerHTML = "JS MARCHE ✔️";
+function addButton(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
 
-    function addButton(text) {
-        let btn = document.createElement("button");
-        btn.innerText = text;
+    btn.onclick = function () {
+        alert("Tu as cliqué : " + text);
+    };
 
-        btn.style.display = "block";
-        btn.style.margin = "10px";
+    document.getElementById("chat").appendChild(btn);
+}
 
-        btn.onclick = function () {
-            alert("Tu as cliqué : " + text);
-        };
-
-        document.getElementById("chat").appendChild(btn);
-    }
-
-    addButton("Bouton 1");
-    addButton("Bouton 2");
-
-};
+addButton("Test bouton 1");
+addButton("Test bouton 2");
 
 </script>
 
