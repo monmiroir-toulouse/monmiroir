@@ -113,3 +113,18 @@ addMessage("Salut. Moi c’est Thomas.\nJe suis là pour t’aider à raconter t
 
 </body>
 </html>
+function addButton(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
+
+    btn.style.display = "block";
+    btn.style.margin = "6px 0";
+    btn.style.padding = "10px";
+
+    btn.onclick = function () {
+        addMessage(text, "user");
+        botResponse(text);
+    };
+
+    document.getElementById("chat").appendChild(btn);
+}
