@@ -1,15 +1,35 @@
-document.getElementById("chat").innerHTML = "JS MARCHE ✔️";
+<!DOCTYPE html>
+<html>
+<body>
 
-function addButton(text) {
-    let btn = document.createElement("button");
-    btn.innerText = text;
+<div id="chat"></div>
 
-    btn.onclick = function () {
-        alert("Tu as cliqué : " + text);
-    };
+<script>
 
-    document.body.appendChild(btn);
-}
+window.onload = function () {
 
-addButton("Test bouton 1");
-addButton("Test bouton 2");
+    document.getElementById("chat").innerHTML = "JS MARCHE ✔️";
+
+    function addButton(text) {
+        let btn = document.createElement("button");
+        btn.innerText = text;
+
+        btn.style.display = "block";
+        btn.style.margin = "10px";
+
+        btn.onclick = function () {
+            alert("Tu as cliqué : " + text);
+        };
+
+        document.getElementById("chat").appendChild(btn);
+    }
+
+    addButton("Bouton 1");
+    addButton("Bouton 2");
+
+};
+
+</script>
+
+</body>
+</html>
