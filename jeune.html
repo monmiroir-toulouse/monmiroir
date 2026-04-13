@@ -1,85 +1,17 @@
-let step = 0;
+<!DOCTYPE html>
+<html>
+<body>
 
-function addMessage(text, sender) {
-    let div = document.createElement("div");
-    div.className = "message " + sender;
-    div.innerText = text;
-    document.getElementById("chat").appendChild(div);
-}
-function addButton(text) {
-    let btn = document.createElement("button");
-    btn.innerText = text;
+<div id="chat"></div>
 
-    btn.style.display = "block";
-    btn.style.margin = "6px 0";
-    btn.style.padding = "10px";
+<script>
+document.getElementById("chat").innerHTML = "TEST OK JS FONCTIONNE";
 
-    btn.onclick = function () {
-        addMessage(text, "user");
-        botResponse(text);
-    };
+let btn = document.createElement("button");
+btn.innerText = "BOUTON TEST";
+document.body.appendChild(btn);
 
-    document.getElementById("chat").appendChild(btn);
-}
-🧠 Pourquoi ça cassait tout
+</script>
 
-En JavaScript :
-
-function doit être écrit exactement comme ça
-si une lettre manque → le navigateur ignore la fonction
-donc aucun bouton ne peut s’afficher
-🧪 Maintenant fais ça
-remplace ton code
-sauvegarde
-recharge la page
-❓ Et tu me dis juste :
-
-👉 “oui ça marche”
-ou
-👉 “non toujours pas”
-
-Si ça bloque encore, je te fais une version ultra simple sans erreur possible 👍
-
-    document.getElementById("chat").appendChild(btn);
-}
-
-function send() {
-    let input = document.getElementById("input");
-    let text = input.value;
-
-    if (text === "") return;
-
-    addMessage(text, "user");
-    input.value = "";
-
-    botResponse(text);
-}
-
-function botResponse(userText) {
-
-    if (step === 0) {
-        addMessage("Tu préfères :", "bot");
-
-        addButton("Raconter ce qui s’est passé");
-        addButton("Parler de moi");
-
-        step++;
-    }
-
-    else if (step === 1) {
-        addMessage("Ok, raconte avec tes mots.", "bot");
-        step++;
-    }
-
-    else if (step === 2) {
-        addMessage("À ce moment-là, t’avais quoi en tête ?", "bot");
-        step++;
-    }
-
-    else {
-        addMessage("Merci. On continue si tu veux.", "bot");
-    }
-}
-
-// message de départ
-addMessage("Salut. Moi c’est Thomas.\nJe suis là pour t’aider à raconter ton histoire.\nOn commence ?", "bot");
+</body>
+</html>
