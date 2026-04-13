@@ -1,80 +1,13 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Mon Miroir - Thomas</title>
-
-<style>
-body {
-    font-family: Arial;
-    background: #f2f2f2;
-}
-
-#chat {
-    width: 420px;
-    height: 500px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-.message {
-    margin: 8px 0;
-}
-
-.bot {
-    color: blue;
-}
-
-.user {
-    text-align: right;
-    color: green;
-}
-
-button {
-    display: block;
-    margin: 6px 0;
-    padding: 10px;
-}
-
-#inputZone {
-    width: 420px;
-    margin: auto;
-    display: flex;
-}
-
-#input {
-    flex: 1;
-    padding: 10px;
-}
-</style>
-
-</head>
-
-<body>
-
-<div id="chat"></div>
-
-<div id="inputZone">
-    <input id="input" placeholder="Écris ici..." />
-    <button onclick="send()">Envoyer</button>
-</div>
-
-<script>
-
 let step = 0;
 
-// afficher message
 function addMessage(text, type) {
     let div = document.createElement("div");
-    div.className = "message " + type;
     div.innerText = text;
+    div.style.margin = "8px 0";
+    div.style.textAlign = (type === "user") ? "right" : "left";
     document.getElementById("chat").appendChild(div);
 }
 
-// ajouter bouton
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
@@ -87,29 +20,15 @@ function addButton(text) {
     document.getElementById("chat").appendChild(btn);
 }
 
-// envoyer texte libre
-function send() {
-    let input = document.getElementById("input");
-    let text = input.value;
-
-    if (text === "") return;
-
-    addMessage(text, "user");
-    input.value = "";
-
-    botResponse(text);
-}
-
-// logique chatbot
 function botResponse(text) {
 
     if (step === 0) {
-        addMessage("Salut. Moi c’est Thomas.", "bot");
+        addMessage("Salut, moi c’est Thomas.", "bot");
         addMessage("Je suis là pour t’aider à raconter ton histoire.", "bot");
 
         addMessage("Tu préfères :", "bot");
 
-        addButton("Raconter ce qui s’est passé");
+        addButton("Raconter");
         addButton("Parler de moi");
 
         step++;
@@ -118,14 +37,8 @@ function botResponse(text) {
     else if (step === 1) {
         if (text.includes("Raconter")) {
             addMessage("Ok, raconte avec tes mots.", "bot");
-        }
-
-        else if (text.includes("Parler")) {
+        } else {
             addMessage("Comment tu te sens en ce moment ?", "bot");
-        }
-
-        else {
-            addMessage("Vas-y, dis-moi plus.", "bot");
         }
 
         step++;
@@ -141,11 +54,6 @@ function botResponse(text) {
     }
 }
 
-// message de départ
+// démarrage
 addMessage("Bienvenue dans Mon Miroir.", "bot");
 addMessage("On commence quand tu veux.", "bot");
-
-</script>
-
-</body>
-</html>
