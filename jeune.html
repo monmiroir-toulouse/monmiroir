@@ -1,5 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mon Miroir</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+}
+
+#chat {
+    width: 420px;
+    height: 500px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+button {
+    display: block;
+    margin: 6px 0;
+    padding: 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="chat"></div>
+
+<script>
+
 let step = 0;
 
+// afficher message
 function addMessage(text, type) {
     let div = document.createElement("div");
     div.innerText = text;
@@ -8,6 +46,7 @@ function addMessage(text, type) {
     document.getElementById("chat").appendChild(div);
 }
 
+// ajouter bouton
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
@@ -20,28 +59,38 @@ function addButton(text) {
     document.getElementById("chat").appendChild(btn);
 }
 
+// logique du chatbot
 function botResponse(text) {
 
     if (step === 0) {
         addMessage("Salut, moi c’est Thomas.", "bot");
-        addMessage("Je suis là pour t’aider à raconter ton histoire.", "bot");
+        addMessage("On va prendre ton histoire tranquillement.", "bot");
 
         addMessage("Tu préfères :", "bot");
 
         addButton("Raconter");
         addButton("Parler de moi");
-else if (text.includes("Je ne sais pas")) {
-    addMessage("C’est pas grave, on peut commencer doucement.", "bot");
-}
+        addButton("Je ne sais pas");
 
         step++;
     }
 
     else if (step === 1) {
+
         if (text.includes("Raconter")) {
-            addMessage("Ok, raconte avec tes mots.", "bot");
-        } else {
+            addMessage("Vas-y, je t’écoute.", "bot");
+        }
+
+        else if (text.includes("Parler")) {
             addMessage("Comment tu te sens en ce moment ?", "bot");
+        }
+
+        else if (text.includes("Je ne sais pas")) {
+            addMessage("C’est ok, on peut commencer doucement.", "bot");
+        }
+
+        else {
+            addMessage("Ok, continue.", "bot");
         }
 
         step++;
@@ -53,11 +102,15 @@ else if (text.includes("Je ne sais pas")) {
     }
 
     else {
-        addMessage("Merci. On continue si tu veux.", "bot");
+        addMessage("Merci. On peut continuer si tu veux.", "bot");
     }
 }
 
 // démarrage
 addMessage("Bienvenue dans Mon Miroir.", "bot");
-addMessage("On commence quand tu veux.", "bot");
+addMessage("Clique sur une option pour commencer.", "bot");
 
+</script>
+
+</body>
+</html>
