@@ -1,123 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Mon Miroir</title>
-
-<style>
-body {
-    font-family: Arial;
-    background: #f2f2f2;
-}
-
-#chat {
-    width: 420px;
-    height: 500px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-button {
-    display: block;
-    margin: 6px 0;
-    padding: 10px;
-    cursor: pointer;
-}
-</style>
-</head>
-
-<body>
-
-<div id="chat"></div>
-
 <script>
 
-let step = 0;
-
-// afficher message
-function addMessage(text, type) {
-    let div = document.createElement("div");
-    div.innerText = text;
-    div.style.margin = "8px 0";
-    div.style.textAlign = (type === "user") ? "right" : "left";
-    document.getElementById("chat").appendChild(div);
-}
-
-// ajouter bouton
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
-
-    btn.onclick = function () {
-        addMessage(text, "user");
-       function botResponse(text) {
-
-    addMessage("Tu préfères :", "bot");
-
-    addButton("Raconter");
-    addButton("Parler de moi");
-    addButton("Je ne sais pas");
-}(text);
-    };
-
-    document.getElementById("chat").appendChild(btn);
+    document.body.appendChild(btn);
 }
 
-// logique du chatbot
-function botResponse(text) {
-
-    if (step === 0) {
-        addMessage("Salut, moi c’est Thomas.", "bot");
-        addMessage("On va prendre ton histoire tranquillement.", "bot");
-
-        addMessage("Tu préfères :", "bot");
-
-        addButton("Raconter");
-        addButton("Parler de moi");
-        addButton("Je ne sais pas");
-
-        step++;
-    }
-
-    else if (step === 1) {
-
-        if (text.includes("Raconter")) {
-            addMessage("Vas-y, je t’écoute.", "bot");
-        }
-
-        else if (text.includes("Parler")) {
-            addMessage("Comment tu te sens en ce moment ?", "bot");
-        }
-
-        else if (text.includes("Je ne sais pas")) {
-            addMessage("C’est ok, on peut commencer doucement.", "bot");
-        }
-
-        else {
-            addMessage("Ok, continue.", "bot");
-        }
-
-        step++;
-    }
-
-    else if (step === 2) {
-        addMessage("À ce moment-là, t’avais quoi en tête ?", "bot");
-        step++;
-    }
-
-    else {
-        addMessage("Merci. On peut continuer si tu veux.", "bot");
-    }
-}
-
-// démarrage
-addMessage("Bienvenue dans Mon Miroir.", "bot");
-addMessage("Clique sur une option pour commencer.", "bot");
+addButton("TEST 1");
+addButton("TEST 2");
 
 </script>
-
-</body>
-</html>
