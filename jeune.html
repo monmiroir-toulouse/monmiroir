@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<div id="chat"></div>
-
-<script>
 document.getElementById("chat").innerHTML = "JS MARCHE ✔️";
 
-console.log("SCRIPT OK");
+function addButton(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
 
-</script>
+    btn.onclick = function () {
+        alert("Tu as cliqué : " + text);
+    };
 
-</body>
-</html>
+    document.body.appendChild(btn);
+}
+
+addButton("Test bouton 1");
+addButton("Test bouton 2");
