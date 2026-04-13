@@ -30,6 +30,9 @@ function botResponse(text) {
 
         addButton("Raconter");
         addButton("Parler de moi");
+else if (text.includes("Je ne sais pas")) {
+    addMessage("C’est pas grave, on peut commencer doucement.", "bot");
+}
 
         step++;
     }
@@ -57,4 +60,4 @@ function botResponse(text) {
 // démarrage
 addMessage("Bienvenue dans Mon Miroir.", "bot");
 addMessage("On commence quand tu veux.", "bot");
-addButton("Je ne sais pas");
+
