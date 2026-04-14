@@ -28,7 +28,10 @@ Tu ne donnes pas de solutions directes.
 Réponses courtes, humaines.
 `; } = body;
 
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch(.then(res => res.json())
+.then(data => {
+  console.log("TEST OK", data);
+});, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
