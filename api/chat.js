@@ -28,23 +28,23 @@ Tu ne donnes pas de solutions directes.
 Réponses courtes, humaines.
 `; } = body;
 
-    const r = await fetch(.then(res => res.json())
-.then(data => {
-  console.log("TEST OK", data);
-});, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        system,
-        messages
-      })
-    });
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': process.env.ANTHROPIC_API_KEY,
+    'anthropic-version': '2023-06-01'
+  },
+  body: JSON.stringify({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1000,
+    system,
+    messages
+  })
+});
+
+const data = await r.json();
+console.log("TEST OK", data);
 
     const data = await r.json();
     return res.status(200).json(data);
