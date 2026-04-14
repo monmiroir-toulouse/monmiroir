@@ -7,7 +7,22 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { const { system, messages } = body;
+    const { system, messages } = body;
+
+const systemPrompt = `
+${system}
+
+Tu es "Le Scribe".
+
+Présence calme, bienveillante et profonde.
+
+Tu adaptes ton ton :
+- tristesse → douceur
+- colère → accueillir
+- peur → rassurer
+
+Réponses courtes, humaines.
+`;
 
 const systemPrompt = `
 ${system}
@@ -36,7 +51,7 @@ const r = await fetch('https://monmiroir.vercel.app/api/chat', {
     system: ag.system,
     messages: agentHistory[currentAgent]
   })
-});
+);
 
 const data = await r.json();
 console.log("TEST OK", data);
