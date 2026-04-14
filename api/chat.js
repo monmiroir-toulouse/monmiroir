@@ -26,7 +26,7 @@ Tu ne juges jamais.
 Tu ne donnes pas de solutions directes.
 
 Réponses courtes, humaines.
-`; } = body;
+`;
 const r = await fetch('https://monmiroir.vercel.app/api/chat', {
   method: 'POST',
   headers: {
