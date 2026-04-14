@@ -18,6 +18,10 @@ function addMessage(text) {
     let div = document.createElement("div");
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
+    function clearButtons() {
+    let buttons = document.querySelectorAll("button");
+    buttons.forEach(btn => btn.remove());
+}
 }
 
 // ajouter bouton
