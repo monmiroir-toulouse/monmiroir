@@ -7,7 +7,26 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { system: systemPrompt,, messages } = body;
+    const { const { system, messages } = body;
+
+const systemPrompt = `
+${system}
+
+Tu es "Le Scribe".
+
+Présence calme, bienveillante et profonde.
+
+Tu adaptes ton ton :
+- tristesse → douceur
+- colère → accueillir
+- peur → rassurer
+
+Tu poses des questions ouvertes.
+Tu ne juges jamais.
+Tu ne donnes pas de solutions directes.
+
+Réponses courtes, humaines.
+`; } = body;
 
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
