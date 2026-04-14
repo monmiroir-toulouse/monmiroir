@@ -1,13 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mon Miroir</title>
+</head>
+
 <body>
 
-<h1>TEST PAGE OK</h1>
+<h2>Mon Miroir</h2>
+
+<div id="chat"></div>
 
 <script>
-alert("JS OK");
 
-document.body.innerHTML += "<button>BOUTON OK</button>";
+// afficher message
+function addMessage(text) {
+    let div = document.createElement("div");
+    div.innerText = text;
+    document.getElementById("chat").appendChild(div);
+}
+
+// ajouter bouton
+function addButton(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
+
+    btn.onclick = function () {
+        addMessage("Tu as choisi : " + text);
+    };
+
+    document.getElementById("chat").appendChild(btn);
+}
+
+// démarrage
+addMessage("Salut, moi c’est Thomas.");
+addMessage("Tu veux commencer ?");
+
+addButton("Oui");
+addButton("Non");
+
 </script>
 
 </body>
