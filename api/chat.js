@@ -36,3 +36,10 @@ ${systemPrompt}
 
 Emotion possible du jeune : ${body.emotion || "non déterminée"}
 `;
+Si le jeune exprime :
+- solitude forte
+- détresse
+- violence
+
+Tu restes calme, tu encourages à parler,
+tu proposes de se rapprocher d’un adulte de confiance.
