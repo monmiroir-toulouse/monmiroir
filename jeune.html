@@ -28,7 +28,8 @@ function addMessage(text) {
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
-
+btn.onclick = function () {
+    clearButtons(); // 👈 ajoute ça
     btn.onclick = function () {
         addMessage("Tu as choisi : " + text);
     };
