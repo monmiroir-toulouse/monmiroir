@@ -14,18 +14,12 @@
   --white: #ffffff;
   --muted: #6b7280;
   --soft: #9ca3af;
-
-  /* Agent 1 - Designer - Or */
   --gold: #d4a853;
   --gold-glow: rgba(212,168,83,0.15);
   --gold-soft: rgba(212,168,83,0.08);
-
-  /* Agent 2 - Narrateur - Turquoise */
   --teal: #2dd4bf;
   --teal-glow: rgba(45,212,191,0.15);
   --teal-soft: rgba(45,212,191,0.08);
-
-  /* Agent 3 - CV - Rose */
   --rose: #f472b6;
   --rose-glow: rgba(244,114,182,0.15);
   --rose-soft: rgba(244,114,182,0.08);
@@ -41,7 +35,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Background mesh */
 body::before {
   content: '';
   position: fixed;
@@ -54,7 +47,6 @@ body::before {
   z-index: 0;
 }
 
-/* INTRO */
 .intro {
   position: relative;
   z-index: 1;
@@ -102,7 +94,6 @@ body::before {
   direction: rtl;
 }
 
-/* PILOT BAR */
 .pilot-bar {
   position: relative;
   z-index: 1;
@@ -144,16 +135,8 @@ body::before {
   border: 2px solid var(--card);
 }
 
-.pilot-info h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.pilot-info p {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-top: 2px;
-}
+.pilot-info h3 { font-size: 0.95rem; font-weight: 600; }
+.pilot-info p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
 
 .pilot-label {
   margin-left: auto;
@@ -167,7 +150,6 @@ body::before {
   text-transform: uppercase;
 }
 
-/* AGENTS GRID */
 .agents {
   position: relative;
   z-index: 1;
@@ -179,7 +161,6 @@ body::before {
   padding: 0 20px 80px;
 }
 
-/* AGENT CARD */
 .agent-card {
   background: var(--card);
   border-radius: 24px;
@@ -190,15 +171,11 @@ body::before {
   position: relative;
 }
 
-.agent-card:hover {
-  transform: translateY(-6px);
-}
-
+.agent-card:hover { transform: translateY(-6px); }
 .agent-card.gold:hover { box-shadow: 0 20px 60px var(--gold-glow); }
 .agent-card.teal:hover { box-shadow: 0 20px 60px var(--teal-glow); }
 .agent-card.rose:hover { box-shadow: 0 20px 60px var(--rose-glow); }
 
-/* Glow top border */
 .agent-card::before {
   content: '';
   position: absolute;
@@ -211,19 +188,8 @@ body::before {
 .agent-card.teal::before { background: linear-gradient(90deg, transparent, var(--teal), transparent); }
 .agent-card.rose::before { background: linear-gradient(90deg, transparent, var(--rose), transparent); }
 
-/* Agent header */
-.agent-header {
-  padding: 28px 24px 20px;
-  position: relative;
-}
-
-.agent-number {
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
+.agent-header { padding: 28px 24px 20px; position: relative; }
+.agent-number { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
 
 .agent-icon {
   width: 64px; height: 64px;
@@ -251,79 +217,27 @@ body::before {
 .teal .agent-icon::after { border-color: var(--teal); }
 .rose .agent-icon::after { border-color: var(--rose); }
 
-.agent-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
+.agent-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
 .gold .agent-name { color: var(--gold); }
 .teal .agent-name { color: var(--teal); }
 .rose .agent-name { color: var(--rose); }
 
-.agent-role {
-  font-size: 0.78rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-}
+.agent-role { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+.agent-desc { font-size: 0.9rem; color: var(--soft); line-height: 1.7; margin-bottom: 12px; }
+.agent-arabic { font-size: 0.82rem; color: var(--muted); direction: rtl; text-align: right; font-style: italic; }
 
-.agent-desc {
-  font-size: 0.9rem;
-  color: var(--soft);
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
+.agent-sep { height: 1px; background: var(--border); margin: 0 24px; }
 
-.agent-arabic {
-  font-size: 0.82rem;
-  color: var(--muted);
-  direction: rtl;
-  text-align: right;
-  font-style: italic;
-}
+.agent-outputs { padding: 20px 24px; }
+.output-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
-/* Separator */
-.agent-sep {
-  height: 1px;
-  background: var(--border);
-  margin: 0 24px;
-}
+.output-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 
-/* Agent outputs */
-.agent-outputs {
-  padding: 20px 24px;
-}
-
-.output-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-
-.output-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.tag {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
+.tag { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 .gold .tag { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,168,83,0.2); }
 .teal .tag { background: var(--teal-soft); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
 .rose .tag { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(244,114,182,0.2); }
 
-/* CTA Button */
 .agent-btn {
   width: 100%;
   padding: 13px;
@@ -340,10 +254,8 @@ body::before {
 .gold .agent-btn { background: var(--gold); color: var(--night); }
 .teal .agent-btn { background: var(--teal); color: var(--night); }
 .rose .agent-btn { background: var(--rose); color: var(--night); }
-
 .agent-btn:hover { filter: brightness(1.1); transform: scale(1.01); }
 
-/* CHAT MODAL */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -356,11 +268,7 @@ body::before {
   padding: 20px;
 }
 
-.modal-overlay.open {
-  display: flex;
-  animation: fadeIn 0.2s ease;
-}
-
+.modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal {
@@ -387,13 +295,7 @@ body::before {
   flex-shrink: 0;
 }
 
-.modal-icon {
-  width: 40px; height: 40px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem;
-}
-
+.modal-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 .modal-title { font-weight: 600; font-size: 0.95rem; }
 .modal-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
@@ -442,14 +344,7 @@ body::before {
 .teal-msg.user { background: var(--teal); }
 .rose-msg.user { background: var(--rose); }
 
-.typing-ind {
-  align-self: flex-start;
-  background: var(--card);
-  border-radius: 4px 16px 16px 16px;
-  padding: 12px 16px;
-  display: flex; gap: 4px; align-items: center;
-}
-
+.typing-ind { align-self: flex-start; background: var(--card); border-radius: 4px 16px 16px 16px; padding: 12px 16px; display: flex; gap: 4px; align-items: center; }
 .td { width: 6px; height: 6px; border-radius: 50%; animation: b 1.2s infinite; }
 .td:nth-child(2) { animation-delay: 0.2s; }
 .td:nth-child(3) { animation-delay: 0.4s; }
@@ -505,7 +400,6 @@ body::before {
 .teal-send { background: var(--teal); }
 .rose-send { background: var(--rose); }
 
-/* FOOTER */
 .footer {
   position: relative; z-index: 1;
   text-align: center;
@@ -522,7 +416,6 @@ body::before {
 </head>
 <body>
 
-<!-- Intro -->
 <div class="intro">
   <div class="intro-badge">Tribunal pour Enfants · Toulouse · 2026</div>
   <h1>Mon <span>Miroir</span></h1>
@@ -530,7 +423,6 @@ body::before {
   <p class="arabic">ثلاثة وكلاء في خدمة صوتك، قصتك، مستقبلك</p>
 </div>
 
-<!-- Pilot -->
 <div class="pilot-bar">
   <div class="pilot-card">
     <div class="pilot-avatar">S</div>
@@ -542,10 +434,8 @@ body::before {
   </div>
 </div>
 
-<!-- Agents -->
 <div class="agents">
 
-  <!-- Agent 1 : Designer -->
   <div class="agent-card gold" onclick="openAgent('designer')">
     <div class="agent-header">
       <div class="agent-number">Agent 01</div>
@@ -567,7 +457,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Agent 2 : Narrateur -->
   <div class="agent-card teal" onclick="openAgent('narrateur')">
     <div class="agent-header">
       <div class="agent-number">Agent 02</div>
@@ -589,7 +478,6 @@ body::before {
     </div>
   </div>
 
-  <!-- Agent 3 : CV -->
   <div class="agent-card rose" onclick="openAgent('cv')">
     <div class="agent-header">
       <div class="agent-number">Agent 03</div>
@@ -615,7 +503,6 @@ body::before {
 
 <div class="footer">Mon Miroir · Si Mohamed ANAYA · Tribunal pour Enfants de Toulouse · 2026</div>
 
-<!-- MODAL CHAT -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-header" id="modal-header">
@@ -714,8 +601,6 @@ RÉPONSES : Guidées, structurées mais chaleureuses.`
 function openAgent(type) {
   currentAgent = type;
   const ag = agents[type];
-  
-  // Set modal style
   const header = document.getElementById('modal-header');
   const icon = document.getElementById('modal-icon');
   const title = document.getElementById('modal-title');
@@ -731,7 +616,6 @@ function openAgent(type) {
   sendBtn.className = `modal-send ${ag.color}-send`;
   input.style.borderColor = ag.color === 'gold' ? 'rgba(212,168,83,0.3)' : ag.color === 'teal' ? 'rgba(45,212,191,0.3)' : 'rgba(244,114,182,0.3)';
 
-  // Clear and show welcome
   const chat = document.getElementById('modal-chat');
   chat.innerHTML = '';
   agentHistory[type] = [];
@@ -739,7 +623,6 @@ function openAgent(type) {
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Welcome message
   setTimeout(() => {
     addModalMessage('agent', ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
@@ -795,7 +678,6 @@ async function sendModalMessage() {
 
   try {
     const ag = agents[currentAgent];
-    console.log('ENVOI:', JSON.stringify({ system: ag.system, messages: agentHistory[currentAgent] }));
     const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -806,8 +688,7 @@ async function sendModalMessage() {
     });
 
     const data = await resp.json();
-console.log('REPONSE:', JSON.stringify(data));
-const reply = data.content?.[0]?.text || '...';
+    const reply = data.content?.[0]?.text || '...';
     hideModalTyping();
     addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[currentAgent].push({ role: 'assistant', content: reply });
@@ -833,41 +714,37 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
 
-// Close on overlay click
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 </script>
-</body>
-</html>
-<button onclick="startListening()">🎤 Parler</button>
+
 <script>
 function startListening() {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = "fr-FR";
-
   recognition.onresult = function(event) {
     const texte = event.results[0][0].transcript;
     document.getElementById("userInput").value = texte;
     envoyerMessage();
   };
-
   recognition.start();
 }
 </script>
+
 <script>
 function parler(texte) {
   const speech = new SpeechSynthesisUtterance(texte);
   speech.lang = "fr-FR";
   speech.rate = 0.9;
   speech.pitch = 1;
-
   window.speechSynthesis.speak(speech);
 }
+</script>
+
 <script>
 function analyserEmotion(message) {
   message = message.toLowerCase();
-
   if (message.includes("triste") || message.includes("déprimé")) {
     return "tristesse";
   }
@@ -880,25 +757,9 @@ function analyserEmotion(message) {
   if (message.includes("heureux") || message.includes("content")) {
     return "joie";
   }
-
   return "neutre";
 }
 </script>
-function analyserEmotion(message) {
-  message = message.toLowerCase();
 
-  if (message.includes("triste") || message.includes("déprimé")) {
-    return "tristesse";
-  }
-  if (message.includes("colère") || message.includes("énervé")) {
-    return "colere";
-  }
-  if (message.includes("peur") || message.includes("angoisse")) {
-    return "peur";
-  }
-  if (message.includes("heureux") || message.includes("content")) {
-    return "joie";
-  }
-
-  return "neutre";
-}
+</body>
+</html>
