@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { system, messages } = body;
+    const { system: systemPrompt,, messages } = body;
 
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
