@@ -864,3 +864,21 @@ function parler(texte) {
   window.speechSynthesis.speak(speech);
 }
 </script>
+function analyserEmotion(message) {
+  message = message.toLowerCase();
+
+  if (message.includes("triste") || message.includes("déprimé")) {
+    return "tristesse";
+  }
+  if (message.includes("colère") || message.includes("énervé")) {
+    return "colere";
+  }
+  if (message.includes("peur") || message.includes("angoisse")) {
+    return "peur";
+  }
+  if (message.includes("heureux") || message.includes("content")) {
+    return "joie";
+  }
+
+  return "neutre";
+}
