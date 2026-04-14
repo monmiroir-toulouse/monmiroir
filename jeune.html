@@ -13,27 +13,36 @@
 
 <script>
 
-// afficher message
 function addMessage(text) {
     let div = document.createElement("div");
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
-    function clearButtons() {
+}
+
+function clearButtons() {
     let chat = document.getElementById("chat");
     let buttons = chat.querySelectorAll("button");
     buttons.forEach(btn => btn.remove());
 }
-}
-}
 
-// ajouter bouton
 function addButton(text) {
     let btn = document.createElement("button");
     btn.innerText = text;
-btn.onclick = function () {
-    clearButtons(); // 👈 ajoute ça
+
     btn.onclick = function () {
-        addMessage("Tu as choisi : " + text);
+        clearButtons();
+        addMessage("👉 " + text);
+
+        if (text === "Oui") {
+            addMessage("Ok, on commence.");
+            addMessage("Tu préfères raconter ou parler de toi ?");
+            addButton("Raconter");
+            addButton("Parler de moi");
+        }
+
+        else if (text === "Non") {
+            addMessage("Pas de souci.");
+        }
     };
 
     document.getElementById("chat").appendChild(btn);
