@@ -854,3 +854,13 @@ function startListening() {
   recognition.start();
 }
 </script>
+<script>
+function parler(texte) {
+  const speech = new SpeechSynthesisUtterance(texte);
+  speech.lang = "fr-FR";
+  speech.rate = 0.9;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+</script>
