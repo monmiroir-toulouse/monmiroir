@@ -1,60 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Mon Miroir</title>
-</head>
-
+<html>
 <body>
 
-<h2>Mon Miroir</h2>
-
-<div id="chat"></div>
+<h1>Mon Miroir</h1>
 
 <script>
-
-function addMessage(text) {
-    let div = document.createElement("div");
-    div.innerText = text;
-    document.getElementById("chat").appendChild(div);
-}
-
-function clearButtons() {
-    let chat = document.getElementById("chat");
-    let buttons = chat.querySelectorAll("button");
-    buttons.forEach(btn => btn.remove());
-}
-
-function addButton(text) {
-    let btn = document.createElement("button");
-    btn.innerText = text;
-
-    btn.onclick = function () {
-        clearButtons();
-        addMessage("👉 " + text);
-
-        if (text === "Oui") {
-            addMessage("Ok, on commence.");
-            addMessage("Tu préfères raconter ou parler de toi ?");
-            addButton("Raconter");
-            addButton("Parler de moi");
-        }
-
-        else if (text === "Non") {
-            addMessage("Pas de souci.");
-        }
-    };
-
-    document.getElementById("chat").appendChild(btn);
-}
-
-// démarrage
-addMessage("Salut, moi c’est Thomas.");
-addMessage("Tu veux commencer ?");
-
-addButton("Oui");
-addButton("Non");
-
+alert("JS MARCHE");
 </script>
 
 </body>
