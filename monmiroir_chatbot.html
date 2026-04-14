@@ -19,7 +19,20 @@ function addButton(text) {
     btn.innerText = text;
 
     btn.onclick = function () {
-        addMessage("👉 " + text);
+    addMessage("👉 " + text);
+
+    if (text.includes("Raconter")) {
+        addMessage("Vas-y, je t’écoute.");
+    }
+
+    else if (text.includes("Parler")) {
+        addMessage("Comment tu te sens en ce moment ?");
+    }
+
+    else {
+        addMessage("C’est ok, on peut prendre le temps.");
+    }
+};
     };
 
     document.getElementById("chat").appendChild(btn);
