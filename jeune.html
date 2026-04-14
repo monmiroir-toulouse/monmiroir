@@ -19,8 +19,10 @@ function addMessage(text) {
     div.innerText = text;
     document.getElementById("chat").appendChild(div);
     function clearButtons() {
-    let buttons = document.querySelectorAll("button");
+    let chat = document.getElementById("chat");
+    let buttons = chat.querySelectorAll("button");
     buttons.forEach(btn => btn.remove());
+}
 }
 }
 
