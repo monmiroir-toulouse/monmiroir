@@ -840,3 +840,17 @@ document.getElementById('modal').addEventListener('click', function(e) {
 </body>
 </html>
 <button onclick="startListening()">🎤 Parler</button>
+<script>
+function startListening() {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "fr-FR";
+
+  recognition.onresult = function(event) {
+    const texte = event.results[0][0].transcript;
+    document.getElementById("userInput").value = texte;
+    envoyerMessage();
+  };
+
+  recognition.start();
+}
+</script>
