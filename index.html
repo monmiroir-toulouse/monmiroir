@@ -299,8 +299,24 @@ body::before {
 .modal-title { font-weight: 600; font-size: 0.95rem; }
 .modal-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
-.modal-close {
+/* Bouton voix ON/OFF dans le header */
+.voice-toggle {
   margin-left: auto;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.voice-toggle:hover { background: rgba(255,255,255,0.1); }
+.voice-toggle.active { background: rgba(45,212,191,0.15); border-color: var(--teal); color: var(--teal); }
+
+.modal-close {
   width: 32px; height: 32px;
   border-radius: 50%;
   background: rgba(255,255,255,0.05);
@@ -310,6 +326,7 @@ body::before {
   font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
+  flex-shrink: 0;
 }
 
 .modal-close:hover { background: rgba(255,255,255,0.1); }
@@ -362,6 +379,28 @@ body::before {
   align-items: flex-end;
   flex-shrink: 0;
 }
+
+/* Bouton micro */
+.modal-mic {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--soft);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.modal-mic:hover { background: rgba(255,255,255,0.1); }
+.modal-mic.listening {
+  background: rgba(255,80,80,0.2);
+  border-color: #ff5050;
+  color: #ff5050;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
 .modal-input {
   flex: 1;
@@ -511,10 +550,12 @@ body::before {
         <div class="modal-title" id="modal-title"></div>
         <div class="modal-subtitle" id="modal-subtitle"></div>
       </div>
+      <button class="voice-toggle" id="voice-toggle" onclick="toggleVoice()" title="Activer / désactiver la voix">🔊</button>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-chat" id="modal-chat"></div>
     <div class="modal-input-area">
+      <button class="modal-mic" id="modal-mic-btn" onclick="startListeningModal()" title="Parler">🎤</button>
       <textarea class="modal-input" id="modal-input" rows="1" placeholder="Écris ici… / كتب هنا…" onkeydown="handleModalKey(event)" oninput="autoResize(this)"></textarea>
       <button class="modal-send" id="modal-send-btn" onclick="sendModalMessage()">➤</button>
     </div>
@@ -525,6 +566,7 @@ body::before {
 let currentAgent = null;
 let agentHistory = { designer: [], narrateur: [], cv: [] };
 let isTyping = false;
+let voiceEnabled = true; // voix activée par défaut
 
 const agents = {
   designer: {
@@ -598,15 +640,72 @@ RÉPONSES : Guidées, structurées mais chaleureuses.`
   }
 };
 
+// --- VOIX ---
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  const btn = document.getElementById('voice-toggle');
+  if (voiceEnabled) {
+    btn.classList.add('active');
+    btn.textContent = '🔊';
+    btn.title = 'Voix activée — cliquer pour désactiver';
+  } else {
+    btn.classList.remove('active');
+    btn.textContent = '🔇';
+    btn.title = 'Voix désactivée — cliquer pour activer';
+    window.speechSynthesis.cancel();
+  }
+}
+
+function parler(texte) {
+  if (!voiceEnabled) return;
+  // Nettoyer le texte (supprimer HTML/markdown)
+  const propre = texte.replace(/<[^>]*>/g, '').replace(/[*_`]/g, '').trim();
+  if (!propre) return;
+  window.speechSynthesis.cancel();
+  const speech = new SpeechSynthesisUtterance(propre);
+  speech.lang = 'fr-FR';
+  speech.rate = 0.9;
+  speech.pitch = 1;
+  window.speechSynthesis.speak(speech);
+}
+
+// --- MICRO ---
+
+function startListeningModal() {
+  const btn = document.getElementById('modal-mic-btn');
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    alert('Ton navigateur ne supporte pas la reconnaissance vocale.');
+    return;
+  }
+  const recognition = new SpeechRec();
+  recognition.lang = 'fr-FR';
+  recognition.interimResults = false;
+  btn.classList.add('listening');
+
+  recognition.onresult = function(e) {
+    const texte = e.results[0][0].transcript;
+    document.getElementById('modal-input').value = texte;
+    btn.classList.remove('listening');
+    sendModalMessage();
+  };
+  recognition.onerror = function() { btn.classList.remove('listening'); };
+  recognition.onend = function() { btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+// --- MODAL ---
+
 function openAgent(type) {
   currentAgent = type;
   const ag = agents[type];
-  const header = document.getElementById('modal-header');
   const icon = document.getElementById('modal-icon');
   const title = document.getElementById('modal-title');
   const sub = document.getElementById('modal-subtitle');
   const sendBtn = document.getElementById('modal-send-btn');
   const input = document.getElementById('modal-input');
+  const voiceBtn = document.getElementById('voice-toggle');
 
   icon.textContent = ag.icon;
   icon.style.background = ag.color === 'gold' ? 'rgba(212,168,83,0.1)' : ag.color === 'teal' ? 'rgba(45,212,191,0.1)' : 'rgba(244,114,182,0.1)';
@@ -616,6 +715,10 @@ function openAgent(type) {
   sendBtn.className = `modal-send ${ag.color}-send`;
   input.style.borderColor = ag.color === 'gold' ? 'rgba(212,168,83,0.3)' : ag.color === 'teal' ? 'rgba(45,212,191,0.3)' : 'rgba(244,114,182,0.3)';
 
+  // Sync bouton voix
+  voiceBtn.classList.toggle('active', voiceEnabled);
+  voiceBtn.textContent = voiceEnabled ? '🔊' : '🔇';
+
   const chat = document.getElementById('modal-chat');
   chat.innerHTML = '';
   agentHistory[type] = [];
@@ -624,12 +727,15 @@ function openAgent(type) {
   document.body.style.overflow = 'hidden';
 
   setTimeout(() => {
-    addModalMessage('agent', ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+    const welcomeText = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    addModalMessage('agent', welcomeText);
     agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
+    parler(ag.welcome.replace(/[*]/g, ''));
   }, 300);
 }
 
 function closeModal() {
+  window.speechSynthesis.cancel();
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow = '';
   currentAgent = null;
@@ -693,6 +799,9 @@ async function sendModalMessage() {
     addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[currentAgent].push({ role: 'assistant', content: reply });
 
+    // 🔊 Lire la réponse à voix haute
+    parler(reply);
+
   } catch(e) {
     hideModalTyping();
     addModalMessage('agent', 'Je suis là — petit souci de connexion, réessaie 🤍');
@@ -714,51 +823,18 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
 
+function analyserEmotion(message) {
+  message = message.toLowerCase();
+  if (message.includes("triste") || message.includes("déprimé")) return "tristesse";
+  if (message.includes("colère") || message.includes("énervé")) return "colere";
+  if (message.includes("peur") || message.includes("angoisse")) return "peur";
+  if (message.includes("heureux") || message.includes("content")) return "joie";
+  return "neutre";
+}
+
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-</script>
-
-<script>
-function startListening() {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = "fr-FR";
-  recognition.onresult = function(event) {
-    const texte = event.results[0][0].transcript;
-    document.getElementById("userInput").value = texte;
-    envoyerMessage();
-  };
-  recognition.start();
-}
-</script>
-
-<script>
-function parler(texte) {
-  const speech = new SpeechSynthesisUtterance(texte);
-  speech.lang = "fr-FR";
-  speech.rate = 0.9;
-  speech.pitch = 1;
-  window.speechSynthesis.speak(speech);
-}
-</script>
-
-<script>
-function analyserEmotion(message) {
-  message = message.toLowerCase();
-  if (message.includes("triste") || message.includes("déprimé")) {
-    return "tristesse";
-  }
-  if (message.includes("colère") || message.includes("énervé")) {
-    return "colere";
-  }
-  if (message.includes("peur") || message.includes("angoisse")) {
-    return "peur";
-  }
-  if (message.includes("heureux") || message.includes("content")) {
-    return "joie";
-  }
-  return "neutre";
-}
 </script>
 
 </body>
