@@ -795,6 +795,7 @@ async function sendModalMessage() {
 
   try {
     const ag = agents[currentAgent];
+    console.log('ENVOI:', JSON.stringify({ system: ag.system, messages: agentHistory[currentAgent] }));
     const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
