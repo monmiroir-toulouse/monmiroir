@@ -27,7 +27,19 @@ Tu ne donnes pas de solutions directes.
 
 Réponses courtes, humaines.
 `; } = body;
+const r = await fetch('https://monmiroir.vercel.app/api/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    system: ag.system,
+    messages: agentHistory[currentAgent]
+  })
+});
 
+const data = await r.json();
+console.log("TEST OK", data);
     
 const data = await r.json();
 console.log("TEST OK", data);
