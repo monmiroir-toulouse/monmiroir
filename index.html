@@ -695,11 +695,16 @@ async function parler(texte) {
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
     const resp = await fetch('https://monmiroir.vercel.app/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: propre })
+      body: JSON.stringify({ text: propre }),
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     if (!resp.ok) throw new Error('TTS failed');
     const blob = await resp.blob();
     const url = URL.createObjectURL(blob);
