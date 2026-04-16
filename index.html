@@ -380,6 +380,19 @@ body::before {
   flex-shrink: 0;
 }
 
+.modal-lang {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.modal-lang:hover { background: rgba(255,255,255,0.1); }
+
 /* Bouton micro */
 .modal-mic {
   width: 42px; height: 42px;
@@ -555,6 +568,7 @@ body::before {
     </div>
     <div class="modal-chat" id="modal-chat"></div>
     <div class="modal-input-area">
+      <button class="modal-lang" id="modal-lang-btn" onclick="toggleLang()" title="Changer la langue du micro">🇫🇷</button>
       <button class="modal-mic" id="modal-mic-btn" onclick="startListeningModal()" title="Parler">🎤</button>
       <textarea class="modal-input" id="modal-input" rows="1" placeholder="Écris ici… / كتب هنا…" onkeydown="handleModalKey(event)" oninput="autoResize(this)"></textarea>
       <button class="modal-send" id="modal-send-btn" onclick="sendModalMessage()">➤</button>
@@ -566,7 +580,21 @@ body::before {
 let currentAgent = null;
 let agentHistory = { designer: [], narrateur: [], cv: [] };
 let isTyping = false;
-let voiceEnabled = true; // voix activée par défaut
+let voiceEnabled = true;
+let micLang = 'fr-FR'; // langue du micro par défaut
+
+function toggleLang() {
+  const btn = document.getElementById('modal-lang-btn');
+  if (micLang === 'fr-FR') {
+    micLang = 'ar-MA';
+    btn.textContent = '🇲🇦';
+    btn.title = 'Micro en Darija — cliquer pour français';
+  } else {
+    micLang = 'fr-FR';
+    btn.textContent = '🇫🇷';
+    btn.title = 'Micro en français — cliquer pour Darija';
+  }
+}
 
 const agents = {
   designer: {
@@ -697,7 +725,7 @@ function startListeningModal() {
     return;
   }
   const recognition = new SpeechRec();
-  recognition.lang = 'fr-FR';
+  recognition.lang = micLang;
   recognition.interimResults = false;
   btn.classList.add('listening');
 
