@@ -5,12 +5,20 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { text } = body;
+    let text;
+    if (typeof req.body === 'string') {
+      text = JSON.parse(req.body).text;
+    } else if (req.body && typeof req.body === 'object') {
+      text = req.body.text;
+    } else {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      text = JSON.parse(Buffer.concat(chunks).toString()).text;
+    }
 
     if (!text) return res.status(400).json({ error: 'No text provided' });
 
-    // Supprimer emojis et caractères spéciaux
+    // Supprimer emojis
     const cleanText = text
       .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
       .replace(/[\u{2600}-\u{26FF}]/gu, '')
@@ -21,7 +29,7 @@ module.exports = async function handler(req, res) {
       .replace(/\s+/g, ' ')
       .trim();
 
-    if (!cleanText) return res.status(400).json({ error: 'Empty text after cleaning' });
+    if (!cleanText) return res.status(400).json({ error: 'Empty text' });
 
     const voiceId = 'hFgOzpmS0CMtL2to8sAl'; // Camille Martin
 
