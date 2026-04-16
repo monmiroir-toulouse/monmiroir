@@ -150,44 +150,6 @@ body::before {
   text-transform: uppercase;
 }
 
-/* CONNEXION STATUS BAR */
-.connexion-bar {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  margin: -32px auto 48px;
-  padding: 0 20px;
-}
-
-.connexion-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 0.72rem;
-  color: var(--muted);
-  background: transparent;
-  transition: all 0.4s;
-}
-
-.connexion-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
-  flex-shrink: 0;
-  transition: background 0.4s;
-}
-
-.connexion-status.ready .connexion-dot { background: #4caf7d; }
-.connexion-status.ready { color: #4caf7d; }
-.connexion-status.loading .connexion-dot { background: var(--gold); animation: blink 1s infinite; }
-.connexion-status.loading { color: var(--gold); }
-.connexion-status.error .connexion-dot { background: #ef4444; }
-.connexion-status.error { color: #ef4444; }
-
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
 .agents {
   position: relative;
   z-index: 1;
@@ -337,6 +299,7 @@ body::before {
 .modal-title { font-weight: 600; font-size: 0.95rem; }
 .modal-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
+/* Bouton voix ON/OFF dans le header */
 .voice-toggle {
   margin-left: auto;
   width: 36px; height: 36px;
@@ -380,35 +343,6 @@ body::before {
 .modal-chat::-webkit-scrollbar { width: 3px; }
 .modal-chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-/* LOADING SCREEN dans le chat */
-.chat-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 16px;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.chat-loading-spinner {
-  width: 36px; height: 36px;
-  border: 2px solid var(--border);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.chat-loading-arabic {
-  font-size: 0.78rem;
-  color: var(--muted);
-  direction: rtl;
-  opacity: 0.7;
-}
-
 .chat-msg {
   max-width: 82%;
   padding: 11px 15px;
@@ -446,6 +380,7 @@ body::before {
   flex-shrink: 0;
 }
 
+/* Bouton micro */
 .modal-mic {
   width: 42px; height: 42px;
   border-radius: 50%;
@@ -535,14 +470,6 @@ body::before {
       <p>Interprète Expert · Psychologue · Pilote humain des 3 agents</p>
     </div>
     <div class="pilot-label">● Présent</div>
-  </div>
-</div>
-
-<!-- BARRE DE STATUT CONNEXION -->
-<div class="connexion-bar">
-  <div class="connexion-status loading" id="connexion-status">
-    <div class="connexion-dot"></div>
-    <span id="connexion-text">Connexion en cours… / جاري الاتصال…</span>
   </div>
 </div>
 
@@ -639,8 +566,7 @@ body::before {
 let currentAgent = null;
 let agentHistory = { designer: [], narrateur: [], cv: [] };
 let isTyping = false;
-let voiceEnabled = true;
-let serverReady = false;
+let voiceEnabled = true; // voix activée par défaut
 
 const agents = {
   designer: {
@@ -714,70 +640,67 @@ RÉPONSES : Guidées, structurées mais chaleureuses.`
   }
 };
 
-// --- WARMUP : ping le serveur au chargement de la page ---
-async function warmupServer() {
-  const statusEl = document.getElementById('connexion-status');
-  const textEl = document.getElementById('connexion-text');
-  try {
-    const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: 'ping',
-        messages: [{ role: 'user', content: 'ping' }]
-      })
-    });
-    if (resp.ok) {
-      serverReady = true;
-      statusEl.className = 'connexion-status ready';
-      textEl.textContent = 'Connecté · متصل ✓';
-      setTimeout(() => { statusEl.style.opacity = '0'; }, 3000);
-    } else {
-      throw new Error('not ok');
-    }
-  } catch(e) {
-    statusEl.className = 'connexion-status error';
-    textEl.textContent = 'Connexion difficile — réessaie dans un instant · الاتصال صعب، حاول من جديد';
-  }
-}
-
-warmupServer();
-
 // --- VOIX ---
+
 function toggleVoice() {
   voiceEnabled = !voiceEnabled;
   const btn = document.getElementById('voice-toggle');
   if (voiceEnabled) {
     btn.classList.add('active');
     btn.textContent = '🔊';
+    btn.title = 'Voix activée — cliquer pour désactiver';
   } else {
     btn.classList.remove('active');
     btn.textContent = '🔇';
+    btn.title = 'Voix désactivée — cliquer pour activer';
     window.speechSynthesis.cancel();
   }
 }
 
-function parler(texte) {
+let currentAudio = null;
+
+async function parler(texte) {
   if (!voiceEnabled) return;
   const propre = texte.replace(/<[^>]*>/g, '').replace(/[*_`]/g, '').trim();
   if (!propre) return;
-  window.speechSynthesis.cancel();
-  const speech = new SpeechSynthesisUtterance(propre);
-  speech.lang = 'fr-FR';
-  speech.rate = 0.9;
-  speech.pitch = 1;
-  window.speechSynthesis.speak(speech);
+
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+  try {
+    const resp = await fetch('https://monmiroir.vercel.app/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: propre })
+    });
+    if (!resp.ok) throw new Error('TTS failed');
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.play();
+    currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
+  } catch (e) {
+    // Fallback voix navigateur
+    const speech = new SpeechSynthesisUtterance(propre);
+    speech.lang = 'fr-FR';
+    speech.rate = 0.9;
+    window.speechSynthesis.speak(speech);
+  }
 }
 
 // --- MICRO ---
+
 function startListeningModal() {
   const btn = document.getElementById('modal-mic-btn');
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) { alert('Ton navigateur ne supporte pas la reconnaissance vocale.'); return; }
+  if (!SpeechRec) {
+    alert('Ton navigateur ne supporte pas la reconnaissance vocale.');
+    return;
+  }
   const recognition = new SpeechRec();
   recognition.lang = 'fr-FR';
   recognition.interimResults = false;
   btn.classList.add('listening');
+
   recognition.onresult = function(e) {
     const texte = e.results[0][0].transcript;
     document.getElementById('modal-input').value = texte;
@@ -790,14 +713,6 @@ function startListeningModal() {
 }
 
 // --- MODAL ---
-function showLoadingScreen(color) {
-  const chat = document.getElementById('modal-chat');
-  chat.innerHTML = `
-    <div class="chat-loading">
-      <div class="chat-loading-spinner" style="border-top-color: var(--${color})"></div>
-      <span>Connexion à l'agent… / جاري الاتصال بالوكيل…</span>
-    </div>`;
-}
 
 function openAgent(type) {
   currentAgent = type;
@@ -817,49 +732,27 @@ function openAgent(type) {
   sendBtn.className = `modal-send ${ag.color}-send`;
   input.style.borderColor = ag.color === 'gold' ? 'rgba(212,168,83,0.3)' : ag.color === 'teal' ? 'rgba(45,212,191,0.3)' : 'rgba(244,114,182,0.3)';
 
+  // Sync bouton voix
   voiceBtn.classList.toggle('active', voiceEnabled);
   voiceBtn.textContent = voiceEnabled ? '🔊' : '🔇';
 
+  const chat = document.getElementById('modal-chat');
+  chat.innerHTML = '';
   agentHistory[type] = [];
+
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Afficher écran de chargement si serveur pas encore prêt
-  if (!serverReady) {
-    showLoadingScreen(ag.color);
-    sendBtn.disabled = true;
-    // Attendre que le serveur soit prêt puis afficher le welcome
-    const waitAndShow = setInterval(() => {
-      if (serverReady) {
-        clearInterval(waitAndShow);
-        showWelcome(type);
-        sendBtn.disabled = false;
-      }
-    }, 500);
-    // Timeout après 8 secondes
-    setTimeout(() => {
-      clearInterval(waitAndShow);
-      if (!serverReady) {
-        showWelcome(type);
-        sendBtn.disabled = false;
-      }
-    }, 8000);
-  } else {
-    setTimeout(() => showWelcome(type), 300);
-  }
-}
-
-function showWelcome(type) {
-  const ag = agents[type];
-  const chat = document.getElementById('modal-chat');
-  chat.innerHTML = '';
-  const welcomeText = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  addModalMessage('agent', welcomeText);
-  agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
-  parler(ag.welcome.replace(/[*]/g, ''));
+  setTimeout(() => {
+    const welcomeText = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    addModalMessage('agent', welcomeText);
+    agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
+    parler(ag.welcome.replace(/[*]/g, ''));
+  }, 300);
 }
 
 function closeModal() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   window.speechSynthesis.cancel();
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow = '';
@@ -923,7 +816,8 @@ async function sendModalMessage() {
     hideModalTyping();
     addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[currentAgent].push({ role: 'assistant', content: reply });
-    serverReady = true;
+
+    // 🔊 Lire la réponse à voix haute
     parler(reply);
 
   } catch(e) {
@@ -945,6 +839,15 @@ function handleModalKey(e) {
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+function analyserEmotion(message) {
+  message = message.toLowerCase();
+  if (message.includes("triste") || message.includes("déprimé")) return "tristesse";
+  if (message.includes("colère") || message.includes("énervé")) return "colere";
+  if (message.includes("peur") || message.includes("angoisse")) return "peur";
+  if (message.includes("heureux") || message.includes("content")) return "joie";
+  return "neutre";
 }
 
 document.getElementById('modal').addEventListener('click', function(e) {
