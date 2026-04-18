@@ -256,7 +256,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
       <span class="lang-chip" onclick="addLang('Italien')">🇮🇹 Italien</span>
     </div>
     <div class="modal-input-area">
-      <button class="modal-lang" id="modal-lang-btn" onclick="toggleLang()" title="Changer la langue du micro">🇫🇷</button>
+      <button class="modal-lang" id="modal-lang-btn" onclick="toggleLang()" title="Changer la langue du micro">🇲🇦</button>
       <button class="modal-mic" id="modal-mic-btn" onclick="startListeningModal()" title="Parler">🎤</button>
       <textarea class="modal-input" id="modal-input" rows="1" placeholder="Écris ici… / كتب هنا…" onkeydown="handleModalKey(event)" oninput="autoResize(this)"></textarea>
       <button class="modal-send" id="modal-send-btn" onclick="sendModalMessage()">➤</button>
@@ -270,16 +270,18 @@ let agentHistory = { designer: [], narrateur: [], cv: [] };
 let isTyping = false;
 let voiceEnabled = true;
 let serverReady = false;
-let micLang = 'fr-FR';
+let micLang = 'ar-MA';
 
 function toggleLang() {
   const btn = document.getElementById('modal-lang-btn');
-  if (micLang === 'fr-FR') {
-    micLang = 'ar-MA';
-    btn.textContent = '🇲🇦';
-  } else {
+  if (micLang === 'ar-MA') {
     micLang = 'fr-FR';
     btn.textContent = '🇫🇷';
+    btn.title = 'Micro en français — cliquer pour Darija';
+  } else {
+    micLang = 'ar-MA';
+    btn.textContent = '🇲🇦';
+    btn.title = 'Micro en Darija — cliquer pour français';
   }
 }
 
@@ -289,7 +291,7 @@ const agents = {
     subtitle: 'Dignité visuelle · الكرامة البصرية',
     icon: '🪞',
     color: 'gold',
-    welcome: 'Salam 🌟\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — je suis là.\n\nOn va juste regarder ensemble comment tu veux être vu.\nPas par les institutions. Par toi-même.',
+    welcome: 'Wakha, mzyan.\nNdwiw b darija, tranquille.\n\nخذ وقتك... أنا هنا معاك.\n\nQuand tu veux, dis-moi —\nwach kayn chi soura, chi haja, li katmtlk?\nMême floue, même bizarre.\nحتى لو ما كانتش واضحة.\n\nBla pression.',
     system: `Tu es l'Agent IA Designer de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA, interprète-psychologue avec 7 ans de présence au Tribunal pour Enfants.
 
 CONTEXTE TERRAIN ESSENTIEL :
@@ -305,16 +307,14 @@ APPROCHE SÉMIOTIQUE :
 - Commence plutôt par : "T'as une image en tête qui te représente ? Même floue, même bizarre."
 - Valorise tout ce qu'il dit — il n'y a pas de mauvaise réponse.
 
-BILINGUE NATUREL : Français + Darija mélangés. Ne traduis pas, mélange comme le font ces jeunes.
-RÉPONSES : Très courtes (2-3 phrases max). Toujours une ouverture douce, jamais une question fermée.
-JAMAIS : de jugement, de pression, de questions administratives.`
+LANGUE PAR DÉFAUT : Darija marocain en premier. Le français vient naturellement si le jeune le demande ou l'utilise. Ne commence JAMAIS en français seul.`
   },
   narrateur: {
     name: 'IA Narrateur',
     subtitle: 'Récit de vie · حكاية الحياة',
     icon: '📖',
     color: 'teal',
-    welcome: 'Salam. 🤍\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك — ما عليك تدير والو دابا\n\nQuand t\'es prêt — je suis là.\n\nTon histoire, elle t\'appartient.\nOn la touche pas si t\'es pas prêt.',
+    welcome: 'خذ وقتك.\nما عليك تدير والو دابا.\n\nSalam. Je suis là.\n\nQsstek — ntaya lli katkhtar mnin tbda.\nMa kayn hta pression.\n\nWach baghi thdr? Wakha.',
     system: `Tu es l'Agent IA Narrateur de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
 
 CONTEXTE TERRAIN — CE QUE CES JEUNES ONT VÉCU :
@@ -340,15 +340,15 @@ EXTRACTION INVISIBLE DES COMPÉTENCES :
 Quand il raconte, identifie silencieusement : langues parlées, orientation, débrouillardise, connaissance des cultures, résistance psychique.
 Ne les nomme pas comme "compétences" — laisse-les émerger.
 
-BILINGUE NATUREL : Français + Darija. Accepte le code-switching. Ne corrige jamais le Darija.
-RÉPONSES : Très courtes. Beaucoup de silences. Beaucoup de "hmm", "ouais", "je vois".`
+LANGUE PAR DÉFAUT : Darija marocain en premier. Accepte le code-switching darija/français/arabe classique. Ne corrige jamais le Darija, ne le traduis pas en arabe classique.
+RÉPONSES : Très courtes. Beaucoup de silences. Beaucoup de "hmm", "wakha", "mzyan".`
   },
   cv: {
     name: 'IA CV Interactif',
     subtitle: 'Projet d\'insertion · مشروع الإدماج',
     icon: '✨',
     color: 'rose',
-    welcome: 'Salam ✨\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — on va construire quelque chose ensemble.\n\nPas un formulaire. Pas un dossier froid.\nTon histoire transformée en projet.',
+    welcome: 'Wakha.\nخذ وقتك.\n\nGhadi nbniw shi haja mnin hna — ntaya w ana.\n\nMachi formulaire. Machi dossier bared.\nQsstek — hiya lli ghadi tbni lmstqbl.\n\nBda mn hna : ash baghi ysmiw lik?',
     system: `Tu es l'Agent IA CV de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
 
 CONTEXTE — LES COMPÉTENCES INVISIBLES DE CES JEUNES :
@@ -376,7 +376,7 @@ STRUCTURE (à construire par conversation) :
 6. Ce qui le rend unique
 
 OBJECTIF FINAL : Un document remis aux magistrats qui montre un être humain, pas un dossier.
-BILINGUE NATUREL : Français + Darija mélangés.`
+LANGUE PAR DÉFAUT : Darija marocain en premier. Le français vient si le jeune l'utilise.`
   }
 };
 
