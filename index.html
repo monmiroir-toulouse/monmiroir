@@ -115,6 +115,13 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 .gold-typing .td { background: var(--gold); }
 .teal-typing .td { background: var(--teal); }
 .rose-typing .td { background: var(--rose); }
+.modal-lang-chips { padding: 8px 16px 0; display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+.lang-chip { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: var(--card); color: var(--soft); cursor: pointer; transition: all 0.2s; font-family: 'Tajawal', sans-serif; }
+.lang-chip:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.lang-chip.active { color: var(--night); border-color: transparent; }
+.gold-agent .lang-chip.active { background: var(--gold); }
+.teal-agent .lang-chip.active { background: var(--teal); }
+.rose-agent .lang-chip.active { background: var(--rose); }
 .modal-input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
 .modal-lang { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
 .modal-lang:hover { background: rgba(255,255,255,0.1); }
@@ -240,6 +247,14 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-chat" id="modal-chat"></div>
+    <div class="modal-lang-chips" id="lang-chips">
+      <span class="lang-chip" onclick="addLang('Français')">🇫🇷 Français</span>
+      <span class="lang-chip" onclick="addLang('Anglais')">🇬🇧 Anglais</span>
+      <span class="lang-chip" onclick="addLang('Darija')">🇲🇦 Darija</span>
+      <span class="lang-chip" onclick="addLang('Arabe')">🌙 Arabe</span>
+      <span class="lang-chip" onclick="addLang('Espagnol')">🇪🇸 Espagnol</span>
+      <span class="lang-chip" onclick="addLang('Italien')">🇮🇹 Italien</span>
+    </div>
     <div class="modal-input-area">
       <button class="modal-lang" id="modal-lang-btn" onclick="toggleLang()" title="Changer la langue du micro">🇫🇷</button>
       <button class="modal-mic" id="modal-mic-btn" onclick="startListeningModal()" title="Parler">🎤</button>
@@ -560,6 +575,17 @@ async function sendModalMessage() {
   }
   isTyping = false;
   document.getElementById('modal-send-btn').disabled = false;
+}
+
+function addLang(langue) {
+  const input = document.getElementById('modal-input');
+  const current = input.value.trim();
+  input.value = current ? current + ', ' + langue : 'Je parle ' + langue;
+  // Toggle chip active state
+  const chips = document.querySelectorAll('.lang-chip');
+  chips.forEach(c => { if (c.textContent.includes(langue)) c.classList.toggle('active'); });
+  input.focus();
+  autoResize(input);
 }
 
 function handleModalKey(e) {
