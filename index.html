@@ -491,7 +491,8 @@ function showWelcome(type) {
   const wt = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   addModalMessage('agent', wt);
   agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
-  parler(ag.welcome.replace(/[*]/g, ''));
+  const welcomeClean = ag.welcome.replace(/[*]/g, '').replace(/[\u{1F000}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27BF]/g, '').replace(/[\uFE00-\uFE0F]/g, '');
+  parler(welcomeClean);
 }
 
 function closeModal() {
