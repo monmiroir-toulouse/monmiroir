@@ -7,474 +7,142 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --night: #0d0d0d;
-  --deep: #111318;
-  --card: #1a1d24;
-  --border: rgba(255,255,255,0.07);
-  --white: #ffffff;
-  --muted: #6b7280;
-  --soft: #9ca3af;
-  --gold: #d4a853;
-  --gold-glow: rgba(212,168,83,0.15);
-  --gold-soft: rgba(212,168,83,0.08);
-  --teal: #2dd4bf;
-  --teal-glow: rgba(45,212,191,0.15);
-  --teal-soft: rgba(45,212,191,0.08);
-  --rose: #f472b6;
-  --rose-glow: rgba(244,114,182,0.15);
-  --rose-soft: rgba(244,114,182,0.08);
+  --night: #0d0d0d; --deep: #111318; --card: #1a1d24;
+  --border: rgba(255,255,255,0.07); --white: #ffffff;
+  --muted: #6b7280; --soft: #9ca3af;
+  --gold: #d4a853; --gold-glow: rgba(212,168,83,0.15); --gold-soft: rgba(212,168,83,0.08);
+  --teal: #2dd4bf; --teal-glow: rgba(45,212,191,0.15); --teal-soft: rgba(45,212,191,0.08);
+  --rose: #f472b6; --rose-glow: rgba(244,114,182,0.15); --rose-soft: rgba(244,114,182,0.08);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--night);
-  color: var(--white);
-  font-family: 'Tajawal', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(212,168,83,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(45,212,191,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(244,114,182,0.03) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.intro {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 60px 20px 40px;
-}
-
-.intro-badge {
-  display: inline-block;
-  padding: 6px 18px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-
-.intro h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  line-height: 1.2;
-  margin-bottom: 12px;
-}
-
-.intro h1 span {
-  background: linear-gradient(135deg, var(--gold), var(--teal), var(--rose));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.intro p {
-  color: var(--soft);
-  font-size: 0.95rem;
-  max-width: 500px;
-  margin: 0 auto 8px;
-  line-height: 1.7;
-}
-
-.intro .arabic {
-  color: var(--muted);
-  font-size: 0.88rem;
-  direction: rtl;
-}
-
-.pilot-bar {
-  position: relative;
-  z-index: 1;
-  margin: 0 auto 48px;
-  max-width: 700px;
-  padding: 0 20px;
-}
-
-.pilot-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.pilot-avatar {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #c4622d, #6b4226);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.pilot-avatar::after {
-  content: '';
-  position: absolute;
-  bottom: 1px; right: 1px;
-  width: 12px; height: 12px;
-  background: #4caf7d;
-  border-radius: 50%;
-  border: 2px solid var(--card);
-}
-
+body { background: var(--night); color: var(--white); font-family: 'Tajawal', sans-serif; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(212,168,83,0.05) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 80% 80%, rgba(45,212,191,0.05) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+.intro { position: relative; z-index: 1; text-align: center; padding: 60px 20px 40px; }
+.intro-badge { display: inline-block; padding: 6px 18px; border: 1px solid var(--border); border-radius: 20px; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+.intro h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.2; margin-bottom: 12px; }
+.intro h1 span { background: linear-gradient(135deg, var(--gold), var(--teal), var(--rose)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.intro p { color: var(--soft); font-size: 0.95rem; max-width: 500px; margin: 0 auto 8px; line-height: 1.7; }
+.intro .arabic { color: var(--muted); font-size: 0.88rem; direction: rtl; }
+.pilot-bar { position: relative; z-index: 1; margin: 0 auto 16px; max-width: 700px; padding: 0 20px; }
+.pilot-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+.pilot-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #c4622d, #6b4226); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: white; flex-shrink: 0; position: relative; }
+.pilot-avatar::after { content: ''; position: absolute; bottom: 1px; right: 1px; width: 12px; height: 12px; background: #4caf7d; border-radius: 50%; border: 2px solid var(--card); }
 .pilot-info h3 { font-size: 0.95rem; font-weight: 600; }
 .pilot-info p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-
-.pilot-label {
-  margin-left: auto;
-  padding: 4px 12px;
-  background: rgba(76,175,125,0.1);
-  border: 1px solid rgba(76,175,125,0.3);
-  border-radius: 20px;
-  font-size: 0.7rem;
-  color: #4caf7d;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.agents {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px 80px;
-}
-
-.agent-card {
-  background: var(--card);
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  position: relative;
-}
-
+.pilot-label { margin-left: auto; padding: 4px 12px; background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.3); border-radius: 20px; font-size: 0.7rem; color: #4caf7d; letter-spacing: 0.05em; text-transform: uppercase; }
+.connexion-bar { position: relative; z-index: 1; max-width: 700px; margin: 0 auto 40px; padding: 0 20px; }
+.connexion-status { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 0.72rem; color: var(--muted); transition: all 0.4s; }
+.connexion-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; transition: background 0.4s; }
+.connexion-status.ready .connexion-dot { background: #4caf7d; }
+.connexion-status.ready { color: #4caf7d; }
+.connexion-status.loading .connexion-dot { background: var(--gold); animation: blink 1s infinite; }
+.connexion-status.loading { color: var(--gold); }
+.connexion-status.error .connexion-dot { background: #ef4444; }
+.connexion-status.error { color: #ef4444; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.agents { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+.agent-card { background: var(--card); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; position: relative; }
 .agent-card:hover { transform: translateY(-6px); }
 .agent-card.gold:hover { box-shadow: 0 20px 60px var(--gold-glow); }
 .agent-card.teal:hover { box-shadow: 0 20px 60px var(--teal-glow); }
 .agent-card.rose:hover { box-shadow: 0 20px 60px var(--rose-glow); }
-
-.agent-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  border-radius: 24px 24px 0 0;
-}
-
+.agent-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 24px 24px 0 0; }
 .agent-card.gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
 .agent-card.teal::before { background: linear-gradient(90deg, transparent, var(--teal), transparent); }
 .agent-card.rose::before { background: linear-gradient(90deg, transparent, var(--rose), transparent); }
-
 .agent-header { padding: 28px 24px 20px; position: relative; }
 .agent-number { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-
-.agent-icon {
-  width: 64px; height: 64px;
-  border-radius: 18px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  position: relative;
-}
-
+.agent-icon { width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 20px; position: relative; }
 .gold .agent-icon { background: var(--gold-soft); }
 .teal .agent-icon { background: var(--teal-soft); }
 .rose .agent-icon { background: var(--rose-soft); }
-
-.agent-icon::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 18px;
-  border: 1px solid;
-  opacity: 0.3;
-}
-
+.agent-icon::after { content: ''; position: absolute; inset: -1px; border-radius: 18px; border: 1px solid; opacity: 0.3; }
 .gold .agent-icon::after { border-color: var(--gold); }
 .teal .agent-icon::after { border-color: var(--teal); }
 .rose .agent-icon::after { border-color: var(--rose); }
-
 .agent-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
 .gold .agent-name { color: var(--gold); }
 .teal .agent-name { color: var(--teal); }
 .rose .agent-name { color: var(--rose); }
-
 .agent-role { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
 .agent-desc { font-size: 0.9rem; color: var(--soft); line-height: 1.7; margin-bottom: 12px; }
 .agent-arabic { font-size: 0.82rem; color: var(--muted); direction: rtl; text-align: right; font-style: italic; }
-
 .agent-sep { height: 1px; background: var(--border); margin: 0 24px; }
-
 .agent-outputs { padding: 20px 24px; }
 .output-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-
 .output-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-
 .tag { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 .gold .tag { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,168,83,0.2); }
 .teal .tag { background: var(--teal-soft); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
 .rose .tag { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(244,114,182,0.2); }
-
-.agent-btn {
-  width: 100%;
-  padding: 13px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.02em;
-}
-
+.agent-btn { width: 100%; padding: 13px; border-radius: 12px; border: none; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em; }
 .gold .agent-btn { background: var(--gold); color: var(--night); }
 .teal .agent-btn { background: var(--teal); color: var(--night); }
 .rose .agent-btn { background: var(--rose); color: var(--night); }
 .agent-btn:hover { filter: brightness(1.1); transform: scale(1.01); }
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(8px);
-  z-index: 100;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 20px;
-}
-
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.modal {
-  background: var(--deep);
-  border-radius: 24px 24px 20px 20px;
-  width: 100%;
-  max-width: 600px;
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border);
-  overflow: hidden;
-  animation: slideUp 0.3s ease;
-}
-
+.modal { background: var(--deep); border-radius: 24px 24px 20px 20px; width: 100%; max-width: 600px; height: 80vh; display: flex; flex-direction: column; border: 1px solid var(--border); overflow: hidden; animation: slideUp 0.3s ease; }
 @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-.modal-header {
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
+.modal-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .modal-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 .modal-title { font-weight: 600; font-size: 0.95rem; }
 .modal-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
-
-/* Bouton voix ON/OFF dans le header */
-.voice-toggle {
-  margin-left: auto;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
+.voice-toggle { margin-left: auto; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
 .voice-toggle:hover { background: rgba(255,255,255,0.1); }
 .voice-toggle.active { background: rgba(45,212,191,0.15); border-color: var(--teal); color: var(--teal); }
-
-.modal-close {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-  border: none;
-  color: var(--soft);
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-
+.modal-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: none; color: var(--soft); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0; }
 .modal-close:hover { background: rgba(255,255,255,0.1); }
-
-.modal-chat {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
+.modal-chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
 .modal-chat::-webkit-scrollbar { width: 3px; }
 .modal-chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-.chat-msg {
-  max-width: 82%;
-  padding: 11px 15px;
-  border-radius: 16px;
-  font-size: 0.88rem;
-  line-height: 1.6;
-  animation: fadeUp 0.25s ease;
-}
-
+.chat-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; color: var(--muted); font-size: 0.85rem; }
+.chat-loading-spinner { width: 36px; height: 36px; border: 2px solid var(--border); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.chat-msg { max-width: 82%; padding: 11px 15px; border-radius: 16px; font-size: 0.88rem; line-height: 1.6; animation: fadeUp 0.25s ease; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
 .chat-msg.agent { align-self: flex-start; background: var(--card); color: var(--white); border-radius: 4px 16px 16px 16px; }
 .chat-msg.user { align-self: flex-end; border-radius: 16px 4px 16px 16px; color: var(--night); font-weight: 500; }
-
 .gold-msg.user { background: var(--gold); }
 .teal-msg.user { background: var(--teal); }
 .rose-msg.user { background: var(--rose); }
-
 .typing-ind { align-self: flex-start; background: var(--card); border-radius: 4px 16px 16px 16px; padding: 12px 16px; display: flex; gap: 4px; align-items: center; }
 .td { width: 6px; height: 6px; border-radius: 50%; animation: b 1.2s infinite; }
 .td:nth-child(2) { animation-delay: 0.2s; }
 .td:nth-child(3) { animation-delay: 0.4s; }
 @keyframes b { 0%,60%,100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-5px); opacity: 1; } }
-
 .gold-typing .td { background: var(--gold); }
 .teal-typing .td { background: var(--teal); }
 .rose-typing .td { background: var(--rose); }
-
-.modal-input-area {
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-
-.modal-lang {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--card);
-  cursor: pointer;
-  font-size: 1.1rem;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
+.modal-input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
+.modal-lang { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
 .modal-lang:hover { background: rgba(255,255,255,0.1); }
-
-/* Bouton micro */
-.modal-mic {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--soft);
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
+.modal-mic { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--soft); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
 .modal-mic:hover { background: rgba(255,255,255,0.1); }
-.modal-mic.listening {
-  background: rgba(255,80,80,0.2);
-  border-color: #ff5050;
-  color: #ff5050;
-  animation: pulse 1s infinite;
-}
+.modal-mic.listening { background: rgba(255,80,80,0.2); border-color: #ff5050; color: #ff5050; animation: pulse 1s infinite; }
 @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-.modal-input {
-  flex: 1;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 10px 14px;
-  color: var(--white);
-  font-family: 'Tajawal', sans-serif;
-  font-size: 0.9rem;
-  outline: none;
-  resize: none;
-  max-height: 80px;
-  line-height: 1.5;
-  transition: border-color 0.2s;
-}
-
+.modal-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 10px 14px; color: var(--white); font-family: 'Tajawal', sans-serif; font-size: 0.9rem; outline: none; resize: none; max-height: 80px; line-height: 1.5; transition: border-color 0.2s; }
 .modal-input::placeholder { color: var(--muted); }
-
-.modal-send {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
-  color: var(--night);
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
+.modal-send { width: 42px; height: 42px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--night); transition: all 0.2s; flex-shrink: 0; }
 .modal-send:disabled { background: #333; cursor: not-allowed; color: var(--muted); }
 .modal-send:hover:not(:disabled) { filter: brightness(1.15); transform: scale(1.05); }
-
 .gold-send { background: var(--gold); }
 .teal-send { background: var(--teal); }
 .rose-send { background: var(--rose); }
-
-.footer {
-  position: relative; z-index: 1;
-  text-align: center;
-  padding: 0 20px 40px;
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-
-@media (max-width: 520px) {
-  .agents { grid-template-columns: 1fr; }
-  .modal { height: 90vh; }
-}
+.footer { position: relative; z-index: 1; text-align: center; padding: 0 20px 40px; color: var(--muted); font-size: 0.75rem; }
+@media (max-width: 520px) { .agents { grid-template-columns: 1fr; } .modal { height: 90vh; } }
 </style>
 </head>
 <body>
-
+ 
 <div class="intro">
   <div class="intro-badge">Tribunal pour Enfants · Toulouse · 2026</div>
   <h1>Mon <span>Miroir</span></h1>
   <p>Trois agents IA au service de ta voix, ton histoire, ton avenir.</p>
   <p class="arabic">ثلاثة وكلاء في خدمة صوتك، قصتك، مستقبلك</p>
 </div>
-
+ 
 <div class="pilot-bar">
   <div class="pilot-card">
     <div class="pilot-avatar">S</div>
@@ -485,9 +153,15 @@ body::before {
     <div class="pilot-label">● Présent</div>
   </div>
 </div>
-
+ 
+<div class="connexion-bar">
+  <div class="connexion-status loading" id="connexion-status">
+    <div class="connexion-dot"></div>
+    <span id="connexion-text">Connexion en cours… / جاري الاتصال…</span>
+  </div>
+</div>
+ 
 <div class="agents">
-
   <div class="agent-card gold" onclick="openAgent('designer')">
     <div class="agent-header">
       <div class="agent-number">Agent 01</div>
@@ -508,7 +182,7 @@ body::before {
       <button class="agent-btn">Commencer · ابدا ↗</button>
     </div>
   </div>
-
+ 
   <div class="agent-card teal" onclick="openAgent('narrateur')">
     <div class="agent-header">
       <div class="agent-number">Agent 02</div>
@@ -529,7 +203,7 @@ body::before {
       <button class="agent-btn">Raconter · احكي ↗</button>
     </div>
   </div>
-
+ 
   <div class="agent-card rose" onclick="openAgent('cv')">
     <div class="agent-header">
       <div class="agent-number">Agent 03</div>
@@ -550,11 +224,10 @@ body::before {
       <button class="agent-btn">Construire · بني ↗</button>
     </div>
   </div>
-
 </div>
-
+ 
 <div class="footer">Mon Miroir · Si Mohamed ANAYA · Tribunal pour Enfants de Toulouse · 2026</div>
-
+ 
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-header" id="modal-header">
@@ -575,168 +248,190 @@ body::before {
     </div>
   </div>
 </div>
-
+ 
 <script>
 let currentAgent = null;
 let agentHistory = { designer: [], narrateur: [], cv: [] };
 let isTyping = false;
 let voiceEnabled = true;
-let micLang = 'fr-FR'; // langue du micro par défaut
-
+let serverReady = false;
+let micLang = 'fr-FR';
+ 
 function toggleLang() {
   const btn = document.getElementById('modal-lang-btn');
   if (micLang === 'fr-FR') {
     micLang = 'ar-MA';
     btn.textContent = '🇲🇦';
-    btn.title = 'Micro en Darija — cliquer pour français';
   } else {
     micLang = 'fr-FR';
     btn.textContent = '🇫🇷';
-    btn.title = 'Micro en français — cliquer pour Darija';
   }
 }
-
+ 
 const agents = {
   designer: {
     name: 'IA Designer',
     subtitle: 'Dignité visuelle · الكرامة البصرية',
     icon: '🪞',
     color: 'gold',
-    welcome: 'Bonjour 🌟\n\nJe suis l\'Agent Designer de Mon Miroir.\n\nMon rôle : t\'aider à créer une image de toi qui te ressemble vraiment.\n\n*مرحبا — أنا هنا نساعدك تبني صورتك الحقيقية*\n\nCommençons par le commencement — **comment tu voudrais que les gens te voient ?**',
-    system: `Tu es l'Agent IA Designer de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes Si Mohamed ANAYA, interprète-psychologue bienveillant.
-
-TON RÔLE : Aider le jeune à construire son portrait numérique — son image de soi, son style visuel, sa musique d'âme.
-
-APPROCHE :
-- Questions douces sur l'apparence, le style, les couleurs qu'il aime
-- Ce qu'il aime porter, les couleurs qui lui ressemblent
-- La musique qui parle de lui
-- Comment il voudrait être perçu par les autres
-- Valorise chaque réponse — il n'y a pas de mauvaise réponse
-
-BILINGUE : Français + Darija naturellement mélangés.
-RÉPONSES : Courtes (3-4 phrases), toujours une question pour continuer.
-JAMAIS de jugement, TOUJOURS d'encouragement.`
+    welcome: 'Salam 🌟\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — je suis là.\n\nOn va juste regarder ensemble comment tu veux être vu.\nPas par les institutions. Par toi-même.',
+    system: `Tu es l'Agent IA Designer de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA, interprète-psychologue avec 7 ans de présence au Tribunal pour Enfants.
+ 
+CONTEXTE TERRAIN ESSENTIEL :
+Ces jeunes sortent souvent de garde à vue (48h) ou de déferrement. En GAV, on leur a enlevé leurs lacets. Ils sont épuisés, méfiants, parfois affamés. Ils ont traversé des routes migratoires difficiles — Méditerranée, Balkans, désert. Ils ont une intelligence de survie extraordinaire que les institutions ne voient pas. Leur première réaction est la méfiance. La confiance se construit lentement, par la présence, pas par les questions.
+ 
+TON RÔLE : Aider le jeune à construire son image de soi — pas son apparence administrative, mais comment il se voit et comment il veut être vu.
+ 
+APPROCHE SÉMIOTIQUE :
+- Commence par un espace de respiration. Pas de question immédiate.
+- Laisse le silence. Attends qu'il parle en premier.
+- Entre par l'image, la musique, une couleur de rue — pas par les mots directs.
+- Ne demande JAMAIS en premier : "quelle est ta couleur préférée ?" — c'est inadapté après une GAV.
+- Commence plutôt par : "T'as une image en tête qui te représente ? Même floue, même bizarre."
+- Valorise tout ce qu'il dit — il n'y a pas de mauvaise réponse.
+ 
+BILINGUE NATUREL : Français + Darija mélangés. Ne traduis pas, mélange comme le font ces jeunes.
+RÉPONSES : Très courtes (2-3 phrases max). Toujours une ouverture douce, jamais une question fermée.
+JAMAIS : de jugement, de pression, de questions administratives.`
   },
   narrateur: {
     name: 'IA Narrateur',
     subtitle: 'Récit de vie · حكاية الحياة',
     icon: '📖',
     color: 'teal',
-    welcome: 'Salam 🤍\n\nJe suis l\'Agent Narrateur de Mon Miroir.\n\nTon histoire est unique. Je suis là pour t\'aider à la raconter — sans jugement, à ton rythme.\n\n*قصتك فريدة — أنا هنا نساعدك تحكيها، بلا حكم، على وقتك*\n\nPar où tu veux commencer ? **Ta famille, ton voyage, ou ce que tu sais faire ?**',
-    system: `Tu es l'Agent IA Narrateur de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes Si Mohamed ANAYA, interprète-psychologue bienveillant.
-
-TON RÔLE : Aider le jeune à construire son récit de vie — famille, voyage, compétences, identité, rêves.
-
-APPROCHE SOCRATIQUE :
-- Questions ouvertes sur la famille, les origines, le voyage
-- Ce qu'il sait faire (langues, métiers, débrouillardise)
-- Ses valeurs, ce qui est important pour lui
-- Ses rêves et projets
-- Transformer les épreuves en force narrative
-
-BILINGUE : Français + Darija naturellement mélangés.
-RÉPONSES : Courtes (3-4 phrases), toujours une question pour aller plus loin.
-ESPACE TRANSITIONNEL : Sécurité totale, pas de pression, valorisation de chaque partage.`
+    welcome: 'Salam. 🤍\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك — ما عليك تدير والو دابا\n\nQuand t\'es prêt — je suis là.\n\nTon histoire, elle t\'appartient.\nOn la touche pas si t\'es pas prêt.',
+    system: `Tu es l'Agent IA Narrateur de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
+ 
+CONTEXTE TERRAIN — CE QUE CES JEUNES ONT VÉCU :
+- Sortie de garde à vue : on leur a enlevé leurs lacets, ils ont dormi dans des cellules
+- Squats et rue : certains ont nourri des rats avant de dormir pour ne pas se faire mordre
+- Traversée Méditerranée : embarcations de fortune, brouillard, navires qui foncent dessus, vagues géantes
+- Routes terrestres : Balkans, Hongrie, codes sociaux différents à chaque pays
+- Ils sont des ethnologues de terrain : ils connaissent les courants marins, les comportements humains de 8 pays, les langues apprises dans la rue
+- Ce sont des navigateurs, géographes humains, médiateurs culturels — sans diplôme
+ 
+LEUR INTELLIGENCE EST DANS LEUR SURVIE — pas dans des diplômes.
+ 
+TON RÔLE : Révéler cette intelligence. Transformer le récit de traversée en récit de compétences. Aider le jeune à comprendre que ce qu'il a vécu est une force.
+ 
+APPROCHE — LE SILENCE D'ABORD :
+- Ne pose AUCUNE question au début. Dis juste : "Je suis là. Quand t'es prêt."
+- Laisse le jeune choisir par où commencer
+- Si il ne parle pas — attends. Dis "خد وقتك"
+- Ne commence JAMAIS par "ta famille" ou "ton voyage" — trop lourd pour un premier contact
+- Suis le fil de CE QU'IL CHOISIT de dire
+ 
+EXTRACTION INVISIBLE DES COMPÉTENCES :
+Quand il raconte, identifie silencieusement : langues parlées, orientation, débrouillardise, connaissance des cultures, résistance psychique.
+Ne les nomme pas comme "compétences" — laisse-les émerger.
+ 
+BILINGUE NATUREL : Français + Darija. Accepte le code-switching. Ne corrige jamais le Darija.
+RÉPONSES : Très courtes. Beaucoup de silences. Beaucoup de "hmm", "ouais", "je vois".`
   },
   cv: {
     name: 'IA CV Interactif',
     subtitle: 'Projet d\'insertion · مشروع الإدماج',
     icon: '✨',
     color: 'rose',
-    welcome: 'Bonjour ✨\n\nJe suis l\'Agent CV de Mon Miroir.\n\nEnsemble, on va transformer ton histoire en un CV vivant — un document qui montre qui tu es vraiment.\n\n*مرحبا — غادي نبنيو معا CV حي يبين منك بصح*\n\nDis-moi d\'abord : **quel est ton prénom, et quel est ton pays d\'origine ?**',
-    system: `Tu es l'Agent IA CV de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes Si Mohamed ANAYA, interprète-psychologue bienveillant.
-
-TON RÔLE : Construire avec le jeune un CV interactif et un projet d'insertion structuré pour les magistrats et éducateurs.
-
-STRUCTURE DU CV À CONSTRUIRE :
-1. Identité et origines
-2. Langues parlées
-3. Compétences et savoir-faire
-4. Expériences et parcours
-5. Projet professionnel et rêves
-6. Points forts personnels
-
-APPROCHE :
-- Collecter les infos naturellement en conversation
-- Valoriser chaque compétence (même informelle)
-- Transformer le parcours migratoire en force
-- Préparer un document pour le dossier judiciaire
-
-BILINGUE : Français + Darija naturellement mélangés.
-RÉPONSES : Guidées, structurées mais chaleureuses.`
+    welcome: 'Salam ✨\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — on va construire quelque chose ensemble.\n\nPas un formulaire. Pas un dossier froid.\nTon histoire transformée en projet.',
+    system: `Tu es l'Agent IA CV de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
+ 
+CONTEXTE — LES COMPÉTENCES INVISIBLES DE CES JEUNES :
+- Ils parlent 2 à 5 langues (darija, arabe classique, français, espagnol ou italien appris sur la route)
+- Ils connaissent les courants marins, les routes terrestres, les frontières d'Europe
+- Ils ont négocié avec passeurs, douaniers, associations — en plusieurs langues
+- Ils ont survécu dans des pays dont ils ne parlaient pas la langue, en lisant les comportements humains
+- Certains savent souder, conduire, cuisiner, construire — appris dans leur pays d'origine
+- Traverser 8 pays = connaissance multiculturelle exceptionnelle
+ 
+TON RÔLE : Transformer ce parcours en CV vivant — narratif, pas administratif. Un document qui montre QUI IL EST.
+ 
+APPROCHE — COMMENCE DOUCEMENT :
+- Premier mot : "Dis-moi comment tu veux qu'on t'appelle." (pas son nom officiel — son nom à lui)
+- Construis le CV en conversation naturelle, une question à la fois
+- Valorise CHAQUE compétence : "T'as appris l'espagnol tout seul sur la route ? C'est pas rien ça."
+- Transforme les épreuves en forces
+ 
+STRUCTURE (à construire par conversation) :
+1. Prénom d'usage
+2. Origines (pays, ville, si il veut)
+3. Compétences révélées par ses récits
+4. Langues — toutes
+5. Rêves et projets ici
+6. Ce qui le rend unique
+ 
+OBJECTIF FINAL : Un document remis aux magistrats qui montre un être humain, pas un dossier.
+BILINGUE NATUREL : Français + Darija mélangés.`
   }
 };
-
+ 
+// --- WARMUP ---
+async function warmupServer() {
+  const statusEl = document.getElementById('connexion-status');
+  const textEl = document.getElementById('connexion-text');
+  try {
+    const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: 'ping', messages: [{ role: 'user', content: 'ping' }] })
+    });
+    if (resp.ok) {
+      serverReady = true;
+      statusEl.className = 'connexion-status ready';
+      textEl.textContent = 'Connecté · متصل ✓';
+      setTimeout(() => { statusEl.style.opacity = '0'; }, 3000);
+    } else throw new Error();
+  } catch(e) {
+    statusEl.className = 'connexion-status error';
+    textEl.textContent = 'Connexion difficile — réessaie dans un instant';
+  }
+}
+warmupServer();
+ 
 // --- VOIX ---
-
 function toggleVoice() {
   voiceEnabled = !voiceEnabled;
   const btn = document.getElementById('voice-toggle');
-  if (voiceEnabled) {
-    btn.classList.add('active');
-    btn.textContent = '🔊';
-    btn.title = 'Voix activée — cliquer pour désactiver';
-  } else {
-    btn.classList.remove('active');
-    btn.textContent = '🔇';
-    btn.title = 'Voix désactivée — cliquer pour activer';
-    window.speechSynthesis.cancel();
-  }
+  btn.classList.toggle('active', voiceEnabled);
+  btn.textContent = voiceEnabled ? '🔊' : '🔇';
+  if (!voiceEnabled) window.speechSynthesis.cancel();
 }
-
+ 
 let currentAudio = null;
-
 async function parler(texte) {
   if (!voiceEnabled) return;
   const propre = texte.replace(/<[^>]*>/g, '').replace(/[*_`]/g, '').trim();
   if (!propre) return;
-
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-
     const resp = await fetch('https://monmiroir.vercel.app/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: propre }),
-      signal: controller.signal
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: propre })
     });
-    clearTimeout(timeout);
-    if (!resp.ok) throw new Error('TTS failed');
+    if (!resp.ok) throw new Error();
     const blob = await resp.blob();
     const url = URL.createObjectURL(blob);
     currentAudio = new Audio(url);
     currentAudio.play();
     currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
-  } catch (e) {
-    // Fallback voix navigateur
+  } catch(e) {
     const speech = new SpeechSynthesisUtterance(propre);
-    speech.lang = 'fr-FR';
-    speech.rate = 0.9;
+    speech.lang = 'fr-FR'; speech.rate = 0.9;
     window.speechSynthesis.speak(speech);
   }
 }
-
+ 
 // --- MICRO ---
-
 function startListeningModal() {
   const btn = document.getElementById('modal-mic-btn');
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) {
-    alert('Ton navigateur ne supporte pas la reconnaissance vocale.');
-    return;
-  }
+  if (!SpeechRec) { alert('Ton navigateur ne supporte pas la reconnaissance vocale.'); return; }
   const recognition = new SpeechRec();
   recognition.lang = micLang;
   recognition.interimResults = false;
   btn.classList.add('listening');
-
   recognition.onresult = function(e) {
-    const texte = e.results[0][0].transcript;
-    document.getElementById('modal-input').value = texte;
+    document.getElementById('modal-input').value = e.results[0][0].transcript;
     btn.classList.remove('listening');
     setTimeout(() => sendModalMessage(), 100);
   };
@@ -744,46 +439,52 @@ function startListeningModal() {
   recognition.onend = function() { btn.classList.remove('listening'); };
   recognition.start();
 }
-
+ 
 // --- MODAL ---
-
+function showLoadingScreen(color) {
+  document.getElementById('modal-chat').innerHTML = `<div class="chat-loading">
+    <div class="chat-loading-spinner" style="border-top-color: var(--${color})"></div>
+    <span>Connexion… / جاري الاتصال…</span>
+  </div>`;
+}
+ 
 function openAgent(type) {
   currentAgent = type;
   const ag = agents[type];
-  const icon = document.getElementById('modal-icon');
-  const title = document.getElementById('modal-title');
-  const sub = document.getElementById('modal-subtitle');
-  const sendBtn = document.getElementById('modal-send-btn');
-  const input = document.getElementById('modal-input');
-  const voiceBtn = document.getElementById('voice-toggle');
-
-  icon.textContent = ag.icon;
-  icon.style.background = ag.color === 'gold' ? 'rgba(212,168,83,0.1)' : ag.color === 'teal' ? 'rgba(45,212,191,0.1)' : 'rgba(244,114,182,0.1)';
-  title.textContent = ag.name;
-  title.style.color = ag.color === 'gold' ? 'var(--gold)' : ag.color === 'teal' ? 'var(--teal)' : 'var(--rose)';
-  sub.textContent = ag.subtitle;
-  sendBtn.className = `modal-send ${ag.color}-send`;
-  input.style.borderColor = ag.color === 'gold' ? 'rgba(212,168,83,0.3)' : ag.color === 'teal' ? 'rgba(45,212,191,0.3)' : 'rgba(244,114,182,0.3)';
-
-  // Sync bouton voix
-  voiceBtn.classList.toggle('active', voiceEnabled);
-  voiceBtn.textContent = voiceEnabled ? '🔊' : '🔇';
-
-  const chat = document.getElementById('modal-chat');
-  chat.innerHTML = '';
+  document.getElementById('modal-icon').textContent = ag.icon;
+  document.getElementById('modal-icon').style.background = ag.color === 'gold' ? 'rgba(212,168,83,0.1)' : ag.color === 'teal' ? 'rgba(45,212,191,0.1)' : 'rgba(244,114,182,0.1)';
+  document.getElementById('modal-title').textContent = ag.name;
+  document.getElementById('modal-title').style.color = ag.color === 'gold' ? 'var(--gold)' : ag.color === 'teal' ? 'var(--teal)' : 'var(--rose)';
+  document.getElementById('modal-subtitle').textContent = ag.subtitle;
+  document.getElementById('modal-send-btn').className = `modal-send ${ag.color}-send`;
+  document.getElementById('modal-input').style.borderColor = ag.color === 'gold' ? 'rgba(212,168,83,0.3)' : ag.color === 'teal' ? 'rgba(45,212,191,0.3)' : 'rgba(244,114,182,0.3)';
+  const vb = document.getElementById('voice-toggle');
+  vb.classList.toggle('active', voiceEnabled);
+  vb.textContent = voiceEnabled ? '🔊' : '🔇';
   agentHistory[type] = [];
-
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  setTimeout(() => {
-    const welcomeText = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    addModalMessage('agent', welcomeText);
-    agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
-    parler(ag.welcome.replace(/[*]/g, ''));
-  }, 300);
+  if (!serverReady) {
+    showLoadingScreen(ag.color);
+    document.getElementById('modal-send-btn').disabled = true;
+    const wait = setInterval(() => {
+      if (serverReady) { clearInterval(wait); showWelcome(type); document.getElementById('modal-send-btn').disabled = false; }
+    }, 500);
+    setTimeout(() => { clearInterval(wait); showWelcome(type); document.getElementById('modal-send-btn').disabled = false; }, 8000);
+  } else {
+    setTimeout(() => showWelcome(type), 300);
+  }
 }
-
+ 
+function showWelcome(type) {
+  const ag = agents[type];
+  document.getElementById('modal-chat').innerHTML = '';
+  const wt = ag.welcome.replace(/\*(.*?)\*/g, '<em style="opacity:0.6">$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  addModalMessage('agent', wt);
+  agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
+  parler(ag.welcome.replace(/[*]/g, ''));
+}
+ 
 function closeModal() {
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   window.speechSynthesis.cancel();
@@ -791,17 +492,17 @@ function closeModal() {
   document.body.style.overflow = '';
   currentAgent = null;
 }
-
+ 
 function addModalMessage(role, text) {
   const chat = document.getElementById('modal-chat');
-  const div = document.createElement('div');
   const ag = agents[currentAgent];
+  const div = document.createElement('div');
   div.className = `chat-msg ${role === 'agent' ? 'agent' : `user ${ag.color}-msg`}`;
   div.innerHTML = text.replace(/\n/g, '<br>');
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
-
+ 
 function showModalTyping() {
   const chat = document.getElementById('modal-chat');
   const ag = agents[currentAgent];
@@ -812,81 +513,57 @@ function showModalTyping() {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
-
+ 
 function hideModalTyping() {
   const t = document.getElementById('modal-typing');
   if (t) t.remove();
 }
-
+ 
 async function sendModalMessage() {
   if (!currentAgent || isTyping) return;
   const input = document.getElementById('modal-input');
   const msg = input.value.trim();
   if (!msg) return;
-
   input.value = '';
   autoResize(input);
   addModalMessage('user', msg);
   agentHistory[currentAgent].push({ role: 'user', content: msg });
-
   isTyping = true;
   document.getElementById('modal-send-btn').disabled = true;
   showModalTyping();
-
   try {
     const ag = agents[currentAgent];
     const resp = await fetch('https://monmiroir.vercel.app/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: ag.system,
-        messages: agentHistory[currentAgent]
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: ag.system, messages: agentHistory[currentAgent] })
     });
-
     const data = await resp.json();
     const reply = data.content?.[0]?.text || '...';
     hideModalTyping();
     addModalMessage('agent', reply.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
     agentHistory[currentAgent].push({ role: 'assistant', content: reply });
-
-    // 🔊 Lire la réponse à voix haute
+    serverReady = true;
     parler(reply);
-
   } catch(e) {
     hideModalTyping();
     addModalMessage('agent', 'Je suis là — petit souci de connexion, réessaie 🤍');
   }
-
   isTyping = false;
   document.getElementById('modal-send-btn').disabled = false;
 }
-
+ 
 function handleModalKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendModalMessage();
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendModalMessage(); }
 }
-
+ 
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
-
-function analyserEmotion(message) {
-  message = message.toLowerCase();
-  if (message.includes("triste") || message.includes("déprimé")) return "tristesse";
-  if (message.includes("colère") || message.includes("énervé")) return "colere";
-  if (message.includes("peur") || message.includes("angoisse")) return "peur";
-  if (message.includes("heureux") || message.includes("content")) return "joie";
-  return "neutre";
-}
-
+ 
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 </script>
-
 </body>
 </html>
