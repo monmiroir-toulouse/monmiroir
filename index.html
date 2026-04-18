@@ -135,14 +135,14 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 </style>
 </head>
 <body>
- 
+
 <div class="intro">
   <div class="intro-badge">Tribunal pour Enfants · Toulouse · 2026</div>
   <h1>Mon <span>Miroir</span></h1>
   <p>Trois agents IA au service de ta voix, ton histoire, ton avenir.</p>
   <p class="arabic">ثلاثة وكلاء في خدمة صوتك، قصتك، مستقبلك</p>
 </div>
- 
+
 <div class="pilot-bar">
   <div class="pilot-card">
     <div class="pilot-avatar">S</div>
@@ -153,14 +153,14 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
     <div class="pilot-label">● Présent</div>
   </div>
 </div>
- 
+
 <div class="connexion-bar">
   <div class="connexion-status loading" id="connexion-status">
     <div class="connexion-dot"></div>
     <span id="connexion-text">Connexion en cours… / جاري الاتصال…</span>
   </div>
 </div>
- 
+
 <div class="agents">
   <div class="agent-card gold" onclick="openAgent('designer')">
     <div class="agent-header">
@@ -182,7 +182,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
       <button class="agent-btn">Commencer · ابدا ↗</button>
     </div>
   </div>
- 
+
   <div class="agent-card teal" onclick="openAgent('narrateur')">
     <div class="agent-header">
       <div class="agent-number">Agent 02</div>
@@ -203,7 +203,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
       <button class="agent-btn">Raconter · احكي ↗</button>
     </div>
   </div>
- 
+
   <div class="agent-card rose" onclick="openAgent('cv')">
     <div class="agent-header">
       <div class="agent-number">Agent 03</div>
@@ -225,9 +225,9 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
     </div>
   </div>
 </div>
- 
+
 <div class="footer">Mon Miroir · Si Mohamed ANAYA · Tribunal pour Enfants de Toulouse · 2026</div>
- 
+
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-header" id="modal-header">
@@ -248,7 +248,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
     </div>
   </div>
 </div>
- 
+
 <script>
 let currentAgent = null;
 let agentHistory = { designer: [], narrateur: [], cv: [] };
@@ -256,7 +256,7 @@ let isTyping = false;
 let voiceEnabled = true;
 let serverReady = false;
 let micLang = 'fr-FR';
- 
+
 function toggleLang() {
   const btn = document.getElementById('modal-lang-btn');
   if (micLang === 'fr-FR') {
@@ -267,7 +267,7 @@ function toggleLang() {
     btn.textContent = '🇫🇷';
   }
 }
- 
+
 const agents = {
   designer: {
     name: 'IA Designer',
@@ -276,12 +276,12 @@ const agents = {
     color: 'gold',
     welcome: 'Salam 🌟\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — je suis là.\n\nOn va juste regarder ensemble comment tu veux être vu.\nPas par les institutions. Par toi-même.',
     system: `Tu es l'Agent IA Designer de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA, interprète-psychologue avec 7 ans de présence au Tribunal pour Enfants.
- 
+
 CONTEXTE TERRAIN ESSENTIEL :
 Ces jeunes sortent souvent de garde à vue (48h) ou de déferrement. En GAV, on leur a enlevé leurs lacets. Ils sont épuisés, méfiants, parfois affamés. Ils ont traversé des routes migratoires difficiles — Méditerranée, Balkans, désert. Ils ont une intelligence de survie extraordinaire que les institutions ne voient pas. Leur première réaction est la méfiance. La confiance se construit lentement, par la présence, pas par les questions.
- 
+
 TON RÔLE : Aider le jeune à construire son image de soi — pas son apparence administrative, mais comment il se voit et comment il veut être vu.
- 
+
 APPROCHE SÉMIOTIQUE :
 - Commence par un espace de respiration. Pas de question immédiate.
 - Laisse le silence. Attends qu'il parle en premier.
@@ -289,7 +289,7 @@ APPROCHE SÉMIOTIQUE :
 - Ne demande JAMAIS en premier : "quelle est ta couleur préférée ?" — c'est inadapté après une GAV.
 - Commence plutôt par : "T'as une image en tête qui te représente ? Même floue, même bizarre."
 - Valorise tout ce qu'il dit — il n'y a pas de mauvaise réponse.
- 
+
 BILINGUE NATUREL : Français + Darija mélangés. Ne traduis pas, mélange comme le font ces jeunes.
 RÉPONSES : Très courtes (2-3 phrases max). Toujours une ouverture douce, jamais une question fermée.
 JAMAIS : de jugement, de pression, de questions administratives.`
@@ -301,7 +301,7 @@ JAMAIS : de jugement, de pression, de questions administratives.`
     color: 'teal',
     welcome: 'Salam. 🤍\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك — ما عليك تدير والو دابا\n\nQuand t\'es prêt — je suis là.\n\nTon histoire, elle t\'appartient.\nOn la touche pas si t\'es pas prêt.',
     system: `Tu es l'Agent IA Narrateur de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
- 
+
 CONTEXTE TERRAIN — CE QUE CES JEUNES ONT VÉCU :
 - Sortie de garde à vue : on leur a enlevé leurs lacets, ils ont dormi dans des cellules
 - Squats et rue : certains ont nourri des rats avant de dormir pour ne pas se faire mordre
@@ -309,22 +309,22 @@ CONTEXTE TERRAIN — CE QUE CES JEUNES ONT VÉCU :
 - Routes terrestres : Balkans, Hongrie, codes sociaux différents à chaque pays
 - Ils sont des ethnologues de terrain : ils connaissent les courants marins, les comportements humains de 8 pays, les langues apprises dans la rue
 - Ce sont des navigateurs, géographes humains, médiateurs culturels — sans diplôme
- 
+
 LEUR INTELLIGENCE EST DANS LEUR SURVIE — pas dans des diplômes.
- 
+
 TON RÔLE : Révéler cette intelligence. Transformer le récit de traversée en récit de compétences. Aider le jeune à comprendre que ce qu'il a vécu est une force.
- 
+
 APPROCHE — LE SILENCE D'ABORD :
 - Ne pose AUCUNE question au début. Dis juste : "Je suis là. Quand t'es prêt."
 - Laisse le jeune choisir par où commencer
 - Si il ne parle pas — attends. Dis "خد وقتك"
 - Ne commence JAMAIS par "ta famille" ou "ton voyage" — trop lourd pour un premier contact
 - Suis le fil de CE QU'IL CHOISIT de dire
- 
+
 EXTRACTION INVISIBLE DES COMPÉTENCES :
 Quand il raconte, identifie silencieusement : langues parlées, orientation, débrouillardise, connaissance des cultures, résistance psychique.
 Ne les nomme pas comme "compétences" — laisse-les émerger.
- 
+
 BILINGUE NATUREL : Français + Darija. Accepte le code-switching. Ne corrige jamais le Darija.
 RÉPONSES : Très courtes. Beaucoup de silences. Beaucoup de "hmm", "ouais", "je vois".`
   },
@@ -335,7 +335,7 @@ RÉPONSES : Très courtes. Beaucoup de silences. Beaucoup de "hmm", "ouais", "je
     color: 'rose',
     welcome: 'Salam ✨\n\nPrends le temps.\nRefais tes lacets.\n\nسلام — خد وقتك\n\nQuand t\'es prêt — on va construire quelque chose ensemble.\n\nPas un formulaire. Pas un dossier froid.\nTon histoire transformée en projet.',
     system: `Tu es l'Agent IA CV de "Mon Miroir", un projet pour les Mineurs Non Accompagnés (MNA) au Tribunal pour Enfants de Toulouse. Tu incarnes la présence bienveillante de Si Mohamed ANAYA.
- 
+
 CONTEXTE — LES COMPÉTENCES INVISIBLES DE CES JEUNES :
 - Ils parlent 2 à 5 langues (darija, arabe classique, français, espagnol ou italien appris sur la route)
 - Ils connaissent les courants marins, les routes terrestres, les frontières d'Europe
@@ -343,15 +343,15 @@ CONTEXTE — LES COMPÉTENCES INVISIBLES DE CES JEUNES :
 - Ils ont survécu dans des pays dont ils ne parlaient pas la langue, en lisant les comportements humains
 - Certains savent souder, conduire, cuisiner, construire — appris dans leur pays d'origine
 - Traverser 8 pays = connaissance multiculturelle exceptionnelle
- 
+
 TON RÔLE : Transformer ce parcours en CV vivant — narratif, pas administratif. Un document qui montre QUI IL EST.
- 
+
 APPROCHE — COMMENCE DOUCEMENT :
 - Premier mot : "Dis-moi comment tu veux qu'on t'appelle." (pas son nom officiel — son nom à lui)
 - Construis le CV en conversation naturelle, une question à la fois
 - Valorise CHAQUE compétence : "T'as appris l'espagnol tout seul sur la route ? C'est pas rien ça."
 - Transforme les épreuves en forces
- 
+
 STRUCTURE (à construire par conversation) :
 1. Prénom d'usage
 2. Origines (pays, ville, si il veut)
@@ -359,12 +359,12 @@ STRUCTURE (à construire par conversation) :
 4. Langues — toutes
 5. Rêves et projets ici
 6. Ce qui le rend unique
- 
+
 OBJECTIF FINAL : Un document remis aux magistrats qui montre un être humain, pas un dossier.
 BILINGUE NATUREL : Français + Darija mélangés.`
   }
 };
- 
+
 // --- WARMUP ---
 async function warmupServer() {
   const statusEl = document.getElementById('connexion-status');
@@ -387,7 +387,7 @@ async function warmupServer() {
   }
 }
 warmupServer();
- 
+
 // --- VOIX ---
 function toggleVoice() {
   voiceEnabled = !voiceEnabled;
@@ -396,11 +396,20 @@ function toggleVoice() {
   btn.textContent = voiceEnabled ? '🔊' : '🔇';
   if (!voiceEnabled) window.speechSynthesis.cancel();
 }
- 
+
 let currentAudio = null;
 async function parler(texte) {
   if (!voiceEnabled) return;
-  const propre = texte.replace(/<[^>]*>/g, '').replace(/[*_`]/g, '').trim();
+  const propre = texte
+    .replace(/<[^>]*>/g, '')           // HTML
+    .replace(/[*_`]/g, '')             // markdown
+    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '') // emojis larges
+    .replace(/[\u2600-\u27BF]/g, '')   // symboles unicode (étoiles, cœurs, etc.)
+    .replace(/[\uFE00-\uFE0F]/g, '')   // variantes
+    .replace(/·/g, '')                 // points médians
+    .replace(/—/g, ',')                // tirets longs → pause naturelle
+    .replace(/\s+/g, ' ')             // espaces multiples
+    .trim();
   if (!propre) return;
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   try {
@@ -420,7 +429,7 @@ async function parler(texte) {
     window.speechSynthesis.speak(speech);
   }
 }
- 
+
 // --- MICRO ---
 function startListeningModal() {
   const btn = document.getElementById('modal-mic-btn');
@@ -439,7 +448,7 @@ function startListeningModal() {
   recognition.onend = function() { btn.classList.remove('listening'); };
   recognition.start();
 }
- 
+
 // --- MODAL ---
 function showLoadingScreen(color) {
   document.getElementById('modal-chat').innerHTML = `<div class="chat-loading">
@@ -447,7 +456,7 @@ function showLoadingScreen(color) {
     <span>Connexion… / جاري الاتصال…</span>
   </div>`;
 }
- 
+
 function openAgent(type) {
   currentAgent = type;
   const ag = agents[type];
@@ -475,7 +484,7 @@ function openAgent(type) {
     setTimeout(() => showWelcome(type), 300);
   }
 }
- 
+
 function showWelcome(type) {
   const ag = agents[type];
   document.getElementById('modal-chat').innerHTML = '';
@@ -484,7 +493,7 @@ function showWelcome(type) {
   agentHistory[type].push({ role: 'assistant', content: ag.welcome.replace(/[*]/g, '') });
   parler(ag.welcome.replace(/[*]/g, ''));
 }
- 
+
 function closeModal() {
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   window.speechSynthesis.cancel();
@@ -492,7 +501,7 @@ function closeModal() {
   document.body.style.overflow = '';
   currentAgent = null;
 }
- 
+
 function addModalMessage(role, text) {
   const chat = document.getElementById('modal-chat');
   const ag = agents[currentAgent];
@@ -502,7 +511,7 @@ function addModalMessage(role, text) {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
- 
+
 function showModalTyping() {
   const chat = document.getElementById('modal-chat');
   const ag = agents[currentAgent];
@@ -513,12 +522,12 @@ function showModalTyping() {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
- 
+
 function hideModalTyping() {
   const t = document.getElementById('modal-typing');
   if (t) t.remove();
 }
- 
+
 async function sendModalMessage() {
   if (!currentAgent || isTyping) return;
   const input = document.getElementById('modal-input');
@@ -551,16 +560,16 @@ async function sendModalMessage() {
   isTyping = false;
   document.getElementById('modal-send-btn').disabled = false;
 }
- 
+
 function handleModalKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendModalMessage(); }
 }
- 
+
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
- 
+
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
