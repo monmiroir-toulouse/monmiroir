@@ -707,7 +707,7 @@ async function parler(texte) {
     const resp = await fetch('https://monmiroir.vercel.app/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: propre }),
+      body: JSON.stringify({ text: propre, voice: currentLang === 'fr' ? 'fr' : 'ar' }),
       signal: controller.signal
     });
     clearTimeout(timeout);
