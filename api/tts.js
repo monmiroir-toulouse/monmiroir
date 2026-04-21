@@ -31,8 +31,10 @@ module.exports = async function handler(req, res) {
 
     if (!cleanText) return res.status(400).json({ error: 'Empty text' });
 
-    const voiceId = 'hFgOzpmS0CMtL2to8sAl'; // Camille Martin
-
+    const voice = req.body.voice || 'ar';
+const voiceId = voice === 'fr' 
+  ? 'mflIRGWOKwTG1A8j2Ma1'  // Estelle-Traductrice
+  : 'MwbxzOINfu7MAPncd73U'; // Anaya-Traducteur
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
       headers: {
