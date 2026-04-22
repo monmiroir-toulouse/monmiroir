@@ -19,6 +19,10 @@ module.exports = async function handler(req, res) {
   .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
   .replace(/:{1,2}[a-zA-Z_]+:{1,2}/g, '')
   .replace(/[•·▪▸►◆★☆]/g, '')
+      .replace(/[🌟⭐✨💫🔥]/gu, '')
+  .replace(/[-—–]{2,}/g, ' ')
+  .replace(/\.{3,}/g, '.')
+  .replace(/[()[\]{}]/g, '')
   .replace(/\s+/g, ' ')
   .trim();
     if (!cleanText) return res.status(400).json({ error: 'Empty text' });
