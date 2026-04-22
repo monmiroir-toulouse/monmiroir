@@ -710,10 +710,9 @@ async function parler(texte) {
       body: JSON.stringify({ text: propre, voice: micLang === 'fr-FR' ? 'fr' : 'ar' }),
       signal: controller.signal
     });
-    clearTimeout(timeout);
-    if (!resp.ok) throw new Error('TTS failed');
-    const blob = await resp.blob();
-    const url = URL.createObjectURL(blob);
+   clearTimeout(timeout);
+const blob = await resp.blob();
+const url = URL.createObjectURL(blob);
     currentAudio = new Audio(url);
     currentAudio.play();
     currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
