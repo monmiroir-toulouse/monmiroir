@@ -893,19 +893,21 @@ function analyserEmotion(message) {
   if (message.includes("heureux") || message.includes("content")) return "joie";
   return "neutre";
 }
+
+function selectLang(lang) {
+  micLang = lang === 'fr' ? 'fr-FR' : 'ar-MA';
+  document.getElementById('lang-select-screen').style.display = 'none';
+  const unlock = new Audio();
+  unlock.play().catch(()=>{});
+}
+
 document.getElementById('btn-fr').addEventListener('click', () => selectLang('fr'));
 document.getElementById('btn-ar').addEventListener('click', () => selectLang('ar'));
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
+
 </script>
 
 </body>
 </html>
-function selectLang(lang) {
-  micLang = lang === 'fr' ? 'fr-FR' : 'ar-MA';
-  document.getElementById('lang-select-screen').style.display = 'none';
-  // Déverrouille l'autoplay
-  const unlock = new Audio();
-  unlock.play().catch(()=>{});
-}
