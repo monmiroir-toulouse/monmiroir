@@ -702,6 +702,7 @@ let currentAudio = null;
 async function parler(texte) {
   if (!voiceEnabled) return;
   const propre = texte.replace(/<[^>]*>/g, '').replace(/[*_`]/g, '').trim();
+  console.log('TTS envoi:', propre);
   if (!propre) return;
 
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
