@@ -8,10 +8,18 @@ module.exports = async function handler(req, res) {
     const text = body?.text;
     const voice = body?.voice || 'ar';
     if (!text) return res.status(400).json({ error: 'No text' });
-    const cleanText = text
-      .replace(/[*_~`#]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+   const cleanText = text
+  .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+  .replace(/[\u{2600}-\u{26FF}]/gu, '')
+  .replace(/[\u{2700}-\u{27BF}]/gu, '')
+  .replace(/[\u{1F900}-\u{1F9FF}]/gu, '')
+  .replace(/[\u{1FA00}-\u{1FAFF}]/gu, '')
+  .replace(/[\uFE0F\u200D]/gu, '')
+  .replace(/[*_~`#•·▪▸►◆★☆🌟⭐✨💫🔥]/gu, '')
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/:{1,2}[a-zA-Z_]+:{1,2}/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
     if (!cleanText) return res.status(400).json({ error: 'Empty text' });
     const voiceId = voice === 'fr'
       ? 'mflIRGWOKwTG1A8j2Ma1'
