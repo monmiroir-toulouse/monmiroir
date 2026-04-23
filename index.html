@@ -750,7 +750,7 @@ function startListeningModal() {
     const texte = e.results[0][0].transcript;
     document.getElementById('modal-input').value = texte;
     btn.classList.remove('listening');
-    setTimeout(() => sendModalMessage(), 100);
+    setTimeout(() => sendModalMessage(), 2000);
   };
   recognition.onerror = function() { btn.classList.remove('listening'); };
   recognition.onend = function() { btn.classList.remove('listening'); };
