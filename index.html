@@ -893,7 +893,8 @@ function analyserEmotion(message) {
   if (message.includes("heureux") || message.includes("content")) return "joie";
   return "neutre";
 }
-
+document.getElementById('btn-fr').addEventListener('click', () => selectLang('fr'));
+document.getElementById('btn-ar').addEventListener('click', () => selectLang('ar'));
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
