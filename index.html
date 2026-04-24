@@ -716,45 +716,66 @@ function sendMessage() {
   callAPI(text);
 }
 
+let mediaRecorder = null;
+let audioChunks = [];
+
 function toggleMic() {
-  const demos = {
-    fr:["Je sais pas trop... peut-être le bleu","Le rouge ça représente ma force","J'aime le vert, ça me rappelle mon pays","C'est compliqué à expliquer..."],
-    ar:["ما عرفتش... ربما الأزرق","الأحمر يمثل قوتي","كانبغي الخضر يذكرني ببلادي","صعب نشرح..."],
-    en:["I'm not sure... maybe blue","Red represents my strength","Green reminds me of home","It's hard to explain..."]
-  };
-
-  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    const arr = demos[currentLang];
-    const text = arr[Math.floor(Math.random()*arr.length)];
-    addBubble(text, 'out', true);
-    callAPI(text);
-    return;
-  }
-
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!isRecording) {
-    recognition = new SR();
-    recognition.lang = {fr:'fr-FR',ar:'ar-MA',en:'en-US'}[currentLang];
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.onresult = e => {
-      const text = e.results[0][0].transcript;
-      addBubble(text, 'out', true);
-      callAPI(text);
+    startWhisperRecording();
+  } else {
+    stopWhisperRecording();
+  }
+}
+
+async function startWhisperRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      await transcribeWithWhisper(blob);
     };
-    recognition.onend = () => {
-      isRecording = false;
-      document.getElementById('micBtn').classList.remove('rec');
-      document.getElementById('micBtn').textContent = '🎤';
-    };
-    recognition.start();
+    mediaRecorder.start();
     isRecording = true;
     document.getElementById('micBtn').classList.add('rec');
     document.getElementById('micBtn').textContent = '⏹';
-  } else {
-    recognition.stop();
+  } catch(e) {
+    alert('Micro non accessible : ' + e.message);
   }
 }
+
+function stopWhisperRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+  isRecording = false;
+  document.getElementById('micBtn').classList.remove('rec');
+  document.getElementById('micBtn').textContent = '🎤';
+}
+
+async function transcribeWithWhisper(blob) {
+  document.getElementById('chat-status').textContent = '🎤 Transcription...';
+  try {
+    const formData = new FormData();
+    formData.append('file', blob, 'audio.webm');
+    const res = await fetch('https://monmiroir.vercel.app/api/whisper', {
+      method: 'POST',
+      headers: { 'x-lang': currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr' },
+      body: formData
+    });
+    const data = await res.json();
+    const text = data.text?.trim();
+    if (text) {
+      addBubble(text, 'out', true);
+      callAPI(text);
+    }
+  } catch(e) {
+    addBubble('⚠️ Transcription échouée', 'in');
+  }
+  document.getElementById('chat-status').textContent = T[currentLang].online;
+}
+
 
 function toggleSendMic(val) {
   const mic=document.getElementById('micBtn'), send=document.getElementById('sendBtn');
