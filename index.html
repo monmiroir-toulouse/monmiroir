@@ -791,7 +791,7 @@ async function transcribeWithWhisper(blob) {
       addBubble(text, 'out', true);
       callAPI(text);
     } else {
-      addBubble('⚠️ Je n'ai pas entendu, réessaie 🎤', 'in');
+      addBubble("⚠️ Je n'ai pas entendu, réessaie 🎤", "in");
     }
   } catch(e) {
     console.error('Transcription error:', e);
