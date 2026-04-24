@@ -540,7 +540,17 @@ function goToAgents() {
   show('page-agents');
 }
 
+function unlockAudio() {
+  // Unlock TTS on first user gesture
+  if (window.speechSynthesis) {
+    const utt = new SpeechSynthesisUtterance('');
+    speechSynthesis.speak(utt);
+    speechSynthesis.cancel();
+  }
+}
+
 function startChat(agent) {
+  unlockAudio();
   currentAgent = agent;
   chatHistory = [];
   const a = AGENTS[agent];
