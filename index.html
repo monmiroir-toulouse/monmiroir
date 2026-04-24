@@ -774,15 +774,14 @@ function stopWhisperRecording() {
 async function transcribeWithWhisper(blob) {
   document.getElementById('chat-status').textContent = '🎤 Transcription...';
   try {
-    const formData = new FormData();
-    formData.append('file', blob, 'audio.webm');
     const res = await fetch('https://monmiroir.vercel.app/api/whisper', {
       method: 'POST',
       headers: { 
         'x-lang': currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr',
-        'x-mime': blob.type || 'audio/webm'
+        'x-mime': blob.type || 'audio/mp4',
+        'Content-Type': blob.type || 'audio/mp4'
       },
-      body: formData
+      body: blob
     });
     const data = await res.json();
     console.log('Whisper result:', JSON.stringify(data));
@@ -791,7 +790,7 @@ async function transcribeWithWhisper(blob) {
       addBubble(text, 'out', true);
       callAPI(text);
     } else {
-     addBubble("Pas entendu, réessaie 🎤", "in");
+      addBubble("⚠️ Je n'ai pas entendu, réessaie 🎤", "in");
     }
   } catch(e) {
     console.error('Transcription error:', e);
