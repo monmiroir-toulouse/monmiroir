@@ -433,7 +433,7 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
 const PROXY = 'https://monmiroir.vercel.app/api/chat';
 let currentLang = 'fr';
 let currentAgent = 'designer';
-let history = [];
+let chatHistory = [];
 let ttsOn = true;
 let isRecording = false;
 let recognition = null;
@@ -542,7 +542,7 @@ function goToAgents() {
 
 function startChat(agent) {
   currentAgent = agent;
-  history = [];
+  chatHistory = [];
   const a = AGENTS[agent];
   const t = T[currentLang];
   const names = { designer: t.a1n, scenariste: t.a2n, pilote: t.a3n };
@@ -635,7 +635,7 @@ function showTyping() {
 function removeTyping() { const e=document.getElementById('typing'); if(e) e.remove(); }
 
 async function callAPI(userText) {
-  if (userText !== '__init__') history.push({role:'user', content:userText});
+  if (userText !== '__init__') chatHistory.push({role:'user', content:userText});
   showTyping();
   const t = T[currentLang];
   document.getElementById('chat-status').textContent = t.typing;
@@ -643,7 +643,7 @@ async function callAPI(userText) {
   try {
     const msgs = userText === '__init__'
       ? [{role:'user', content:'Bonjour'}]
-      : history;
+      : chatHistory;
     const res = await fetch(PROXY, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -656,9 +656,9 @@ async function callAPI(userText) {
     removeTyping();
     const reply = data.content?.[0]?.text || '...';
     if (userText === '__init__') {
-      history = [{role:'user',content:'Bonjour'},{role:'assistant',content:reply}];
+      chatHistory = [{role:'user',content:'Bonjour'},{role:'assistant',content:reply}];
     } else {
-      history.push({role:'assistant', content:reply});
+      chatHistory.push({role:'assistant', content:reply});
     }
     addBubble(reply, 'in');
   } catch(e) {
