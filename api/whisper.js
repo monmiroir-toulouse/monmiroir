@@ -18,8 +18,8 @@ export default async function handler(req, res) {
     const FormData = (await import('form-data')).default;
     const form = new FormData();
     form.append('file', buffer, {
-      filename: 'audio.mp4',
-      contentType: 'audio/mp4'
+     filename: 'audio.webm',
+contentType: 'audio/webm'
     });
     form.append('model', 'whisper-1');
     form.append('language', lang);
