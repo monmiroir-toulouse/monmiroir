@@ -12,18 +12,14 @@ export default async function handler(req, res) {
     for await (const chunk of req) chunks.push(chunk);
     const buffer = Buffer.concat(chunks);
     const lang = req.headers['x-lang'] || 'fr';
-    const mime = req.headers['x-mime'] || 'audio/webm';
-    
-    const ext = mime.includes('mp4') ? 'mp4' 
-      : mime.includes('ogg') ? 'ogg'
-      : mime.includes('wav') ? 'wav'
-      : 'webm';
+
+    console.log('Buffer size:', buffer.length);
 
     const FormData = (await import('form-data')).default;
     const form = new FormData();
     form.append('file', buffer, {
-      filename: `audio.${ext}`,
-      contentType: mime
+      filename: 'audio.mp4',
+      contentType: 'audio/mp4'
     });
     form.append('model', 'whisper-1');
     form.append('language', lang);
@@ -38,10 +34,10 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    console.log('Whisper:', JSON.stringify(data));
+    console.log('Whisper response:', JSON.stringify(data));
     return res.status(200).json({ text: data.text || '' });
   } catch(e) {
-    console.error('Whisper error:', e.message);
+    console.error('Error:', e.message);
     return res.status(500).json({ error: e.message });
   }
 }
