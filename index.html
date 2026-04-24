@@ -785,13 +785,17 @@ async function transcribeWithWhisper(blob) {
       body: formData
     });
     const data = await res.json();
+    console.log('Whisper result:', JSON.stringify(data));
     const text = data.text?.trim();
-    if (text) {
+    if (text && text.length > 0) {
       addBubble(text, 'out', true);
       callAPI(text);
+    } else {
+      addBubble('⚠️ Je n'ai pas entendu, réessaie 🎤', 'in');
     }
   } catch(e) {
-    addBubble('⚠️ Transcription échouée', 'in');
+    console.error('Transcription error:', e);
+    addBubble('⚠️ Transcription échouée : ' + e.message, 'in');
   }
   document.getElementById('chat-status').textContent = T[currentLang].online;
 }
