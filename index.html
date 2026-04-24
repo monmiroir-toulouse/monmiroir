@@ -731,14 +731,26 @@ async function startWhisperRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks = [];
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    const mimeType = MediaRecorder.isTypeSupported('audio/mp4') 
+      ? 'audio/mp4'
+      : MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+      ? 'audio/webm;codecs=opus' 
+      : MediaRecorder.isTypeSupported('audio/webm') 
+        ? 'audio/webm' 
+        : 'audio/ogg';
+    mediaRecorder = new MediaRecorder(stream, { mimeType });
     mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
     mediaRecorder.onstop = async () => {
       stream.getTracks().forEach(t => t.stop());
-      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      const blob = new Blob(audioChunks, { type: mimeType });
+      console.log('Audio blob size:', blob.size, 'type:', blob.type);
+      if (blob.size < 1000) {
+        addBubble('⚠️ Audio trop court, réessaie', 'in');
+        return;
+      }
       await transcribeWithWhisper(blob);
     };
-    mediaRecorder.start();
+    mediaRecorder.start(100);
     isRecording = true;
     document.getElementById('micBtn').classList.add('rec');
     document.getElementById('micBtn').textContent = '⏹';
@@ -761,7 +773,10 @@ async function transcribeWithWhisper(blob) {
     formData.append('file', blob, 'audio.webm');
     const res = await fetch('https://monmiroir.vercel.app/api/whisper', {
       method: 'POST',
-      headers: { 'x-lang': currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr' },
+      headers: { 
+        'x-lang': currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr',
+        'x-mime': blob.type || 'audio/webm'
+      },
       body: formData
     });
     const data = await res.json();
