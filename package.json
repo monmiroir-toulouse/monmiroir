@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "form-data": "^4.0.0"
+    "form-data": "^4.0.0",
+    "formidable": "^3.5.1"
   }
 }
-"formidable": "^3.5.1"
