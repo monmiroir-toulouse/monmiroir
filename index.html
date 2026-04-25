@@ -732,11 +732,12 @@ async function startWhisperRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks = [];
     
-    const mimeType = MediaRecorder.isTypeSupported('audio/mp4') 
-      ? 'audio/mp4'
-      : MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-      ? 'audio/webm;codecs=opus' 
-      : 'audio/webm';
+    // Force webm - better Whisper compatibility
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/webm')
+      ? 'audio/webm'
+      : 'audio/mp4';
 
     mediaRecorder = new MediaRecorder(stream, { mimeType });
     
@@ -774,14 +775,15 @@ function stopWhisperRecording() {
 async function transcribeWithWhisper(blob) {
   document.getElementById('chat-status').textContent = '🎤 Transcription...';
   try {
+    const lang = currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr';
+    const ext = blob.type.includes('mp4') ? 'm4a' : blob.type.includes('ogg') ? 'ogg' : 'webm';
+    const formData = new FormData();
+    formData.append('file', new File([blob], `audio.${ext}`, {type: blob.type}));
+    formData.append('model', 'whisper-1');
+    formData.append('language', lang);
     const res = await fetch('https://monmiroir.vercel.app/api/whisper', {
       method: 'POST',
-      headers: { 
-        'x-lang': currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr',
-        'x-mime': blob.type || 'audio/mp4',
-        'Content-Type': blob.type || 'audio/mp4'
-      },
-      body: blob
+      body: formData
     });
     const data = await res.json();
     console.log('Whisper result:', JSON.stringify(data));
