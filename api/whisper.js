@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const [fields, files] = await form.parse(req);
     
     const audioFile = files.file?.[0];
-    const lang = fields.language?.[0] || 'fr';
+    const lang = fields.language?.[0] || 'ar';
     
     if (!audioFile) return res.status(400).json({ error: 'No file' });
     
