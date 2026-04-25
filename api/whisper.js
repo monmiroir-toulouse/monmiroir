@@ -13,13 +13,13 @@ export default async function handler(req, res) {
     const buffer = Buffer.concat(chunks);
     const lang = req.headers['x-lang'] || 'fr';
 
-    console.log('Buffer size:', buffer.length);
+    console.log('Buffer size:', buffer.length, 'lang:', lang);
 
-    const FormData = (await import('form-data')).default;
+    const { default: FormData } = await import('form-data');
     const form = new FormData();
     form.append('file', buffer, {
-    filename: 'audio.m4a',
-contentType: 'audio/mp4'
+      filename: 'audio.mp4',
+      contentType: 'audio/mpeg'
     });
     form.append('model', 'whisper-1');
     form.append('language', lang);
@@ -33,8 +33,13 @@ contentType: 'audio/mp4'
       body: form
     });
 
-    const data = await response.json();
-    console.log('Whisper response:', JSON.stringify(data));
+    const text_response = await response.text();
+    console.log('OpenAI raw response:', text_response);
+    
+    let data;
+    try { data = JSON.parse(text_response); } 
+    catch(e) { data = { text: text_response }; }
+    
     return res.status(200).json({ text: data.text || '' });
   } catch(e) {
     console.error('Error:', e.message);
