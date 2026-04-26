@@ -1,4 +1,4 @@
-const formidable = require('formidable');
+const { IncomingForm } = require('formidable');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
-    const form = formidable({ maxFileSize: 25 * 1024 * 1024 });
+   const form = new IncomingForm({ maxFileSize: 25 * 1024 * 1024 });
     const [fields, files] = await form.parse(req);
     const audioFile = files.file?.[0];
     const lang = fields.language?.[0] || 'ar';
