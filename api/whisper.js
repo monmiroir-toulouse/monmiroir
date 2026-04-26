@@ -51,3 +51,19 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: e.message });
   }
 }
+{
+  "version": "1.0",
+  "description": "Bibliothèque de témoignages MNA — Tribunal pour Enfants de Toulouse",
+  "temoignages": [
+    {
+      "id": "MNA00023",
+      "langue": "ar",
+      "fichier": "MNA00023.txt"
+    },
+    {
+      "id": "MNA00024",
+      "langue": "ar",
+      "fichier": "MNA00024.txt"
+    }
+  ]
+}
