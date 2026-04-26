@@ -1,13 +1,7 @@
 {
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, x-lang"
-      },
-      "dest": "/api/$1.js"
-    }
+    { "src": "/api/chat", "dest": "/api/chat.js" },
+    { "src": "/api/whisper", "dest": "/api/whisper.js" },
+    { "src": "/api/tts", "dest": "/api/tts.js" }
   ]
 }
