@@ -52,3 +52,6 @@ ${bibliotheque ? `EXTRAITS DE TÉMOIGNAGES MNA RÉELS (contexte culturel) :\n${b
     return res.status(500).json({ error: e.message });
   }
 };
+system: `Tu es l'IA de Mon Miroir...
+BIBLIOTHÈQUE DE TÉMOIGNAGES MNA :
+${textes.join('\n---\n')}`
