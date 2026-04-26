@@ -1,8 +1,3 @@
-import formidable from 'formidable';
-import fs from 'fs';
-import fetch from 'node-fetch';
-import FormData from 'form-data';
-
 const formidable = require('formidable');
 const fs = require('fs');
 const fetch = require('node-fetch');
