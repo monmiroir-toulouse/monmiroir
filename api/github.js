@@ -37,3 +37,23 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: e.message });
   }
 };
+// api/bibliotheque.js — LIRE la bibliothèque
+const fetch = require('node-fetch');
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const token = process.env.GITHUB_TOKEN;
+  const repo = 'monmiroir-toulouse/monmiroir';
+  
+  // Lister tous les fichiers de la bibliothèque
+  const response = await fetch(
+    `https://api.github.com/repos/${repo}/contents/bibliotheque`,
+    { headers: { 'Authorization': `Bearer ${token}`, 'User-Agent': 'MonMiroir' }}
+  );
+  const files = await response.json();
+  // Lire le contenu de chaque fichier
+  const textes = await Promise.all(files.map(async f => {
+    const r = await fetch(f.download_url);
+    return await r.text();
+  }));
+  return res.status(200).json({ textes });
+};
