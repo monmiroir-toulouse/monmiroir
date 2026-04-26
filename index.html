@@ -898,7 +898,25 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
         <div class="adm-result-actions">
           <button class="adm-btn-action" onclick="admCopy()">Copier</button>
           <button class="adm-btn-action" onclick="admSave()">Sauvegarder .txt</button>
-          <button class="adm-btn-action" onclick="admClear()">Nouveau</button>
+          async function admSaveToGithub() {
+  const text = document.getElementById('admResultText').textContent;
+  const name = (admCurrentFile?.name || 'transcription').replace(/\.[^.]+$/, '') + '.txt';
+  try {
+    admShowStatus('⏳ Envoi vers la bibliothèque...', 'success');
+    const res = await fetch('https://monmiroir.vercel.app/api/github', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: name, content: text })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    admShowStatus('✅ Ajouté à la bibliothèque : ' + name, 'success');
+  } catch(e) {
+    admShowStatus('✕ Erreur : ' + e.message, 'error');
+  }
+}
+         <button class="adm-btn-action" id="admBtnSaveGithub" onclick="admSaveToGithub()" style="border-color:#C9A84C;color:#C9A84C;">⭐ Bibliothèque</button>
+       <button class="adm-btn-action" id="admBtnSaveGithub" onclick="admSaveToGithub()" style="border-color:#C9A84C;color:#C9A84C;">⭐ Bibliothèque</button>
         </div>
       </div>
       <div class="adm-result-text" id="admResultText"></div>
