@@ -9,23 +9,14 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-lang');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-lang');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).end();
 
   try {
     const form = formidable({ maxFileSize: 25 * 1024 * 1024 });
     const [fields, files] = await form.parse(req);
-    
     const audioFile = files.file?.[0];
     const lang = fields.language?.[0] || 'ar';
-    
     if (!audioFile) return res.status(400).json({ error: 'No file' });
-    
-    console.log('File:', audioFile.originalFilename, audioFile.size, audioFile.mimetype);
-    
+
     const buffer = fs.readFileSync(audioFile.filepath);
     const outForm = new FormData();
     outForm.append('file', buffer, {
@@ -45,29 +36,13 @@ module.exports = async function handler(req, res) {
     });
 
     const text_response = await response.text();
-    console.log('OpenAI response:', text_response);
     let data;
     try { data = JSON.parse(text_response); }
     catch(e) { data = { text: text_response }; }
     return res.status(200).json({ text: data.text || '' });
+
   } catch(e) {
     console.error('Error:', e.message);
     return res.status(500).json({ error: e.message });
   }
-}
-{
-  "version": "1.0",
-  "description": "Bibliothèque de témoignages MNA — Tribunal pour Enfants de Toulouse",
-  "temoignages": [
-    {
-      "id": "MNA00023",
-      "langue": "ar",
-      "fichier": "MNA00023.txt"
-    },
-    {
-      "id": "MNA00024",
-      "langue": "ar",
-      "fichier": "MNA00024.txt"
-    }
-  ]
-}
+};
