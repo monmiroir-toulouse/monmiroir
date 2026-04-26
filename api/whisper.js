@@ -3,8 +3,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
 
-export const config = { api: { bodyParser: false } };
-
+export const config = { api: { bodyParser: false, sizeLimit: '25mb' } };
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
