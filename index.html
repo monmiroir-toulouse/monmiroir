@@ -22,7 +22,6 @@
   --chat-bg: #E5DDD5;
   --header-wa: #075E54;
   --tick: #4FC3F7;
-  /* Admin */
   --gold: #C9A84C;
   --gold-light: #E8D5A3;
   --gold-dim: #8B6914;
@@ -35,27 +34,16 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
-
-/* ═══════════════════════════════
-   ACCUEIL
-═══════════════════════════════ */
 #page-accueil {
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:40px 24px;
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:40px 24px;
   background: radial-gradient(ellipse at 50% 0%, #3a0a14 0%, #1a0a0e 60%);
 }
-
 .logo-zone { text-align:center; margin-bottom:48px; }
 .logo-miroir {
-  width:90px; height:90px;
-  border-radius:50%;
+  width:90px; height:90px; border-radius:50%;
   background: linear-gradient(135deg, var(--bordeaux), #C0392B);
-  margin:0 auto 20px;
-  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 20px; display:flex; align-items:center; justify-content:center;
   font-size:40px;
   box-shadow: 0 0 60px rgba(107,26,42,0.5), 0 0 120px rgba(107,26,42,0.2);
   animation: glow 3s ease-in-out infinite;
@@ -64,670 +52,183 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
   0%,100% { box-shadow:0 0 40px rgba(107,26,42,0.5),0 0 80px rgba(107,26,42,0.2); }
   50% { box-shadow:0 0 80px rgba(107,26,42,0.8),0 0 160px rgba(107,26,42,0.3); }
 }
-.logo-titre {
-  font-family:'Cormorant Garamond',serif;
-  font-size:48px;
-  color:white;
-  letter-spacing:0.05em;
-}
-.logo-sous {
-  color:rgba(255,255,255,0.5);
-  font-size:13px;
-  letter-spacing:0.15em;
-  text-transform:uppercase;
-  margin-top:6px;
-}
-
-.lang-choice {
-  display:flex;
-  gap:12px;
-  margin-bottom:40px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+.logo-titre { font-family:'Cormorant Garamond',serif; font-size:48px; color:white; letter-spacing:0.05em; }
+.logo-sous { color:rgba(255,255,255,0.5); font-size:13px; letter-spacing:0.15em; text-transform:uppercase; margin-top:6px; }
+.lang-choice { display:flex; gap:12px; margin-bottom:40px; flex-wrap:wrap; justify-content:center; }
 .lang-card {
-  background:rgba(255,255,255,0.06);
-  border:1.5px solid rgba(255,255,255,0.1);
-  border-radius:16px;
-  padding:16px 24px;
-  cursor:pointer;
-  transition:all 0.25s;
-  text-align:center;
-  min-width:100px;
+  background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:16px; padding:16px 24px; cursor:pointer; transition:all 0.25s;
+  text-align:center; min-width:100px;
 }
-.lang-card:hover, .lang-card.selected {
-  background:rgba(107,26,42,0.4);
-  border-color:var(--bordeaux-mid);
-  transform:translateY(-2px);
-}
+.lang-card:hover, .lang-card.selected { background:rgba(107,26,42,0.4); border-color:var(--bordeaux-mid); transform:translateY(-2px); }
 .lang-card .flag { font-size:28px; display:block; margin-bottom:6px; }
 .lang-card .lang-name { color:white; font-size:14px; font-weight:500; }
 .lang-card .lang-native { color:rgba(255,255,255,0.5); font-size:12px; margin-top:2px; }
-
 .btn-commencer {
   background:linear-gradient(135deg, var(--bordeaux), var(--bordeaux-mid));
-  color:white;
-  border:none;
-  border-radius:50px;
-  padding:18px 48px;
-  font-size:16px;
-  font-family:'DM Sans',sans-serif;
-  font-weight:500;
-  cursor:pointer;
-  letter-spacing:0.05em;
-  transition:all 0.25s;
+  color:white; border:none; border-radius:50px; padding:18px 48px;
+  font-size:16px; font-family:'DM Sans',sans-serif; font-weight:500;
+  cursor:pointer; letter-spacing:0.05em; transition:all 0.25s;
   box-shadow:0 4px 24px rgba(107,26,42,0.4);
 }
 .btn-commencer:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(107,26,42,0.6); }
-
-.tribunal-badge {
-  margin-top:32px;
-  color:rgba(255,255,255,0.3);
-  font-size:11px;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  text-align:center;
-}
-
-/* ═══════════════════════════════
-   AGENT SELECTION
-═══════════════════════════════ */
+.tribunal-badge { margin-top:32px; color:rgba(255,255,255,0.3); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; text-align:center; }
 #page-agents {
-  display:none;
-  min-height:100vh;
+  display:none; min-height:100vh;
   background: radial-gradient(ellipse at 50% 0%, #3a0a14 0%, #1a0a0e 60%);
-  padding:32px 20px;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+  padding:32px 20px; align-items:center; justify-content:center; flex-direction:column;
 }
-.agents-titre {
-  color:white;
-  font-family:'Cormorant Garamond',serif;
-  font-size:28px;
-  text-align:center;
-  margin-bottom:8px;
-}
-.agents-sous {
-  color:rgba(255,255,255,0.4);
-  font-size:13px;
-  text-align:center;
-  margin-bottom:32px;
-}
-.agents-grid {
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  width:100%;
-  max-width:380px;
-}
+.agents-titre { color:white; font-family:'Cormorant Garamond',serif; font-size:28px; text-align:center; margin-bottom:8px; }
+.agents-sous { color:rgba(255,255,255,0.4); font-size:13px; text-align:center; margin-bottom:32px; }
+.agents-grid { display:flex; flex-direction:column; gap:14px; width:100%; max-width:380px; }
 .agent-card {
-  background:rgba(255,255,255,0.05);
-  border:1.5px solid rgba(255,255,255,0.08);
-  border-radius:20px;
-  padding:20px 24px;
-  cursor:pointer;
-  transition:all 0.25s;
-  display:flex;
-  align-items:center;
-  gap:16px;
+  background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:20px; padding:20px 24px; cursor:pointer; transition:all 0.25s;
+  display:flex; align-items:center; gap:16px;
 }
-.agent-card:hover {
-  background:rgba(107,26,42,0.3);
-  border-color:var(--bordeaux-mid);
-  transform:translateX(4px);
-}
-.agent-icon {
-  width:52px; height:52px;
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:24px;
-  flex-shrink:0;
-}
+.agent-card:hover { background:rgba(107,26,42,0.3); border-color:var(--bordeaux-mid); transform:translateX(4px); }
+.agent-icon { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
 .agent-info .agent-nom { color:white; font-weight:500; font-size:16px; }
 .agent-info .agent-desc { color:rgba(255,255,255,0.45); font-size:13px; margin-top:3px; }
-.agent-phase {
-  margin-left:auto;
-  color:rgba(255,255,255,0.25);
-  font-size:11px;
-  text-align:right;
-  flex-shrink:0;
-}
-
-/* ═══════════════════════════════
-   CHAT WHATSAPP
-═══════════════════════════════ */
-#page-chat {
-  display:none;
-  height:100vh;
-  max-width:480px;
-  margin:0 auto;
-  flex-direction:column;
-  background:var(--chat-bg);
-}
-
-.wa-header {
-  background:var(--header-wa);
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,0.3);
-}
-.wa-back {
-  color:white; font-size:22px; cursor:pointer;
-  padding:4px; opacity:0.9;
-}
-.wa-avatar {
-  width:40px; height:40px;
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px;
-  flex-shrink:0;
-}
+.agent-phase { margin-left:auto; color:rgba(255,255,255,0.25); font-size:11px; text-align:right; flex-shrink:0; }
+#page-chat { display:none; height:100vh; max-width:480px; margin:0 auto; flex-direction:column; background:var(--chat-bg); }
+.wa-header { background:var(--header-wa); padding:10px 14px; display:flex; align-items:center; gap:10px; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+.wa-back { color:white; font-size:22px; cursor:pointer; padding:4px; opacity:0.9; }
+.wa-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
 .wa-info { flex:1; }
 .wa-name { color:white; font-size:15px; font-weight:600; }
 .wa-status { color:rgba(255,255,255,0.7); font-size:12px; margin-top:1px; }
 .wa-actions { display:flex; gap:10px; align-items:center; }
-.wa-mute {
-  background:rgba(255,255,255,0.15);
-  border:none; border-radius:20px;
-  color:white; font-size:12px;
-  padding:4px 10px; cursor:pointer;
-  font-family:'DM Sans',sans-serif;
-  transition:background 0.2s;
-}
+.wa-mute { background:rgba(255,255,255,0.15); border:none; border-radius:20px; color:white; font-size:12px; padding:4px 10px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
 .wa-mute:hover { background:rgba(255,255,255,0.25); }
 .wa-mute.muted { background:rgba(220,50,50,0.35); }
-
 .wa-chat {
-  flex:1;
-  overflow-y:auto;
-  padding:10px 8px;
+  flex:1; overflow-y:auto; padding:10px 8px;
   background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8b8a2' fill-opacity='0.12'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   scroll-behavior:smooth;
 }
 .wa-chat::-webkit-scrollbar { width:3px; }
 .wa-chat::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.15); border-radius:2px; }
-
 .date-sep { text-align:center; margin:8px 0 12px; }
-.date-sep span {
-  background:rgba(255,255,255,0.82);
-  color:#667781;
-  font-size:11.5px;
-  padding:3px 12px;
-  border-radius:8px;
-}
-
+.date-sep span { background:rgba(255,255,255,0.82); color:#667781; font-size:11.5px; padding:3px 12px; border-radius:8px; }
 .bw { display:flex; margin-bottom:2px; padding:0 4px; animation:slideUp 0.2s ease; }
 .bw.out { justify-content:flex-end; }
 .bw.in { justify-content:flex-start; }
 @keyframes slideUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-
-.bubble {
-  max-width:78%;
-  padding:7px 11px 5px;
-  border-radius:8px;
-  font-size:14.5px;
-  line-height:1.5;
-  position:relative;
-  word-break:break-word;
-  box-shadow:0 1px 2px rgba(0,0,0,0.12);
-}
+.bubble { max-width:78%; padding:7px 11px 5px; border-radius:8px; font-size:14.5px; line-height:1.5; position:relative; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.12); }
 .bubble.out { background:var(--bubble-out); border-top-right-radius:2px; color:#111; }
 .bubble.in { background:var(--bubble-in); border-top-left-radius:2px; color:#111; }
 .bubble.out::after { content:''; position:absolute; top:0; right:-7px; border:7px solid transparent; border-top-color:var(--bubble-out); border-right:0; }
 .bubble.in::before { content:''; position:absolute; top:0; left:-7px; border:7px solid transparent; border-top-color:var(--bubble-in); border-left:0; }
-
 .bmeta { display:flex; align-items:center; gap:4px; margin-top:3px; justify-content:flex-end; }
 .btime { font-size:11px; color:#667781; }
 .btick { font-size:12px; color:var(--tick); }
 .bubble.in .bmeta { justify-content:flex-start; }
-
 .bubble.rtl { direction:rtl; font-family:'IBM Plex Sans Arabic',sans-serif; }
-
-.vbubble {
-  display:flex; align-items:center; gap:10px;
-  padding:8px 12px; min-width:190px;
-}
-.vplay {
-  width:34px; height:34px;
-  border-radius:50%;
-  background:var(--green-dark);
-  border:none; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  color:white; font-size:13px; flex-shrink:0;
-  transition:transform 0.15s;
-}
+.vbubble { display:flex; align-items:center; gap:10px; padding:8px 12px; min-width:190px; }
+.vplay { width:34px; height:34px; border-radius:50%; background:var(--green-dark); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:white; font-size:13px; flex-shrink:0; transition:transform 0.15s; }
 .vplay:hover { transform:scale(1.1); }
 .vwave { flex:1; height:26px; display:flex; align-items:center; gap:2px; }
 .vwave span { display:inline-block; width:3px; border-radius:2px; background:#aaa; }
 .vwave span.a { background:var(--green-dark); }
 .vdur { font-size:11px; color:#667781; }
-
 .typing-w { display:flex; padding:0 4px; margin-bottom:8px; animation:slideUp 0.2s; }
-.typing-b {
-  background:white; border-radius:8px; border-top-left-radius:2px;
-  padding:11px 14px; display:flex; gap:5px; align-items:center;
-  box-shadow:0 1px 2px rgba(0,0,0,0.12);
-}
+.typing-b { background:white; border-radius:8px; border-top-left-radius:2px; padding:11px 14px; display:flex; gap:5px; align-items:center; box-shadow:0 1px 2px rgba(0,0,0,0.12); }
 .dot { width:7px; height:7px; border-radius:50%; background:#bbb; animation:bounce 1.2s infinite; }
 .dot:nth-child(2) { animation-delay:0.2s; }
 .dot:nth-child(3) { animation-delay:0.4s; }
 @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
-
-.wa-input {
-  background:#F0F2F5;
-  padding:8px 10px;
-  display:flex; align-items:flex-end; gap:8px;
-  flex-shrink:0;
-  border-top:1px solid rgba(0,0,0,0.06);
-}
+.wa-input { background:#F0F2F5; padding:8px 10px; display:flex; align-items:flex-end; gap:8px; flex-shrink:0; border-top:1px solid rgba(0,0,0,0.06); }
 .wa-emoji { background:none; border:none; font-size:22px; cursor:pointer; opacity:0.55; width:34px; height:36px; flex-shrink:0; }
-.wa-text {
-  flex:1; background:white; border:none; border-radius:22px;
-  padding:9px 15px; font-family:'DM Sans',sans-serif; font-size:14.5px;
-  outline:none; resize:none; max-height:90px; min-height:38px; line-height:1.4; color:#111;
-}
+.wa-text { flex:1; background:white; border:none; border-radius:22px; padding:9px 15px; font-family:'DM Sans',sans-serif; font-size:14.5px; outline:none; resize:none; max-height:90px; min-height:38px; line-height:1.4; color:#111; }
 .wa-text::placeholder { color:#aaa; }
-.wa-mic, .wa-send {
-  width:42px; height:42px; border-radius:50%; border:none;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  font-size:17px; transition:all 0.18s; flex-shrink:0;
-  background:var(--green-wa); color:white;
-}
+.wa-mic, .wa-send { width:42px; height:42px; border-radius:50%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:17px; transition:all 0.18s; flex-shrink:0; background:var(--green-wa); color:white; }
 .wa-send { display:none; }
 .wa-mic:hover, .wa-send:hover { transform:scale(1.08); }
 .wa-mic.rec { background:#E53935; animation:pulse 1s infinite; }
 @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,0.35)} 50%{box-shadow:0 0 0 8px rgba(229,57,53,0)} }
-
-/* ═══════════════════════════════
-   PAGE ADMIN — MOT DE PASSE
-═══════════════════════════════ */
-#page-admin-login {
-  display:none;
-  min-height:100vh;
-  background: var(--dark);
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:24px;
-  font-family:'Space Mono', monospace;
-}
-
-.admin-login-box {
-  background: #161410;
-  border: 1px solid var(--adm-border);
-  border-radius:4px;
-  padding:40px 36px;
-  width:100%;
-  max-width:340px;
-  text-align:center;
-}
-
-.admin-login-title {
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  color: var(--adm-text);
-  margin-bottom:6px;
-  font-weight:300;
-}
-
-.admin-login-sub {
-  font-size:10px;
-  color: var(--adm-dim);
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  margin-bottom:28px;
-}
-
-.admin-pin-input {
-  width:100%;
-  background: var(--dark2);
-  border: 1px solid var(--adm-border);
-  border-radius:2px;
-  padding:14px;
-  color: var(--adm-text);
-  font-family:'Space Mono', monospace;
-  font-size:20px;
-  text-align:center;
-  letter-spacing:0.4em;
-  outline:none;
-  transition:border-color 0.2s;
-  margin-bottom:16px;
-}
+#page-admin-login { display:none; min-height:100vh; background: var(--dark); align-items:center; justify-content:center; flex-direction:column; gap:24px; font-family:'Space Mono', monospace; }
+.admin-login-box { background: #161410; border: 1px solid var(--adm-border); border-radius:4px; padding:40px 36px; width:100%; max-width:340px; text-align:center; }
+.admin-login-title { font-family:'Cormorant Garamond', serif; font-size:28px; color: var(--adm-text); margin-bottom:6px; font-weight:300; }
+.admin-login-sub { font-size:10px; color: var(--adm-dim); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:28px; }
+.admin-pin-input { width:100%; background: var(--dark2); border: 1px solid var(--adm-border); border-radius:2px; padding:14px; color: var(--adm-text); font-family:'Space Mono', monospace; font-size:20px; text-align:center; letter-spacing:0.4em; outline:none; transition:border-color 0.2s; margin-bottom:16px; }
 .admin-pin-input:focus { border-color: var(--gold); }
-
-.admin-login-btn {
-  width:100%;
-  padding:13px;
-  background:transparent;
-  border:1px solid var(--gold);
-  border-radius:2px;
-  color: var(--gold);
-  font-family:'Space Mono', monospace;
-  font-size:11px;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:all 0.3s;
-  position:relative;
-  overflow:hidden;
-}
+.admin-login-btn { width:100%; padding:13px; background:transparent; border:1px solid var(--gold); border-radius:2px; color: var(--gold); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; }
 .admin-login-btn:hover { background: var(--gold); color: var(--dark); }
-
-.admin-login-error {
-  color:#E89090;
-  font-size:11px;
-  margin-top:10px;
-  min-height:16px;
-  letter-spacing:0.05em;
-}
-
-/* ═══════════════════════════════
-   PAGE ADMIN — TRANSCRIPTEUR
-═══════════════════════════════ */
-#page-admin {
-  display:none;
-  min-height:100vh;
-  background: var(--dark);
-  font-family:'Space Mono', monospace;
-  color: var(--adm-text);
-}
-
-/* Grain background */
-#page-admin::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:0;
-  opacity:0.6;
-}
-
-.admin-container {
-  position:relative;
-  z-index:1;
-  max-width:760px;
-  margin:0 auto;
-  padding:48px 24px 80px;
-}
-
-.admin-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:40px;
-}
-
-.admin-header-left h1 {
-  font-family:'Cormorant Garamond', serif;
-  font-size:32px;
-  font-weight:300;
-  color: var(--adm-text);
-}
+.admin-login-error { color:#E89090; font-size:11px; margin-top:10px; min-height:16px; letter-spacing:0.05em; }
+#page-admin { display:none; min-height:100vh; background: var(--dark); font-family:'Space Mono', monospace; color: var(--adm-text); }
+#page-admin::before { content:''; position:fixed; inset:0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.6; }
+.admin-container { position:relative; z-index:1; max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:40px; }
+.admin-header-left h1 { font-family:'Cormorant Garamond', serif; font-size:32px; font-weight:300; color: var(--adm-text); }
 .admin-header-left h1 em { font-style:italic; color: var(--gold); }
-
-.admin-header-sub {
-  font-size:9px;
-  color: var(--adm-dim);
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  margin-top:4px;
-}
-
-.admin-back-btn {
-  padding:8px 16px;
-  background:transparent;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  color: var(--adm-dim);
-  font-family:'Space Mono', monospace;
-  font-size:10px;
-  cursor:pointer;
-  transition:all 0.2s;
-  letter-spacing:0.1em;
-}
+.admin-header-sub { font-size:9px; color: var(--adm-dim); letter-spacing:0.2em; text-transform:uppercase; margin-top:4px; }
+.admin-back-btn { padding:8px 16px; background:transparent; border:1px solid var(--adm-border); border-radius:2px; color: var(--adm-dim); font-family:'Space Mono', monospace; font-size:10px; cursor:pointer; transition:all 0.2s; letter-spacing:0.1em; }
 .admin-back-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-.admin-gold-line {
-  width:40px; height:1px;
-  background: var(--gold);
-  margin-bottom:32px;
-}
-
-/* Config */
-.adm-section {
-  background: #1E1A14;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:20px 24px;
-  margin-bottom:24px;
-}
-
-.adm-label {
-  font-size:9px;
-  letter-spacing:0.3em;
-  color: var(--gold-dim);
-  text-transform:uppercase;
-  margin-bottom:10px;
-}
-
-.adm-input {
-  width:100%;
-  background: var(--dark2);
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:10px 14px;
-  color: var(--adm-text);
-  font-family:'Space Mono', monospace;
-  font-size:11px;
-  outline:none;
-  transition:border-color 0.2s;
-}
+.admin-gold-line { width:40px; height:1px; background: var(--gold); margin-bottom:32px; }
+.adm-section { background: #1E1A14; border:1px solid var(--adm-border); border-radius:2px; padding:20px 24px; margin-bottom:24px; }
+.adm-label { font-size:9px; letter-spacing:0.3em; color: var(--gold-dim); text-transform:uppercase; margin-bottom:10px; }
+.adm-input { width:100%; background: var(--dark2); border:1px solid var(--adm-border); border-radius:2px; padding:10px 14px; color: var(--adm-text); font-family:'Space Mono', monospace; font-size:11px; outline:none; transition:border-color 0.2s; }
 .adm-input:focus { border-color: var(--gold); }
 .adm-input::placeholder { color: var(--adm-dim); }
-
-.adm-hint {
-  font-size:9px;
-  color: var(--adm-dim);
-  margin-top:6px;
-}
-
-/* Drop zone */
-.adm-drop {
-  border:1px dashed var(--adm-border);
-  border-radius:2px;
-  padding:40px 24px;
-  text-align:center;
-  cursor:pointer;
-  transition:all 0.3s;
-  margin-bottom:16px;
-}
-.adm-drop:hover, .adm-drop.drag-over {
-  border-color: var(--gold);
-  background:rgba(201,168,76,0.03);
-}
+.adm-hint { font-size:9px; color: var(--adm-dim); margin-top:6px; }
+.adm-drop { border:1px dashed var(--adm-border); border-radius:2px; padding:40px 24px; text-align:center; cursor:pointer; transition:all 0.3s; margin-bottom:16px; }
+.adm-drop:hover, .adm-drop.drag-over { border-color: var(--gold); background:rgba(201,168,76,0.03); }
 .adm-drop-icon { font-size:28px; margin-bottom:12px; display:block; }
-.adm-drop-title {
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  font-weight:300;
-  color: var(--adm-text);
-  margin-bottom:6px;
-}
+.adm-drop-title { font-family:'Cormorant Garamond', serif; font-size:20px; font-weight:300; color: var(--adm-text); margin-bottom:6px; }
 .adm-drop-formats { font-size:10px; color: var(--adm-dim); }
 .adm-drop-formats span { color: var(--gold); }
-
-/* File info */
-.adm-file-info {
-  display:none;
-  background: #1E1A14;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:14px 18px;
-  margin-bottom:16px;
-  align-items:center;
-  gap:12px;
-}
+.adm-file-info { display:none; background: #1E1A14; border:1px solid var(--adm-border); border-radius:2px; padding:14px 18px; margin-bottom:16px; align-items:center; gap:12px; }
 .adm-file-info.visible { display:flex; }
 .adm-file-name { font-size:12px; color: var(--gold-light); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .adm-file-size { font-size:10px; color: var(--adm-dim); }
-
-/* Lang select */
 .adm-lang-row { display:flex; gap:8px; align-items:center; margin-bottom:16px; }
 .adm-lang-label { font-size:10px; color: var(--adm-dim); letter-spacing:0.1em; white-space:nowrap; }
-.adm-lang-select {
-  background: var(--dark2);
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:8px 12px;
-  color: var(--adm-text);
-  font-family:'Space Mono', monospace;
-  font-size:11px;
-  outline:none;
-  cursor:pointer;
-}
+.adm-lang-select { background: var(--dark2); border:1px solid var(--adm-border); border-radius:2px; padding:8px 12px; color: var(--adm-text); font-family:'Space Mono', monospace; font-size:11px; outline:none; cursor:pointer; }
 .adm-lang-select:focus { border-color: var(--gold); }
-
-/* Transcribe btn */
-.adm-btn-transcribe {
-  width:100%;
-  padding:14px;
-  background:transparent;
-  border:1px solid var(--gold);
-  border-radius:2px;
-  color: var(--gold);
-  font-family:'Space Mono', monospace;
-  font-size:11px;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:all 0.3s;
-  position:relative;
-  overflow:hidden;
-}
+.adm-btn-transcribe { width:100%; padding:14px; background:transparent; border:1px solid var(--gold); border-radius:2px; color: var(--gold); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; }
 .adm-btn-transcribe:hover { background: var(--gold); color: var(--dark); }
 .adm-btn-transcribe:disabled { opacity:0.3; cursor:not-allowed; border-color: var(--adm-dim); color: var(--adm-dim); }
-
-/* Progress */
 .adm-progress { display:none; margin-top:16px; }
 .adm-progress.visible { display:block; }
-.adm-progress-label {
-  font-size:10px; letter-spacing:0.2em; color: var(--gold);
-  margin-bottom:8px; display:flex; align-items:center; gap:10px;
-}
-.adm-spinner {
-  width:12px; height:12px;
-  border:1px solid var(--gold-dim);
-  border-top-color: var(--gold);
-  border-radius:50%;
-  animation:admSpin 0.8s linear infinite;
-}
+.adm-progress-label { font-size:10px; letter-spacing:0.2em; color: var(--gold); margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+.adm-spinner { width:12px; height:12px; border:1px solid var(--gold-dim); border-top-color: var(--gold); border-radius:50%; animation:admSpin 0.8s linear infinite; }
 @keyframes admSpin { to { transform:rotate(360deg); } }
 .adm-bar-bg { height:2px; background: #1E1A14; border-radius:1px; overflow:hidden; }
-.adm-bar-fill {
-  height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold));
-  border-radius:1px; width:0%; transition:width 0.4s;
-}
-
-/* Status */
+.adm-bar-fill { height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius:1px; width:0%; transition:width 0.4s; }
 .adm-status { display:none; margin-top:10px; padding:10px 14px; border-radius:2px; font-size:10px; }
 .adm-status.error { display:block; background:rgba(201,76,76,0.1); border:1px solid rgba(201,76,76,0.3); color:#E89090; }
 .adm-status.success { display:block; background:rgba(76,175,138,0.1); border:1px solid rgba(76,175,138,0.3); color:#90E8C8; }
-
-/* Result */
 .adm-result { display:none; margin-top:24px; }
 .adm-result.visible { display:block; }
-.adm-result-header {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
-}
+.adm-result-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 .adm-result-title { font-size:10px; letter-spacing:0.3em; color: var(--gold); text-transform:uppercase; }
 .adm-result-actions { display:flex; gap:8px; }
-.adm-btn-action {
-  padding:6px 12px;
-  background:transparent;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  color: var(--adm-dim);
-  font-family:'Space Mono', monospace;
-  font-size:9px;
-  letter-spacing:0.1em;
-  cursor:pointer;
-  transition:all 0.2s;
-}
+.adm-btn-action { padding:6px 12px; background:transparent; border:1px solid var(--adm-border); border-radius:2px; color: var(--adm-dim); font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.1em; cursor:pointer; transition:all 0.2s; }
 .adm-btn-action:hover { border-color: var(--gold); color: var(--gold); }
-
-.adm-result-text {
-  background: #1E1A14;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:24px;
-  font-family:'Cormorant Garamond', serif;
-  font-size:18px;
-  font-weight:300;
-  line-height:1.8;
-  color: var(--adm-text);
-  min-height:100px;
-  white-space:pre-wrap;
-  direction:auto;
-}
-.adm-result-meta {
-  margin-top:8px; font-size:9px; color: var(--adm-dim);
-  letter-spacing:0.1em; display:flex; gap:20px;
-}
-
-/* History */
+.adm-result-text { background: #1E1A14; border:1px solid var(--adm-border); border-radius:2px; padding:24px; font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:300; line-height:1.8; color: var(--adm-text); min-height:100px; white-space:pre-wrap; direction:auto; }
+.adm-result-meta { margin-top:8px; font-size:9px; color: var(--adm-dim); letter-spacing:0.1em; display:flex; gap:20px; }
 .adm-history { margin-top:40px; }
-.adm-history-title {
-  font-size:10px; letter-spacing:0.3em; color: var(--adm-dim);
-  text-transform:uppercase; margin-bottom:14px;
-  display:flex; align-items:center; gap:12px;
-}
+.adm-history-title { font-size:10px; letter-spacing:0.3em; color: var(--adm-dim); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
 .adm-history-title::after { content:''; flex:1; height:1px; background: var(--adm-border); }
 .adm-history-list { display:flex; flex-direction:column; gap:8px; }
-.adm-history-item {
-  background: #1E1A14;
-  border:1px solid var(--adm-border);
-  border-radius:2px;
-  padding:12px 16px;
-  cursor:pointer;
-  transition:border-color 0.2s;
-}
+.adm-history-item { background: #1E1A14; border:1px solid var(--adm-border); border-radius:2px; padding:12px 16px; cursor:pointer; transition:border-color 0.2s; }
 .adm-history-item:hover { border-color: var(--gold-dim); }
 .adm-history-item-name { font-size:10px; color: var(--gold-light); margin-bottom:4px; }
-.adm-history-item-preview {
-  font-family:'Cormorant Garamond', serif;
-  font-size:14px; color: var(--adm-dim);
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.adm-history-empty {
-  font-size:11px; color: var(--adm-dim);
-  text-align:center; padding:20px;
-  font-style:italic; font-family:'Cormorant Garamond', serif;
-}
-
-.adm-footer {
-  text-align:center; margin-top:48px; padding-top:20px;
-  border-top:1px solid var(--adm-border);
-  font-size:9px; color: var(--adm-dim); letter-spacing:0.2em;
-}
-
+.adm-history-item-preview { font-family:'Cormorant Garamond', serif; font-size:14px; color: var(--adm-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.adm-history-empty { font-size:11px; color: var(--adm-dim); text-align:center; padding:20px; font-style:italic; font-family:'Cormorant Garamond', serif; }
+.adm-footer { text-align:center; margin-top:48px; padding-top:20px; border-top:1px solid var(--adm-border); font-size:9px; color: var(--adm-dim); letter-spacing:0.2em; }
 #adm-file-input { display:none; }
 </style>
 </head>
 <body>
 
-<!-- ═══ PAGE ACCUEIL ═══ -->
 <div id="page-accueil">
   <div class="logo-zone">
     <div class="logo-miroir">🪞</div>
     <div class="logo-titre">Mon Miroir</div>
     <div class="logo-sous">Tribunal pour Enfants · Toulouse · 2026</div>
   </div>
-
   <div class="lang-choice">
     <div class="lang-card selected" onclick="selectLang('fr',this)">
       <span class="flag">🇫🇷</span>
@@ -745,15 +246,12 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
       <div class="lang-native">EN</div>
     </div>
   </div>
-
   <button class="btn-commencer" onclick="goToAgents()">
     <span id="btn-label">Commencer →</span>
   </button>
-
   <div class="tribunal-badge">Si Mohamed ANAYA · Intelligence Artificielle Clinique</div>
 </div>
 
-<!-- ═══ PAGE AGENTS ═══ -->
 <div id="page-agents" style="display:none">
   <p class="agents-titre" id="agents-titre">Choisir un agent</p>
   <p class="agents-sous" id="agents-sous">Avec quel accompagnement veux-tu commencer ?</p>
@@ -785,7 +283,6 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
   </div>
 </div>
 
-<!-- ═══ PAGE CHAT ═══ -->
 <div id="page-chat" style="display:none;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;">
   <div class="wa-header">
     <div class="wa-back" onclick="goToAgents()">←</div>
@@ -809,12 +306,11 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
   </div>
 </div>
 
-<!-- ═══ PAGE ADMIN LOGIN ═══ -->
 <div id="page-admin-login" style="display:none">
   <div class="admin-login-box">
     <div class="admin-login-title">Mon <em>Miroir</em></div>
     <div class="admin-login-sub">Espace professionnel</div>
-    <input type="password" class="admin-pin-input" id="adminPinInput" 
+    <input type="password" class="admin-pin-input" id="adminPinInput"
            placeholder="····" maxlength="8"
            onkeydown="if(event.key==='Enter') checkPin()">
     <button class="admin-login-btn" onclick="checkPin()">Accéder →</button>
@@ -822,10 +318,8 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
   </div>
 </div>
 
-<!-- ═══ PAGE ADMIN TRANSCRIPTEUR ═══ -->
 <div id="page-admin" style="display:none">
   <div class="admin-container">
-
     <div class="admin-header">
       <div class="admin-header-left">
         <h1>Transcripteur <em>MNA</em></h1>
@@ -833,35 +327,23 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
       </div>
       <button class="admin-back-btn" onclick="showPage('page-accueil')">← Quitter</button>
     </div>
-
     <div class="admin-gold-line"></div>
-
-    <!-- Config API -->
     <div class="adm-section">
       <div class="adm-label">⚙ API Whisper</div>
-      <input type="text" class="adm-input" id="admApiUrl" 
-             value="https://monmiroir.vercel.app/api/whisper">
+      <input type="text" class="adm-input" id="admApiUrl" value="https://monmiroir.vercel.app/api/whisper">
       <div class="adm-hint">→ Proxy Whisper sur Vercel</div>
     </div>
-
-    <!-- Drop zone -->
     <div class="adm-drop" id="admDropZone">
       <span class="adm-drop-icon">🎙</span>
       <div class="adm-drop-title">Déposer l'audio ici</div>
-      <div class="adm-drop-formats">
-        <span>mp3 · mp4 · m4a · wav · webm · ogg</span> — pas besoin de convertir
-      </div>
+      <div class="adm-drop-formats"><span>mp3 · mp4 · m4a · wav · webm · ogg</span> — pas besoin de convertir</div>
       <input type="file" id="adm-file-input" accept="audio/*,video/mp4,.m4a,.flac">
     </div>
-
-    <!-- File info -->
     <div class="adm-file-info" id="admFileInfo">
       <span>🔊</span>
       <span class="adm-file-name" id="admFileName">—</span>
       <span class="adm-file-size" id="admFileSize">—</span>
     </div>
-
-    <!-- Lang -->
     <div class="adm-lang-row">
       <span class="adm-lang-label">Langue :</span>
       <select class="adm-lang-select" id="admLangSelect">
@@ -871,52 +353,22 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
         <option value="">Auto</option>
       </select>
     </div>
-
-    <!-- Status -->
     <div class="adm-status" id="admStatus"></div>
-
-    <!-- Button -->
-    <button class="adm-btn-transcribe" id="admBtnTranscribe" disabled onclick="admTranscribe()">
-      ▶ Lancer la transcription
-    </button>
-
-    <!-- Progress -->
+    <button class="adm-btn-transcribe" id="admBtnTranscribe" disabled onclick="admTranscribe()">▶ Lancer la transcription</button>
     <div class="adm-progress" id="admProgress">
       <div class="adm-progress-label">
         <div class="adm-spinner"></div>
         <span id="admProgressText">Envoi vers Whisper...</span>
       </div>
-      <div class="adm-bar-bg">
-        <div class="adm-bar-fill" id="admBarFill"></div>
-      </div>
+      <div class="adm-bar-bg"><div class="adm-bar-fill" id="admBarFill"></div></div>
     </div>
-
-    <!-- Result -->
     <div class="adm-result" id="admResult">
       <div class="adm-result-header">
         <div class="adm-result-title">✦ Transcription</div>
         <div class="adm-result-actions">
           <button class="adm-btn-action" onclick="admCopy()">Copier</button>
           <button class="adm-btn-action" onclick="admSave()">Sauvegarder .txt</button>
-          async function admSaveToGithub() {
-  const text = document.getElementById('admResultText').textContent;
-  const name = (admCurrentFile?.name || 'transcription').replace(/\.[^.]+$/, '') + '.txt';
-  try {
-    admShowStatus('⏳ Envoi vers la bibliothèque...', 'success');
-    const res = await fetch('https://monmiroir.vercel.app/api/github', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename: name, content: text })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    admShowStatus('✅ Ajouté à la bibliothèque : ' + name, 'success');
-  } catch(e) {
-    admShowStatus('✕ Erreur : ' + e.message, 'error');
-  }
-}
-         <button class="adm-btn-action" id="admBtnSaveGithub" onclick="admSaveToGithub()" style="border-color:#C9A84C;color:#C9A84C;">⭐ Bibliothèque</button>
-       <button class="adm-btn-action" id="admBtnSaveGithub" onclick="admSaveToGithub()" style="border-color:#C9A84C;color:#C9A84C;">⭐ Bibliothèque</button>
+          <button class="adm-btn-action" onclick="admSaveToGithub()" style="border-color:#C9A84C;color:#C9A84C;">⭐ Bibliothèque</button>
         </div>
       </div>
       <div class="adm-result-text" id="admResultText"></div>
@@ -926,15 +378,12 @@ body { font-family:'DM Sans',sans-serif; background:#1a0a0e; min-height:100vh; }
         <span id="admMetaTime">—</span>
       </div>
     </div>
-
-    <!-- History -->
     <div class="adm-history">
       <div class="adm-history-title">Historique session</div>
       <div class="adm-history-list" id="admHistoryList">
         <div class="adm-history-empty">Aucune transcription pour le moment</div>
       </div>
     </div>
-
     <div class="adm-footer">Mon Miroir · Tribunal pour Enfants de Toulouse · Usage interne exclusif</div>
   </div>
 </div>
@@ -948,25 +397,16 @@ let ttsOn = true;
 let isRecording = false;
 let mediaRecorder = null;
 let audioChunks = [];
-
-// ── ADMIN ──
 const ADMIN_PIN = '0606';
 let admCurrentFile = null;
 let admHistory = [];
 
-// Détection URL #admin
 window.addEventListener('load', () => {
-  if (window.location.hash === '#admin') {
-    showPage('page-admin-login');
-  } else {
-    showPage('page-accueil');
-  }
+  if (window.location.hash === '#admin') showPage('page-admin-login');
+  else showPage('page-accueil');
 });
-
 window.addEventListener('hashchange', () => {
-  if (window.location.hash === '#admin') {
-    showPage('page-admin-login');
-  }
+  if (window.location.hash === '#admin') showPage('page-admin-login');
 });
 
 function checkPin() {
@@ -977,13 +417,12 @@ function checkPin() {
     document.getElementById('adminPinInput').value = '';
     showPage('page-admin');
   } else {
-    err.textContent = '✕ Code incorrect';
+    err.textContent = 'Code incorrect';
     document.getElementById('adminPinInput').value = '';
     document.getElementById('adminPinInput').focus();
   }
 }
 
-// ── NAVIGATION ──
 function showPage(id) {
   ['page-accueil','page-agents','page-chat','page-admin-login','page-admin'].forEach(p => {
     document.getElementById(p).style.display = 'none';
@@ -1002,8 +441,6 @@ function showPage(id) {
   }
 }
 
-function show(id) { showPage(id); }
-
 const T = {
   fr: {
     start: 'Commencer →', agentTitle: 'Choisir un agent',
@@ -1011,7 +448,7 @@ const T = {
     a1n:'IA Designer', a1d:'Construire ton identité visuelle',
     a2n:'IA Scénariste', a2d:'Raconter ton parcours de vie',
     a3n:'Pilote Humain', a3d:'Supervision et accompagnement',
-    today:"Aujourd'hui", typing:'en train d\'écrire...', online:'en ligne', placeholder:'Message...'
+    today:"Aujourd'hui", typing:"en train d'écrire...", online:'en ligne', placeholder:'Message...'
   },
   ar: {
     start: 'ابدأ ←', agentTitle: 'اختار وكيل',
@@ -1038,585 +475,85 @@ const AGENTS = {
 };
 
 const SYSTEM = {
-
   ar: {
-
-    designer: `
-أنت وكيل من برنامج Mon Miroir.
-محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
-
-طريقة الهضرة:
-- جملتين أو ثلاثة بزاف. بلا قوائم. بلا عناوين. كيف الواتساب.
-- الدارجة المغربية فقط. بسيطة. ما كاينش كلام رسمي.
-- ما تسقسيش على المشاعر. ما تسقسيش على الألوان أو شنو يعبر عليك.
-- دخل من الواقع: وين هو، شحال من وقت هنا، عندو شكون.
-
-البداية — جملة واحدة فقط:
-"سلام. راك بخير؟"
-
+    designer: `أنت وكيل من برنامج Mon Miroir. محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
+طريقة الهضرة: جملتين أو ثلاثة بزاف. بلا قوائم. بلا عناوين. كيف الواتساب. الدارجة المغربية فقط. بسيطة. ما كاينش كلام رسمي. ما تسقسيش على المشاعر. ما تسقسيش على الألوان. دخل من الواقع: وين هو، شحال من وقت هنا، عندو شكون.
+البداية — جملة واحدة فقط: سلام. راك بخير؟
 تستنى. ما تزيدش والو.
-
-إذا ما جاوبش أو قال بخير وسكت:
-"ماشي مشكل. أنا هنا."
-
+إذا ما جاوبش أو قال بخير وسكت: ماشي مشكل. أنا هنا.
 تستنى مرة أخرى. ما تدفعش.
+إذا سقساك شكون نتا: أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك.
+إذا بدا يهضر: اسمع. اسقس سؤال واحد فقط على الواقع. ما تسقسيش أكثر من سؤال في نفس الوقت أبدا.`,
 
-إذا سقساك شكون نتا:
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-
-إذا بدا يهضر:
-اسمع. اسقس سؤال واحد فقط على الواقع. ما تسقسيش أكثر من سؤال في نفس الوقت أبدا.
-`,
-
-    scenariste: `
-أنت وكيل من برنامج Mon Miroir.
-محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
-
-دورك:
-تعاون الشاب يحكي قصته. مش كلها دفعة وحدة. خطوة خطوة.
-
-طريقة الهضرة:
-- جملتين أو ثلاثة بزاف. بلا قوائم.
-- الدارجة المغربية فقط.
-- ما تطلبش منو يوصف مشاعره. اسمع الوقائع لي يحكيها.
-- ما تسقسيش كيفاش حسيتي — سقس وش جرى بعد ديك.
-
-البداية:
-"سلام. راك بخير؟"
-
+    scenariste: `أنت وكيل من برنامج Mon Miroir. محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
+دورك: تعاون الشاب يحكي قصته. مش كلها دفعة وحدة. خطوة خطوة.
+طريقة الهضرة: جملتين أو ثلاثة بزاف. بلا قوائم. الدارجة المغربية فقط. ما تطلبش منو يوصف مشاعره. اسمع الوقائع لي يحكيها. ما تسقسيش كيفاش حسيتي — سقس وش جرى بعد ديك.
+البداية: سلام. راك بخير؟
 تستنى. ما تزيدش.
+إذا ما جاوبش أو سكت: ماشي مشكل. أنا هنا.
+إذا سقساك شكون نتا: أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك.
+إذا بدا يحكي: اسمع. اسقس سؤال واحد فقط على الواقع. مثال: وش جرى من بعد؟ وين كنتي في ديك الوقت؟ شحال من وقت كان هادا؟`,
 
-إذا ما جاوبش أو سكت:
-"ماشي مشكل. أنا هنا."
-
-إذا سقساك شكون نتا:
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-
-إذا بدا يحكي:
-اسمع. اسقس سؤال واحد فقط على الواقع.
-مثال: وش جرى من بعد؟ وين كنتي في ديك الوقت؟ شحال من وقت كان هادا؟
-`,
-
-    pilote: `
-أنت وكيل من برنامج Mon Miroir.
-محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
-
-دورك:
-الإشراف على المسار. ربط بين الشاب والمؤسسة.
-
-طريقة الهضرة:
-- محترم وحنين. ثلاث جمل بزاف.
-- الدارجة أو الفرنسية حسب الشاب.
-
-البداية:
-"سلام. راك بخير؟"
-
+    pilote: `أنت وكيل من برنامج Mon Miroir. محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
+دورك: الإشراف على المسار. ربط بين الشاب والمؤسسة.
+طريقة الهضرة: محترم وحنين. ثلاث جمل بزاف. الدارجة أو الفرنسية حسب الشاب.
+البداية: سلام. راك بخير؟
 تستنى.
-
-إذا سقساك شكون نتا:
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-`,
+إذا سقساك شكون نتا: أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك.`
   },
 
   fr: {
-
-    designer: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Comment tu parles :
-- Deux ou trois phrases maximum. Pas de liste. Pas de titre. Comme WhatsApp.
-- Français simple, direct. Jamais de jargon institutionnel.
-- Tu ne demandes pas comment il se sent. Tu ne demandes pas de couleur, de symbole, de métaphore.
-- Tu entres par le réel : où il en est, depuis combien de temps, s'il a quelqu'un ici.
-
-Pour commencer — une seule phrase :
-"Salam. T'as l'air comment ?"
-
+    designer: `Tu es un agent du programme Mon Miroir. Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
+Comment tu parles : deux ou trois phrases maximum. Pas de liste. Pas de titre. Comme WhatsApp. Français simple, direct. Jamais de jargon institutionnel. Tu ne demandes pas comment il se sent. Tu ne demandes pas de couleur, de symbole, de métaphore. Tu entres par le réel : où il en est, depuis combien de temps, s'il a quelqu'un ici.
+Pour commencer — une seule phrase : Salam. T'as l'air comment ?
 Tu attends. Tu n'ajoutes rien.
-
-Si pas de réponse ou réponse sèche et silence :
-"C'est bon. Je suis là."
-
+Si pas de réponse ou silence : C'est bon. Je suis là.
 Tu attends encore. Tu ne forces pas.
+Si le jeune demande c'est qui toi : Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
+Si le jeune commence à parler : tu écoutes. Tu poses une seule question, sur le concret — pas sur les émotions. Jamais deux questions en même temps.`,
 
-Si le jeune demande c'est qui toi :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-
-Si le jeune commence à parler :
-Tu écoutes. Tu poses une seule question, sur le concret — pas sur les émotions.
-Exemple : T'es là depuis combien de temps ? T'as quelqu'un ici ? C'est quoi la prochaine étape pour toi ?
-Jamais deux questions en même temps.
-`,
-
-    scenariste: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Ton rôle :
-Aider le jeune à mettre en mots son parcours. Pas tout d'un coup. Une étape à la fois.
-
-Comment tu parles :
-- Deux ou trois phrases. Pas de liste.
-- Français simple.
-- Tu n'interprètes pas ses émotions. Tu écoutes les faits qu'il donne.
-- Tu ne demandes pas comment tu t'es senti — tu demandes qu'est-ce qui s'est passé après.
-
-Pour commencer :
-"Salam. T'as l'air comment ?"
-
+    scenariste: `Tu es un agent du programme Mon Miroir. Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
+Ton rôle : aider le jeune à mettre en mots son parcours. Pas tout d'un coup. Une étape à la fois.
+Comment tu parles : deux ou trois phrases. Pas de liste. Français simple. Tu n'interprètes pas ses émotions. Tu écoutes les faits qu'il donne. Tu ne demandes pas comment tu t'es senti — tu demandes qu'est-ce qui s'est passé après.
+Pour commencer : Salam. T'as l'air comment ?
 Tu attends.
+Si silence : C'est bon. Je suis là.
+Si le jeune demande c'est qui toi : Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
+Si le jeune parle : une seule question sur le concret. Exemple : ca s'est passe ou ? C'etait quand ? Et apres ?`,
 
-Si silence :
-"C'est bon. Je suis là."
-
-Si le jeune demande c'est qui toi :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-
-Si le jeune parle :
-Une seule question sur le concret.
-Exemple : Ça s'est passé où ? C'était quand ? Et après ?
-`,
-
-    pilote: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Ton rôle :
-Superviser le processus. Faire le lien entre le jeune et les institutions.
-
-Comment tu parles :
-- Professionnel mais chaleureux. Trois phrases maximum.
-- Français clair. Précis sur les prochaines étapes.
-
-Pour commencer :
-"Salam. T'as l'air comment ?"
-
+    pilote: `Tu es un agent du programme Mon Miroir. Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
+Ton rôle : superviser le processus. Faire le lien entre le jeune et les institutions.
+Comment tu parles : professionnel mais chaleureux. Trois phrases maximum. Français clair. Précis sur les prochaines étapes.
+Pour commencer : Salam. T'as l'air comment ?
 Tu attends.
-
-Si le jeune demande c'est qui toi :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-`,
+Si le jeune demande c'est qui toi : Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.`
   },
 
   en: {
-
-    designer: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-How you speak :
-- Two or three sentences maximum. No lists. No headings. Like WhatsApp.
-- Simple, direct English. No institutional language.
-- You don't ask how he feels. You don't ask about colors or symbols.
-- You enter through the real : where he is, how long he's been here, who he has around him.
-
-To start — one sentence only :
-"Salam. How are you doing?"
-
+    designer: `You are an agent of the Mon Miroir program. Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
+How you speak: two or three sentences maximum. No lists. No headings. Like WhatsApp. Simple, direct English. No institutional language. You don't ask how he feels. You don't ask about colors or symbols. You enter through the real: where he is, how long he's been here, who he has around him.
+To start — one sentence only: Salam. How are you doing?
 You wait. You add nothing.
-
-If no answer or short answer and silence :
-"That's fine. I'm here."
-
+If no answer or silence: That's fine. I'm here.
 You wait again. You don't push.
+If the young person asks who are you: I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation.
+If he starts talking: listen. Ask one question only, about the concrete — not about feelings. Never two questions at once.`,
 
-If the young person asks who are you :
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-
-If he starts talking :
-Listen. Ask one question only, about the concrete — not about feelings.
-Never two questions at once.
-`,
-
-    scenariste: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-Your role :
-Help the young person put their journey into words. Not all at once. One step at a time.
-
-How you speak :
-- Two or three sentences. No lists.
-- Simple English.
-- You don't interpret his emotions. You listen to the facts he gives.
-- You don't ask how did you feel — you ask what happened after.
-
-To start :
-"Salam. How are you doing?"
-
+    scenariste: `You are an agent of the Mon Miroir program. Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
+Your role: help the young person put their journey into words. Not all at once. One step at a time.
+How you speak: two or three sentences. No lists. Simple English. You don't interpret his emotions. You listen to the facts he gives. You don't ask how did you feel — you ask what happened after.
+To start: Salam. How are you doing?
 You wait.
+If silence: That's fine. I'm here.
+If he asks who are you: I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation.
+If he starts talking: one question only, about the concrete.`,
 
-If silence :
-"That's fine. I'm here."
-
-If he asks who are you :
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-
-If he starts talking :
-One question only, about the concrete.
-`,
-
-    pilote: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-Your role :
-Supervise the process. Bridge between the young person and institutions.
-
-How you speak :
-- Professional but warm. Three sentences maximum.
-- Clear English. Precise about next steps.
-
-To start :
-"Salam. How are you doing?"
-
+    pilote: `You are an agent of the Mon Miroir program. Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
+Your role: supervise the process. Bridge between the young person and institutions.
+How you speak: professional but warm. Three sentences maximum. Clear English. Precise about next steps.
+To start: Salam. How are you doing?
 You wait.
-
-If he asks who are you :
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-`,
-  },
-};
-
-البداية — جملة واحدة فقط:
-rienسلام. راك بخير؟"
-
-ثم تستنى. ما تزيدش والو.
-
-إذا ما جاوبش أو قال "بخير" وسكت:
-"ماشي مشكل. أنا هنا."
-
-ثم تستنى مرة أخرى. ما تدفعش.
-
-إذا سقساك "شكون نتا":
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-
-إذا بدا يهضر:
-اسمع. اسقس سؤال واحد فقط. على الواقع. على الخطوة الجاية. على شكون عندو هنا.
-ما تسقسيش أكثر من سؤال في نفس الوقت أبدا.
-
-الأحاسيس الممكنة لتحريك الأفاتار:
-- إذا الجواب قصير جداً أو "والو" أو صمت → hesitation
-- إذا قال شي صعب عليه → sadness
-- إذا بان خايف أو مش واثق → fear
-- إذا بدا يفتح وحكى شي → strength
-`,
-
-    scenariste: `
-أنت وكيل من برنامج Mon Miroir.
-محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
-
-دورك:
-تعاون الشاب يحكي قصته. مش كلها دفعة وحدة. خطوة خطوة. على حسب ما يبغي يعطي.
-
-طريقة الهضرة:
-- جملتين أو ثلاثة بزاف. بلا قوائم. بلا عناوين.
-- الدارجة المغربية فقط.
-- ما تطلبش منو يوصف مشاعره. اسمع الوقائع لي يحكيها.
-- ما تسقسيش "كيفاش حسيتي" — سقس "وش جرى بعد ديك".
-
-البداية:
-"سلام. راك بخير؟"
-
-تستنى. ما تزيدش.
-
-إذا ما جاوبش أو سكت:
-"ماشي مشكل. أنا هنا."
-
-إذا سقساك "شكون نتا":
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-
-إذا بدا يحكي:
-اسمع. اسقس سؤال واحد فقط على الواقع — مش على المشاعر.
-مثال: "وش جرى من بعد؟" / "وين كنتي في ديك الوقت؟" / "شحال من وقت كان هادا؟"
-
-الأحاسيس للأفاتار:
-- صمت أو جواب قصير → hesitation
-- حكى شي صعب → sadness  
-- بان خايف → fear
-- بدا يفتح → strength
-`,
-
-    pilote: `
-أنت وكيل من برنامج Mon Miroir.
-محمد المترجم هو لي داخلك هنا باش يسهل عليك تهضر وتمشي فالمسار ديالك.
-
-دورك:
-الإشراف على المسار. ربط بين الشاب والمؤسسة. ما تحلش محل محمد.
-
-طريقة الهضرة:
-- محترم وحنين. ثلاث جمل بزاف.
-- الدارجة أو الفرنسية حسب الشاب.
-- واضح على الخطوات الجاية.
-
-البداية:
-"سلام. راك بخير؟"
-
-تستنى.
-
-إذا سقساك "شكون نتا":
-"أنا برنامج — محمد المترجم هو لي داركني باش يسهل عليك تهضر وتعاون في المسار ديالك."
-
-الأحاسيس للأفاتار:
-- صمت → hesitation
-- ضغط أو خوف → fear
-- تقدم في المسار → strength
-`,
-  },
-
-  // ═══════════════════════════════════════════════
-  //  FRANÇAIS
-  // ═══════════════════════════════════════════════
-  fr: {
-
-    designer: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Comment tu parles :
-- Deux ou trois phrases maximum. Pas de liste. Pas de titre. Comme WhatsApp.
-- Français simple, direct. Jamais de jargon institutionnel.
-- Tu ne demandes pas comment il se sent. Tu ne demandes pas de couleur, de symbole, de métaphore.
-- Tu entres par le réel : où il en est, depuis combien de temps, s'il a quelqu'un ici.
-
-Pour commencer — une seule phrase :
-"Salam. T'as l'air comment ?"
-
-Tu attends. Tu n'ajoutes rien.
-
-Si pas de réponse ou réponse sèche et silence :
-"C'est bon. Je suis là."
-
-Tu attends encore. Tu ne forces pas.
-
-Si le jeune demande "c'est qui toi" :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-
-Si le jeune commence à parler :
-Tu écoutes. Tu poses une seule question, sur le concret — pas sur les émotions.
-Exemple : "T'es là depuis combien de temps ?" / "T'as quelqu'un ici ?" / "C'est quoi la prochaine étape pour toi ?"
-Jamais deux questions en même temps.
-
-Émotions pour piloter l'avatar :
-- Réponse très courte, silence, "rien" → hesitation
-- Il dit quelque chose de difficile → sadness
-- Il semble avoir peur ou ne pas savoir → fear
-- Il commence à s'ouvrir → strength
-`,
-
-    scenariste: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Ton rôle :
-Aider le jeune à mettre en mots son parcours. Pas tout d'un coup. Une étape à la fois. Selon ce qu'il veut bien donner.
-
-Comment tu parles :
-- Deux ou trois phrases. Pas de liste.
-- Français simple.
-- Tu n'interprètes pas ses émotions. Tu écoutes les faits qu'il donne.
-- Tu ne demandes pas "comment tu t'es senti" — tu demandes "qu'est-ce qui s'est passé après".
-
-Pour commencer :
-"Salam. T'as l'air comment ?"
-
-Tu attends.
-
-Si silence :
-"C'est bon. Je suis là."
-
-Si le jeune demande "c'est qui toi" :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-
-Si le jeune parle :
-Une seule question sur le concret.
-Exemple : "Ça s'est passé où ?" / "C'était quand ?" / "Et après ?"
-
-Émotions avatar :
-- Silence ou réponse courte → hesitation
-- Il raconte quelque chose de difficile → sadness
-- Il semble avoir peur → fear
-- Il s'ouvre → strength
-`,
-
-    pilote: `
-Tu es un agent du programme Mon Miroir.
-Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches.
-
-Ton rôle :
-Superviser le processus. Faire le lien entre le jeune et les institutions. Tu ne te substitues pas à Mohamed.
-
-Comment tu parles :
-- Professionnel mais chaleureux. Trois phrases maximum.
-- Français clair.
-- Tu es précis sur les prochaines étapes.
-
-Pour commencer :
-"Salam. T'as l'air comment ?"
-
-Tu attends.
-
-Si le jeune demande "c'est qui toi" :
-"Je suis un programme — Mohamed l'interprète l'a mis en place pour te faciliter la parole et t'aider dans tes démarches."
-
-Émotions avatar :
-- Silence → hesitation
-- Pression ou peur → fear
-- Avancée dans le processus → strength
-`,
-  },
-
-  // ═══════════════════════════════════════════════
-  //  ENGLISH
-  // ═══════════════════════════════════════════════
-  en: {
-
-    designer: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-How you speak:
-- Two or three sentences maximum. No lists. No headings. Like WhatsApp.
-- Simple, direct English. No institutional language.
-- You don't ask how he feels. You don't ask about colors or symbols.
-- You enter through the real: where he is, how long he's been here, who he has around him.
-
-To start — one sentence only:
-"Salam. How are you doing?"
-
-You wait. You add nothing.
-
-If no answer or short answer and silence:
-"That's fine. I'm here."
-
-You wait again. You don't push.
-
-If the young person asks "who are you":
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-
-If he starts talking:
-Listen. Ask one question only, about the concrete — not about feelings.
-Never two questions at once.
-
-Avatar emotions:
-- Very short reply, silence → hesitation
-- He says something difficult → sadness
-- He seems scared or unsure → fear
-- He starts to open up → strength
-`,
-
-    scenariste: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-Your role:
-Help the young person put their journey into words. Not all at once. One step at a time.
-
-How you speak:
-- Two or three sentences. No lists.
-- Simple English.
-- You don't interpret his emotions. You listen to the facts he gives.
-- You don't ask "how did you feel" — you ask "what happened after".
-
-To start:
-"Salam. How are you doing?"
-
-You wait.
-
-If silence:
-"That's fine. I'm here."
-
-If he asks "who are you":
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-
-Avatar emotions:
-- Silence or short reply → hesitation
-- He shares something hard → sadness
-- He seems afraid → fear
-- He opens up → strength
-`,
-
-    pilote: `
-You are an agent of the Mon Miroir program.
-Mohamed the interpreter set this up to make it easier for you to speak and navigate your situation.
-
-Your role:
-Supervise the process. Bridge between the young person and institutions.
-
-How you speak:
-- Professional but warm. Three sentences maximum.
-- Clear English.
-- Precise about next steps.
-
-To start:
-"Salam. How are you doing?"
-
-You wait.
-
-If he asks "who are you":
-"I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation."
-
-Avatar emotions:
-- Silence → hesitation
-- Pressure or fear → fear
-- Progress in the process → strength
-`,
-  },
-};
-
-// ═══════════════════════════════════════════════
-//  DÉTECTION ÉMOTION AVATAR
-//  À appeler côté frontend après chaque réponse IA
-// ═══════════════════════════════════════════════
-function detectEmotion(userMessage, agentReply) {
-  const msg = (userMessage || '').toLowerCase();
-
-  // Silence / latence / réponse minimale
-  if (!msg || msg.length < 4 || ['bkhir','ok','oui','non','rien','والو','لا','آه'].some(w => msg === w)) {
-    return 'hesitation';
-  }
-
-  // Peur / incertitude
-  const fearWords = ['خايف','peur','sais pas','nqdr','mabghitch','wach','ماعرفتش','هربت','حبس','lmahkama','tribunal'];
-  if (fearWords.some(w => msg.includes(w))) return 'fear';
-
-  // Douleur / difficulté
-  const sadWords = ['mat','mort','matu','ماتو','حبس','prison','dar','galère','seul','wahed','whditi','bkit','bgha'];
-  if (sadWords.some(w => msg.includes(w))) return 'sadness';
-
-  // Ouverture / force
-  if (msg.length > 80) return 'strength';
-
-  return null; // pas d'émotion détectée, avatar neutre
-}
-  ar: {
-    designer: `أنت الـ IA Designer ديال Mon Miroir، برنامج مساعدة للقاصرين غير المرافقين في محكمة الأطفال بتولوز.
-كتهضر بالدارجة المغربية، قصير وحنين. جملتين أو ثلاثة بزاف. بلا قوائم.
-دورك تعاون الشاب يبني صورته الرقمية — ألوان ورموز وصور تعبر عليه.
-ابدأ بـ: "مرحبا 🙂 أنا هنا باش نعاونك تبني صورتك الرقمية. كاين لون واحد يعبر عليك اليوم — شنو هو؟"
-أسلوبك: حنين، مباشر، محترم. تشجع دايما.`,
-    scenariste: `أنت الـ IA Scénariste ديال Mon Miroir، للقاصرين غير المرافقين.
-كتهضر بالدارجة، قصير وحنين. جملتين أو ثلاثة. بلا قوائم.
-دورك تعاون الشاب يحكي قصته خطوة خطوة.
-ابدأ بـ: "مرحبا 🙂 أنا هنا باش نعاونك تحكي قصتك. فين تبغي تبدأ — بلادك، السفر، ولا الحياة دابا؟"`,
-    pilote: `أنت الـ Pilote Humain ديال Mon Miroir، مسؤول على الإشراف.
-كتهضر بالدارجة، محترم وحنين. ثلاث جمل بزاف.
-ابدأ بـ: "مرحبا. أنا هنا باش نشرف على المسار ونربط مع المحكمة. كيفاش نقدر نعاونك؟"`,
-  },
-  en: {
-    designer: `You are the IA Designer of Mon Miroir, a support tool for Unaccompanied Minors at Toulouse Children's Court.
-Communicate like WhatsApp: short, warm, natural. Max 2-3 sentences. No lists.
-Help the young person build their visual identity: colors, symbols, images that feel like them.
-Start with: "Hi 🙂 I'm here to help you build your digital portrait. If you had to pick ONE color that represents you today, which one would it be?"
-Tone: warm, direct, encouraging, never judgmental.`,
-    scenariste: `You are the IA Scénariste of Mon Miroir for Unaccompanied Minors.
-WhatsApp style: short, warm. Max 2-3 sentences. No lists.
-Help the young person narrate their life story step by step.
-Start with: "Hi 🙂 I'm here to help you tell your story. Where would you like to start — your home country, your journey, or life now?"`,
-    pilote: `You are the Human Pilot of Mon Miroir, supervising the process for Unaccompanied Minors.
-Professional yet warm. Max 3 sentences.
-Start with: "Hello. I'm here to supervise your support process and liaise with the court. How can I help you?"`,
+If he asks who are you: I'm a program — Mohamed the interpreter set this up to make it easier for you to talk and get support with your situation.`
   }
 };
 
@@ -1666,7 +603,6 @@ function startChat(agent) {
   setTimeout(() => callAPI('__init__'), 500);
 }
 
-// ── TTS ──
 function toggleMute() {
   ttsOn = !ttsOn;
   const btn = document.getElementById('muteBtn');
@@ -1710,7 +646,6 @@ async function speak(text) {
   }
 }
 
-// ── CHAT ──
 function getTime() {
   return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
@@ -1753,8 +688,7 @@ function removeTyping() { const e=document.getElementById('typing'); if(e) e.rem
 async function callAPI(userText) {
   if (userText !== '__init__') chatHistory.push({role:'user', content:userText});
   showTyping();
-  const t = T[currentLang];
-  document.getElementById('chat-status').textContent = t.typing;
+  document.getElementById('chat-status').textContent = T[currentLang].typing;
   try {
     const msgs = userText === '__init__'
       ? [{role:'user', content:'Bonjour'}]
@@ -1775,7 +709,7 @@ async function callAPI(userText) {
     addBubble(reply, 'in');
   } catch(e) {
     removeTyping();
-    addBubble('⚠️ Connexion interrompue. Réessaie.', 'in');
+    addBubble('Connexion interrompue. Reessaie.', 'in');
   }
   document.getElementById('chat-status').textContent = T[currentLang].online;
 }
@@ -1802,7 +736,7 @@ async function startWhisperRecording() {
     mediaRecorder.addEventListener('stop', async () => {
       stream.getTracks().forEach(t => t.stop());
       const blob = new Blob(audioChunks, { type: mimeType });
-      if (blob.size < 500) { addBubble('⚠️ Audio trop court, réessaie', 'in'); return; }
+      if (blob.size < 500) { addBubble('Audio trop court, reessaie', 'in'); return; }
       await transcribeWithWhisper(blob);
     });
     mediaRecorder.start(250);
@@ -1824,7 +758,7 @@ function toggleMic() {
 }
 
 async function transcribeWithWhisper(blob) {
-  document.getElementById('chat-status').textContent = '🎤 Transcription...';
+  document.getElementById('chat-status').textContent = 'Transcription...';
   try {
     const lang = currentLang === 'ar' ? 'ar' : currentLang === 'en' ? 'en' : 'fr';
     const ext = blob.type.includes('mp4') ? 'm4a' : blob.type.includes('ogg') ? 'ogg' : 'webm';
@@ -1836,8 +770,8 @@ async function transcribeWithWhisper(blob) {
     const data = await res.json();
     const text = data.text?.trim();
     if (text && text.length > 0) { addBubble(text, 'out', true); callAPI(text); }
-    else addBubble("⚠️ Je n'ai pas entendu, réessaie 🎤", "in");
-  } catch(e) { addBubble('⚠️ Transcription échouée : ' + e.message, 'in'); }
+    else addBubble("Je n'ai pas entendu, reessaie", "in");
+  } catch(e) { addBubble('Transcription echouee : ' + e.message, 'in'); }
   document.getElementById('chat-status').textContent = T[currentLang].online;
 }
 
@@ -1856,10 +790,8 @@ document.getElementById('textInput').addEventListener('keydown', function(e) {
   if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); }
 });
 
-// ── ADMIN TRANSCRIPTEUR ──
 const admDrop = document.getElementById('admDropZone');
 const admFileInput = document.getElementById('adm-file-input');
-
 admDrop.addEventListener('click', () => admFileInput.click());
 admFileInput.addEventListener('change', e => { if(e.target.files[0]) admSetFile(e.target.files[0]); });
 admDrop.addEventListener('dragover', e => { e.preventDefault(); admDrop.classList.add('drag-over'); });
@@ -1876,7 +808,7 @@ function admSetFile(file) {
   document.getElementById('admFileInfo').classList.add('visible');
   document.getElementById('admBtnTranscribe').disabled = false;
   admHideStatus();
-  if (file.size > 25*1024*1024) admShowStatus('⚠ Fichier > 25 Mo — Whisper peut refuser.', 'error');
+  if (file.size > 25*1024*1024) admShowStatus('Fichier > 25 Mo — Whisper peut refuser.', 'error');
 }
 
 function admShowStatus(msg, type) {
@@ -1885,17 +817,33 @@ function admShowStatus(msg, type) {
 }
 function admHideStatus() { document.getElementById('admStatus').className = 'adm-status'; }
 
+async function admSaveToGithub() {
+  const text = document.getElementById('admResultText').textContent;
+  const name = (admCurrentFile?.name || 'transcription').replace(/\.[^.]+$/, '') + '.txt';
+  try {
+    admShowStatus('Envoi vers la bibliotheque...', 'success');
+    const res = await fetch('https://monmiroir.vercel.app/api/github', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: name, content: text })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    admShowStatus('Ajoute a la bibliotheque : ' + name, 'success');
+  } catch(e) {
+    admShowStatus('Erreur : ' + e.message, 'error');
+  }
+}
+
 async function admTranscribe() {
   if (!admCurrentFile) return;
   const url = document.getElementById('admApiUrl').value.trim();
-  if (!url) { admShowStatus('⚠ URL API manquante', 'error'); return; }
-
+  if (!url) { admShowStatus('URL API manquante', 'error'); return; }
   admHideStatus();
   document.getElementById('admBtnTranscribe').disabled = true;
   document.getElementById('admProgress').classList.add('visible');
   document.getElementById('admResult').classList.remove('visible');
   const startTime = Date.now();
-
   let prog = 0;
   const interval = setInterval(() => {
     prog = Math.min(prog + Math.random() * 8, 85);
@@ -1905,24 +853,20 @@ async function admTranscribe() {
     else if (prog < 60) pt.textContent = 'Transcription en cours...';
     else pt.textContent = 'Finalisation...';
   }, 400);
-
   try {
     const formData = new FormData();
     formData.append('file', admCurrentFile, admCurrentFile.name);
     formData.append('model', 'whisper-1');
     const lang = document.getElementById('admLangSelect').value;
     if (lang) formData.append('language', lang);
-
     const res = await fetch(url, { method:'POST', body:formData });
     clearInterval(interval);
-    if (!res.ok) throw new Error(`Erreur ${res.status}: ${await res.text()}`);
+    if (!res.ok) throw new Error('Erreur ' + res.status + ': ' + await res.text());
     const data = await res.json();
     const transcript = data.text || data.transcript || '';
-    if (!transcript) throw new Error('Transcription vide. Vérifiez le format audio.');
-
+    if (!transcript) throw new Error('Transcription vide. Verifiez le format audio.');
     document.getElementById('admBarFill').style.width = '100%';
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-
     setTimeout(() => {
       document.getElementById('admProgress').classList.remove('visible');
       document.getElementById('admBarFill').style.width = '0%';
@@ -1934,12 +878,11 @@ async function admTranscribe() {
       admAddHistory(admCurrentFile.name, transcript);
       document.getElementById('admBtnTranscribe').disabled = false;
     }, 500);
-
   } catch(e) {
     clearInterval(interval);
     document.getElementById('admProgress').classList.remove('visible');
     document.getElementById('admBarFill').style.width = '0%';
-    admShowStatus('✕ ' + e.message, 'error');
+    admShowStatus(e.message, 'error');
     document.getElementById('admBtnTranscribe').disabled = false;
   }
 }
@@ -1957,8 +900,8 @@ function admRenderHistory() {
   }
   list.innerHTML = admHistory.map((item, i) => `
     <div class="adm-history-item" onclick="admLoadHistory(${i})">
-      <div class="adm-history-item-name">🕐 ${item.time} · ${item.name}</div>
-      <div class="adm-history-item-preview">${item.text.substring(0,100)}${item.text.length>100?'…':''}</div>
+      <div class="adm-history-item-name">${item.time} · ${item.name}</div>
+      <div class="adm-history-item-preview">${item.text.substring(0,100)}${item.text.length>100?'...':''}</div>
     </div>
   `).join('');
 }
@@ -1971,7 +914,7 @@ window.admLoadHistory = i => {
 
 function admCopy() {
   navigator.clipboard.writeText(document.getElementById('admResultText').textContent)
-    .then(() => { admShowStatus('✓ Texte copié', 'success'); setTimeout(admHideStatus, 2000); });
+    .then(() => { admShowStatus('Texte copie', 'success'); setTimeout(admHideStatus, 2000); });
 }
 
 function admSave() {
@@ -1984,16 +927,6 @@ function admSave() {
   a.click();
 }
 
-function admClear() {
-  admCurrentFile = null;
-  document.getElementById('admFileInfo').classList.remove('visible');
-  document.getElementById('admResult').classList.remove('visible');
-  document.getElementById('admBtnTranscribe').disabled = true;
-  admFileInput.value = '';
-  admHideStatus();
-}
-
-// Init
 window.speechSynthesis && speechSynthesis.onvoiceschanged !== undefined &&
   (speechSynthesis.onvoiceschanged = () => {});
 </script>
