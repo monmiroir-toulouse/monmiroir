@@ -402,8 +402,20 @@ let admCurrentFile = null;
 let admHistory = [];
 
 window.addEventListener('load', () => {
-  if (window.location.hash === '#admin') showPage('page-admin-login');
-  else showPage('page-accueil');
+  if (window.location.hash === '#admin') {
+    showPage('page-admin-login');
+  } else {
+    const params = new URLSearchParams(window.location.search);
+    const agent = params.get('agent');
+    const lang  = params.get('lang');
+    if (agent && ['designer','scenariste','pilote'].includes(agent)) {
+      if (lang && ['fr','ar','en'].includes(lang)) currentLang = lang;
+      showPage('page-accueil');
+      setTimeout(() => startChat(agent), 300);
+    } else {
+      showPage('page-accueil');
+    }
+  }
 });
 window.addEventListener('hashchange', () => {
   if (window.location.hash === '#admin') showPage('page-admin-login');
