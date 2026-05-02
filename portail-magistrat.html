@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mon Miroir — Portail Magistrat</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --bordeaux:     #6B1A2A;
@@ -30,13 +31,8 @@
     .logo { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--blanc); }
     .logo span { color:var(--bordeaux-pale); }
     .header-right { display:flex; align-items:center; gap:16px; }
-    .ws-status { display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.8); }
-    .ws-dot { width:8px; height:8px; border-radius:50%; background:#ccc; transition:background 0.3s; }
-    .ws-dot.connecte { background:#4CAF50; box-shadow:0 0 6px #4CAF50; animation:pulse 2s infinite; }
-    .ws-dot.erreur { background:#f44336; }
     .badge-role { font-size:10px; letter-spacing:2px; color:var(--bordeaux-pale); border:1px solid rgba(255,255,255,0.3); padding:5px 14px; text-transform:uppercase; }
 
-    /* NOTIFICATION TOAST */
     .toast-container { position:fixed; top:80px; right:20px; z-index:1000; display:flex; flex-direction:column; gap:10px; max-width:380px; }
     .toast { background:var(--blanc); border:1px solid var(--ligne); border-left:4px solid var(--bordeaux); padding:16px 18px; box-shadow:0 4px 20px rgba(0,0,0,0.12); animation:slideIn 0.4s ease; position:relative; }
     .toast.urgent { border-left-color: var(--orange); background: var(--orange-pale); }
@@ -47,7 +43,6 @@
     .toast-close { position:absolute; top:10px; right:12px; background:none; border:none; cursor:pointer; color:var(--gris); font-size:16px; }
     .toast-close:hover { color:var(--bordeaux); }
 
-    /* DASHBOARD */
     .dashboard { max-width:1140px; margin:28px auto; padding:0 24px; }
 
     .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
@@ -57,58 +52,83 @@
     .stat-num { font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:600; color:var(--bordeaux); line-height:1; }
     .stat-label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-top:6px; }
 
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--bordeaux); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+    .section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
+
+    /* GENERER SESSION */
+    .session-panel { background:var(--blanc); border:1px solid var(--ligne); padding:28px 32px; margin-bottom:28px; }
+    .session-form { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:16px; align-items:end; }
+    @media(max-width:800px){ .session-form{ grid-template-columns:1fr 1fr; } }
+    @media(max-width:500px){ .session-form{ grid-template-columns:1fr; } }
+
+    .form-group { display:flex; flex-direction:column; gap:6px; }
+    .form-label { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); }
+    .form-select, .form-input-session {
+      background:var(--gris-fond); border:1px solid var(--gris-clair);
+      color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-size:13px;
+      padding:10px 14px; outline:none; transition:border-color 0.2s;
+      appearance:none; cursor:pointer;
+    }
+    .form-select:focus, .form-input-session:focus { border-color:var(--bordeaux); }
+    .btn-generer {
+      background:var(--bordeaux); color:var(--blanc); border:none;
+      font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500;
+      letter-spacing:2px; padding:11px 24px; cursor:pointer;
+      transition:background 0.2s; text-transform:uppercase; white-space:nowrap;
+    }
+    .btn-generer:hover { background:var(--bordeaux-mid); }
+
+    /* QR MODAL */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(26,22,20,0.7); z-index:200;
+      align-items:center; justify-content:center;
+      animation:fadeIn 0.2s ease;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal-card {
+      background:var(--blanc); max-width:460px; width:90%;
+      padding:36px; position:relative;
+      box-shadow:0 20px 60px rgba(0,0,0,0.3);
+      animation:slideUp 0.3s ease;
+    }
+    .modal-close { position:absolute; top:16px; right:20px; background:none; border:none; cursor:pointer; color:var(--gris); font-size:22px; }
+    .modal-close:hover { color:var(--bordeaux); }
+    .modal-titre { font-family:'Cormorant Garamond',serif; font-size:24px; color:var(--bordeaux); margin-bottom:6px; }
+    .modal-sub { font-size:12px; color:var(--gris); margin-bottom:24px; line-height:1.6; }
+    .modal-info-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+    .modal-badge { font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 12px; border:1px solid var(--bordeaux-line); color:var(--bordeaux); background:var(--bordeaux-pale); }
+
+    .qr-zone { display:flex; justify-content:center; margin:20px 0; }
+    #qrcode { padding:16px; background:white; border:1px solid var(--ligne); display:inline-block; }
+
+    .lien-zone { background:var(--gris-fond); border:1px solid var(--gris-clair); padding:12px 14px; display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+    .lien-texte { font-size:11px; color:var(--gris-fonce); word-break:break-all; flex:1; font-family:monospace; }
+    .btn-copier { background:var(--bordeaux); color:var(--blanc); border:none; font-size:10px; letter-spacing:1px; padding:8px 14px; cursor:pointer; white-space:nowrap; text-transform:uppercase; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+    .btn-copier:hover { background:var(--bordeaux-mid); }
+    .btn-copier.copie { background:var(--vert); }
+
+    .modal-instructions { font-size:12px; color:var(--gris); line-height:1.8; border-top:1px solid var(--ligne); padding-top:16px; }
+    .modal-instructions strong { color:var(--gris-fonce); font-weight:500; }
+
     /* AGENTS */
     .agents-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:28px; }
     @media(max-width:700px){ .agents-grid{ grid-template-columns:1fr; } }
 
-    .agent-card {
-      background:var(--blanc);
-      border:1px solid var(--ligne);
-      padding:22px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      transition:border-color 0.2s, box-shadow 0.2s;
-      text-decoration:none;
-      color:inherit;
-      cursor:pointer;
-    }
-    .agent-card:hover {
-      border-color:var(--bordeaux-line);
-      box-shadow:0 4px 16px rgba(107,26,42,0.12);
-    }
+    .agent-card { background:var(--blanc); border:1px solid var(--ligne); padding:22px; display:flex; flex-direction:column; gap:10px; transition:border-color 0.2s, box-shadow 0.2s; }
+    .agent-card:hover { border-color:var(--bordeaux-line); box-shadow:0 4px 16px rgba(107,26,42,0.12); }
     .agent-icon { font-size:28px; }
     .agent-nom { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--bordeaux); }
     .agent-desc { font-size:12px; color:var(--gris); line-height:1.5; }
     .agent-phase { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--bordeaux); border:1px solid var(--bordeaux-line); padding:3px 10px; align-self:flex-start; background:var(--bordeaux-pale); }
-    .btn-lancer {
-      margin-top:6px;
-      background:var(--bordeaux);
-      color:var(--blanc);
-      border:none;
-      font-family:'DM Sans',sans-serif;
-      font-size:11px;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      padding:8px 16px;
-      cursor:pointer;
-      transition:background 0.2s;
-      text-decoration:none;
-      display:inline-block;
-      text-align:center;
-    }
+    .btn-lancer { margin-top:6px; background:var(--bordeaux); color:var(--blanc); border:none; font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:8px 16px; cursor:pointer; transition:background 0.2s; display:inline-block; text-align:center; }
     .btn-lancer:hover { background:var(--bordeaux-mid); }
 
     /* DOSSIERS */
-    .section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--bordeaux); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
-    .section-title::after { content:''; flex:1; height:1px; background:var(--ligne); }
-
     .dossiers-list { display:flex; flex-direction:column; gap:10px; }
-
-    .dossier-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 22px; display:flex; align-items:center; gap:16px; transition:border-color 0.3s, box-shadow 0.3s; }
+    .dossier-card { background:var(--blanc); border:1px solid var(--ligne); padding:18px 22px; display:flex; align-items:center; gap:16px; transition:border-color 0.3s; }
     .dossier-card.nouveau { border-color:var(--bordeaux-line); box-shadow:0 2px 12px rgba(107,26,42,0.1); animation:highlight 1s ease; }
     .dossier-card.urgent { border-left:4px solid var(--orange); }
-
     .dossier-badge { width:42px; height:42px; background:var(--bordeaux-pale); border:1px solid var(--bordeaux-line); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:600; color:var(--bordeaux); flex-shrink:0; }
     .dossier-info { flex:1; }
     .dossier-pseudo { font-weight:500; font-size:14px; color:var(--gris-fonce); }
@@ -124,10 +144,10 @@
     .connexion-card { background:var(--blanc); border:1px solid var(--ligne); padding:40px; }
     .connexion-titre { font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--bordeaux); margin-bottom:8px; }
     .connexion-sub { font-size:13px; color:var(--gris); margin-bottom:28px; line-height:1.6; }
-    .form-group { margin-bottom:16px; }
-    .form-label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-bottom:6px; display:block; }
-    .form-input { width:100%; background:var(--gris-fond); border:1px solid var(--gris-clair); color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 14px; outline:none; transition:border-color 0.2s; }
-    .form-input:focus { border-color:var(--bordeaux); }
+    .form-group-login { margin-bottom:16px; }
+    .form-label-login { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gris); margin-bottom:6px; display:block; }
+    .form-input-login { width:100%; background:var(--gris-fond); border:1px solid var(--gris-clair); color:var(--gris-fonce); font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 14px; outline:none; transition:border-color 0.2s; }
+    .form-input-login:focus { border-color:var(--bordeaux); }
     .btn-connexion { width:100%; background:var(--bordeaux); border:none; color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; letter-spacing:2px; padding:12px; cursor:pointer; transition:background 0.2s; text-transform:uppercase; margin-top:8px; }
     .btn-connexion:hover { background:var(--bordeaux-mid); }
 
@@ -136,6 +156,8 @@
     .footer-info { font-size:11px; color:var(--gris); }
 
     @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
     @keyframes highlight { 0%{background:#FFF9C4} 100%{background:var(--blanc)} }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   </style>
@@ -144,6 +166,26 @@
 
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- MODAL QR -->
+<div class="modal-overlay" id="modalQR">
+  <div class="modal-card">
+    <button class="modal-close" onclick="fermerModal()">×</button>
+    <div class="modal-titre">Session générée</div>
+    <div class="modal-sub">Transmettez ce QR code ou ce lien à l'éducateur référent. Le jeune ouvrira directement Mon Miroir sur son téléphone.</div>
+    <div class="modal-info-row" id="modalBadges"></div>
+    <div class="qr-zone"><div id="qrcode"></div></div>
+    <div class="lien-zone">
+      <span class="lien-texte" id="lienTexte"></span>
+      <button class="btn-copier" id="btnCopier" onclick="copierLien()">Copier</button>
+    </div>
+    <div class="modal-instructions">
+      <strong>1.</strong> Montrez ce QR code à l'éducateur ou au référent PJJ.<br/>
+      <strong>2.</strong> Il scanne avec son téléphone — Mon Miroir s'ouvre directement.<br/>
+      <strong>3.</strong> Il tend le téléphone au jeune. La session commence.
+    </div>
+  </div>
+</div>
+
 <!-- VUE CONNEXION -->
 <div id="vueConnexion">
   <div style="background:var(--bordeaux);height:4px;"></div>
@@ -151,17 +193,17 @@
     <div class="connexion-card">
       <div class="connexion-titre">Mon Miroir</div>
       <p class="connexion-sub">Portail sécurisé — Magistrats et Éducateurs<br/>Tribunal pour Enfants de Toulouse</p>
-      <div class="form-group">
-        <label class="form-label">Identifiant</label>
-        <input class="form-input" type="text" id="loginId" placeholder="votre.identifiant"/>
+      <div class="form-group-login">
+        <label class="form-label-login">Identifiant</label>
+        <input class="form-input-login" type="text" id="loginId" placeholder="votre.identifiant"/>
       </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input class="form-input" type="password" id="loginPwd" placeholder="••••••••"/>
+      <div class="form-group-login">
+        <label class="form-label-login">Mot de passe</label>
+        <input class="form-input-login" type="password" id="loginPwd" placeholder="••••••••" onkeydown="if(event.key==='Enter') seConnecter()"/>
       </div>
       <button class="btn-connexion" onclick="seConnecter()">Se connecter</button>
       <p style="font-size:11px;color:var(--gris);margin-top:12px;text-align:center;">
-        Mode démo : identifiant <strong>magistrat.test</strong> / mdp <strong>test</strong>
+        Mode démo : <strong>magistrat.test</strong> / <strong>test</strong>
       </p>
     </div>
   </div>
@@ -173,72 +215,91 @@
   <header>
     <div class="logo">Mon <span>Miroir</span> — Portail Magistrat</div>
     <div class="header-right">
-      <div class="ws-status">
-        <div class="ws-dot" id="wsDot"></div>
-        <span id="wsLabel">Connexion...</span>
-      </div>
       <div class="badge-role">Magistrat</div>
     </div>
   </header>
 
   <div class="dashboard">
 
-    <!-- Statistiques -->
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-num" id="statTotal">0</div>
-        <div class="stat-label">Dossiers total</div>
+        <div class="stat-label">Sessions total</div>
       </div>
       <div class="stat-card">
         <div class="stat-num" id="statNouveaux" style="color:#E65100;">0</div>
-        <div class="stat-label">Nouveaux</div>
+        <div class="stat-label">Nouvelles</div>
       </div>
       <div class="stat-card">
         <div class="stat-num" id="statRapports" style="color:#2E7D32;">0</div>
         <div class="stat-label">Rapports disponibles</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num" id="statConnectes">0</div>
-        <div class="stat-label">Sessions actives</div>
+        <div class="stat-num" id="statQR">0</div>
+        <div class="stat-label">Liens générés</div>
       </div>
     </div>
 
-    <!-- Les 3 Agents -->
+    <!-- GENERER SESSION -->
+    <div class="section-title">Générer une session</div>
+    <div class="session-panel">
+      <div class="session-form">
+        <div class="form-group">
+          <label class="form-label">Agent</label>
+          <select class="form-select" id="selectAgent">
+            <option value="designer">🎨 IA Designer — Identité visuelle</option>
+            <option value="scenariste">✍️ IA Scénariste — Récit de vie</option>
+            <option value="pilote">🧑‍⚕️ Pilote Humain — Supervision</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Langue</label>
+          <select class="form-select" id="selectLang">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="ar">🇲🇦 Darija</option>
+            <option value="en">🇬🇧 English</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Référence dossier (optionnel)</label>
+          <input class="form-input-session" type="text" id="inputRef" placeholder="ex: MNA-2026-042"/>
+        </div>
+        <button class="btn-generer" onclick="genererSession()">Générer le QR →</button>
+      </div>
+    </div>
+
+    <!-- AGENTS -->
     <div class="section-title">Les 3 Agents IA</div>
     <div class="agents-grid">
-
       <div class="agent-card">
         <div class="agent-icon">🎨</div>
         <div class="agent-nom">IA Designer</div>
         <div class="agent-phase">Phase 1 — Semaines 1–4</div>
         <div class="agent-desc">Valorise l'image de soi du jeune. Portrait numérique, dignité visuelle, identité graphique personnelle.</div>
-        <a class="btn-lancer" href="index.html#designer" target="_blank">Lancer une session</a>
+        <button class="btn-lancer" onclick="genererSessionRapide('designer','fr')">Générer session →</button>
       </div>
-
       <div class="agent-card">
         <div class="agent-icon">✍️</div>
         <div class="agent-nom">IA Scénariste</div>
         <div class="agent-phase">Phase 2 — Récit de vie</div>
         <div class="agent-desc">Guide la construction du récit de vie. Transforme le trauma en narration. Projection vers l'avenir.</div>
-        <a class="btn-lancer" href="index.html#scenariste" target="_blank">Lancer une session</a>
+        <button class="btn-lancer" onclick="genererSessionRapide('scenariste','fr')">Générer session →</button>
       </div>
-
       <div class="agent-card">
         <div class="agent-icon">🧑‍⚕️</div>
         <div class="agent-nom">Pilote Humain</div>
         <div class="agent-phase">Supervision continue</div>
         <div class="agent-desc">Si Mohamed ANAYA oriente et supervise les 3 agents IA. Garant de la dimension clinique, culturelle et éthique.</div>
-        <a class="btn-lancer" href="index.html#pilote" target="_blank">Accéder</a>
+        <button class="btn-lancer" onclick="genererSessionRapide('pilote','fr')">Générer session →</button>
       </div>
-
     </div>
 
-    <!-- Liste des dossiers -->
-    <div class="section-title">Dossiers MNA</div>
+    <!-- DOSSIERS -->
+    <div class="section-title">Sessions récentes</div>
     <div class="dossiers-list" id="dossiersList">
       <div style="text-align:center;padding:40px;color:var(--gris);font-size:13px;">
-        En attente de nouveaux dossiers...<br/>
-        <small>Les notifications arrivent en temps réel dès qu'un MNA termine son entretien.</small>
+        Aucune session pour le moment.<br/>
+        <small>Les sessions apparaissent ici dès qu'un lien est généré ou qu'un entretien est complété.</small>
       </div>
     </div>
 
@@ -252,151 +313,124 @@
 </div>
 
 <script>
-  var BACKEND_WS  = 'wss://monmiroir-backend.onrender.com/ws';
-  var BACKEND_API = 'https://monmiroir-backend.onrender.com';
-  var ws = null;
-  var token = null;
-  var dossiers = [];
-  var stats = { total:0, nouveaux:0, rapports:0, connectes:0 };
+var BASE_URL = 'https://monmiroir-toulouse.github.io/monmiroir/';
+var dossiers = [];
+var stats = { total:0, nouveaux:0, rapports:0, qr:0 };
+var currentLien = '';
+var qrInstance = null;
 
-  function seConnecter() {
-    var id  = document.getElementById('loginId').value.trim();
-    var pwd = document.getElementById('loginPwd').value.trim();
-    if (!id || !pwd) { alert('Identifiant et mot de passe requis.'); return; }
-    if (id === 'magistrat.test') { token = 'demo_token'; afficherDashboard(); return; }
-    fetch(BACKEND_API + '/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifiant: id, motDePasse: pwd, role: 'magistrat' })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.token) { token = d.token; afficherDashboard(); }
-      else { alert('Identifiants incorrects.'); }
-    })
-    .catch(function() { token = 'demo_token'; afficherDashboard(); });
-  }
-
-  function afficherDashboard() {
-    document.getElementById('vueConnexion').style.display = 'none';
-    document.getElementById('vueDashboard').style.display = 'block';
-    connecterWebSocket();
-  }
-
-  function connecterWebSocket() {
-    var url = BACKEND_WS + '?role=magistrat&token=' + (token || 'demo');
-    ws = new WebSocket(url);
-    ws.onopen = function() {
-      document.getElementById('wsDot').className = 'ws-dot connecte';
-      document.getElementById('wsLabel').textContent = 'En ligne';
-    };
-    ws.onmessage = function(event) {
-      try { traiterMessage(JSON.parse(event.data)); } catch(e) {}
-    };
-    ws.onclose = function() {
-      document.getElementById('wsDot').className = 'ws-dot erreur';
-      document.getElementById('wsLabel').textContent = 'Déconnecté';
-      setTimeout(connecterWebSocket, 5000);
-    };
-    ws.onerror = function() {
-      document.getElementById('wsDot').className = 'ws-dot erreur';
-      document.getElementById('wsLabel').textContent = 'Erreur';
-    };
-  }
-
-  function traiterMessage(msg) {
-    if (msg.type === 'nouveau_dossier') {
-      ajouterDossier(msg);
-      afficherToast(msg.titre, msg.message, msg.urgent ? 'urgent' : 'normal', msg.pseudonyme);
-      stats.total++; stats.nouveaux++; mettreAJourStats();
-    }
-    if (msg.type === 'rapport_disponible') {
-      afficherToast(msg.titre, msg.message, 'rapport', msg.id_rapport);
-      stats.rapports++; mettreAJourStats();
-    }
-  }
-
-  function ajouterDossier(msg) {
-    var liste = document.getElementById('dossiersList');
-    if (dossiers.length === 0) liste.innerHTML = '';
-    var now = new Date();
-    var heure = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    var card = document.createElement('div');
-    card.className = 'dossier-card nouveau' + (msg.urgent ? ' urgent' : '');
-    var initiales = msg.pseudonyme ? msg.pseudonyme.substring(0,3).toUpperCase() : 'MNA';
-    var agentLabel = { designer:'Designer', scenariste:'Scénariste', superviseur:'Superviseur' }[msg.agent] || msg.agent;
-    var langueLabel = { fr:'Français', ar:'Arabe', en:'Anglais' }[msg.langue] || msg.langue;
-    card.innerHTML = `
-      <div class="dossier-badge">${initiales}</div>
-      <div class="dossier-info">
-        <div class="dossier-pseudo">${msg.pseudonyme || 'MNA-XXXX'}</div>
-        <div class="dossier-meta">Agent : ${agentLabel} · Langue : ${langueLabel}</div>
-      </div>
-      <div class="dossier-statut ${msg.urgent ? 'statut-urgent' : 'statut-nouveau'}">
-        ${msg.urgent ? 'URGENT' : 'NOUVEAU'}
-      </div>
-      <div class="dossier-time">${heure}</div>
-    `;
-    liste.insertBefore(card, liste.firstChild);
-    dossiers.unshift(msg);
-    setTimeout(function() {
-      card.classList.remove('nouveau');
-      card.querySelector('.dossier-statut').className = 'dossier-statut statut-lu';
-      card.querySelector('.dossier-statut').textContent = 'LU';
-      if (stats.nouveaux > 0) { stats.nouveaux--; mettreAJourStats(); }
-    }, 10000);
-  }
-
-  function afficherToast(titre, message, type, meta) {
-    var container = document.getElementById('toastContainer');
-    var toast = document.createElement('div');
-    toast.className = 'toast' + (type === 'urgent' ? ' urgent' : type === 'rapport' ? ' rapport' : '');
-    toast.innerHTML = `
-      <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-      <div class="toast-titre">${titre}</div>
-      <div class="toast-message">${message}</div>
-      <div class="toast-meta">${meta || ''} · ${new Date().toLocaleTimeString('fr-FR')}</div>
-    `;
-    container.appendChild(toast);
-    jouerSon(type === 'urgent');
-    setTimeout(function() { if (toast.parentElement) toast.remove(); }, 8000);
-  }
-
-  function jouerSon(urgent) {
-    try {
-      var ctx = new (window.AudioContext || window.webkitAudioContext)();
-      var osc = ctx.createOscillator();
-      var gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = urgent ? 880 : 660;
-      osc.type = 'sine';
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
-    } catch(e) {}
-  }
-
-  function mettreAJourStats() {
-    document.getElementById('statTotal').textContent = stats.total;
-    document.getElementById('statNouveaux').textContent = stats.nouveaux;
-    document.getElementById('statRapports').textContent = stats.rapports;
-  }
-
-  function demoNotification() {
-    setTimeout(function() {
-      traiterMessage({
-        type: 'nouveau_dossier', titre: 'Nouveau Dossier MNA',
-        message: 'Un entretien vient d\'être complété. (Démonstration)',
-        pseudonyme: 'MNA-2026-001', agent: 'scenariste', langue: 'fr', urgent: false
-      });
-    }, 3000);
-  }
-
-  if (window.location.hostname.includes('github.io')) {
-    token = 'demo_token';
+function seConnecter() {
+  var id  = document.getElementById('loginId').value.trim();
+  var pwd = document.getElementById('loginPwd').value.trim();
+  if (!id || !pwd) { alert('Identifiant et mot de passe requis.'); return; }
+  if (id === 'magistrat.test' && pwd === 'test') {
     afficherDashboard();
-    demoNotification();
+  } else {
+    alert('Identifiants incorrects. Mode démo : magistrat.test / test');
   }
+}
+
+function afficherDashboard() {
+  document.getElementById('vueConnexion').style.display = 'none';
+  document.getElementById('vueDashboard').style.display = 'block';
+}
+
+function genererSession() {
+  var agent = document.getElementById('selectAgent').value;
+  var lang  = document.getElementById('selectLang').value;
+  var ref   = document.getElementById('inputRef').value.trim();
+  ouvrirModal(agent, lang, ref);
+}
+
+function genererSessionRapide(agent, lang) {
+  ouvrirModal(agent, lang, '');
+}
+
+function ouvrirModal(agent, lang, ref) {
+  var lien = BASE_URL + '?agent=' + agent + '&lang=' + lang;
+  if (ref) lien += '&ref=' + encodeURIComponent(ref);
+  currentLien = lien;
+
+  var agentLabels = { designer:'IA Designer', scenariste:'IA Scénariste', pilote:'Pilote Humain' };
+  var langLabels  = { fr:'Français', ar:'Darija', en:'English' };
+
+  document.getElementById('modalBadges').innerHTML =
+    '<span class="modal-badge">' + (agentLabels[agent] || agent) + '</span>' +
+    '<span class="modal-badge">' + (langLabels[lang] || lang) + '</span>' +
+    (ref ? '<span class="modal-badge">' + ref + '</span>' : '');
+
+  document.getElementById('lienTexte').textContent = lien;
+  document.getElementById('btnCopier').textContent = 'Copier';
+  document.getElementById('btnCopier').className = 'btn-copier';
+
+  var qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+  qrInstance = new QRCode(qrDiv, {
+    text: lien,
+    width: 200,
+    height: 200,
+    colorDark: '#6B1A2A',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.getElementById('modalQR').classList.add('open');
+
+  stats.qr++;
+  stats.total++;
+  document.getElementById('statQR').textContent = stats.qr;
+  document.getElementById('statTotal').textContent = stats.total;
+
+  ajouterDossierListe(agent, lang, ref);
+}
+
+function fermerModal() {
+  document.getElementById('modalQR').classList.remove('open');
+}
+
+document.getElementById('modalQR').addEventListener('click', function(e) {
+  if (e.target === this) fermerModal();
+});
+
+function copierLien() {
+  navigator.clipboard.writeText(currentLien).then(function() {
+    var btn = document.getElementById('btnCopier');
+    btn.textContent = 'Copié !';
+    btn.className = 'btn-copier copie';
+    setTimeout(function() {
+      btn.textContent = 'Copier';
+      btn.className = 'btn-copier';
+    }, 2000);
+  });
+}
+
+function ajouterDossierListe(agent, lang, ref) {
+  var liste = document.getElementById('dossiersList');
+  if (dossiers.length === 0) liste.innerHTML = '';
+  var now = new Date();
+  var heure = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  var agentLabels = { designer:'IA Designer', scenariste:'IA Scénariste', pilote:'Pilote Humain' };
+  var langLabels  = { fr:'Français', ar:'Darija', en:'English' };
+  var initiales = ref ? ref.substring(0,3).toUpperCase() : 'MNA';
+
+  var card = document.createElement('div');
+  card.className = 'dossier-card nouveau';
+  card.innerHTML =
+    '<div class="dossier-badge">' + initiales + '</div>' +
+    '<div class="dossier-info">' +
+      '<div class="dossier-pseudo">' + (ref || 'Session sans référence') + '</div>' +
+      '<div class="dossier-meta">Agent : ' + (agentLabels[agent] || agent) + ' · Langue : ' + (langLabels[lang] || lang) + '</div>' +
+    '</div>' +
+    '<div class="dossier-statut statut-nouveau">LIEN GÉNÉRÉ</div>' +
+    '<div class="dossier-time">' + heure + '</div>';
+
+  liste.insertBefore(card, liste.firstChild);
+  dossiers.unshift({ agent, lang, ref, heure });
+}
+
+if (window.location.hostname.includes('github.io') || window.location.hostname === 'localhost') {
+  afficherDashboard();
+}
 </script>
 </body>
 </html>
