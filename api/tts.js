@@ -10,7 +10,7 @@ module.exports = async function handler(req, res) {
     if (!text) return res.status(400).json({ error: 'No text' });
     const cleanText = text.replace(/\s+/g, ' ').trim();
     if (!cleanText) return res.status(400).json({ error: 'Empty text' });
-    const voiceId = voice === 'fr' ? 'mflIRGWOKwTG1A8j2Ma1' : 'IKRnTow9UDgZBDEXp4Gq';
+    const voiceId = 'IKRnTow9UDgZBDEXp4Gq';
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
       headers: {
