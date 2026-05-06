@@ -101,72 +101,86 @@
         <button id="stopBtn" class="btn-call btn-stop" onclick="handleStop()">🛑</button>
     </div>
 
-    <script>
-        const statusText = document.getElementById('status');
-        const wave = document.getElementById('wave');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
+  <script>
+    const statusText = document.getElementById('status');
+    const wave = document.getElementById('wave');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
 
-        let recognition;
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.lang = 'fr-FR'; // Peut être changé en 'ar-SA' pour le Darija
-        }
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'fr-FR';
+    }
 
-        function playSound(freq, duration) {
+    function playSound(freq, duration) {
+        try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.connect(gain); gain.connect(ctx.destination);
+            osc.connect(gain); 
+            gain.connect(ctx.destination);
             osc.frequency.value = freq;
-            osc.start(); osc.stop(ctx.currentTime + duration);
+            osc.start(); 
+            osc.stop(ctx.currentTime + duration);
+        } catch (e) {
+            console.log("Audio non supporté");
         }
+    }
 
-        function closeOnboarding() {
-            document.getElementById('onboarding').style.opacity = '0';
-            setTimeout(() => document.getElementById('onboarding').style.display = 'none', 500);
-        }
+    function closeOnboarding() {
+        const ob = document.getElementById('onboarding');
+        ob.style.opacity = '0';
+        setTimeout(() => {
+            ob.style.display = 'none';
+        }, 500);
+    }
 
-        function handleStart() {
-            if (navigator.vibrate) navigator.vibrate(60);
-            playSound(523, 0.1);
+    function handleStart() {
+        if (navigator.vibrate) navigator.vibrate(60);
+        playSound(523, 0.1);
 
-            statusText.innerText = "Je t'écoute...";
-            statusText.style.color = "var(--success-green)";
-            wave.className = "wave-circle wave-active";
-            
-            startBtn.classList.add('btn-inactive');
-            stopBtn.classList.add('btn-active');
+        statusText.innerText = "Je t'écoute...";
+        statusText.style.color = "var(--success-green)";
+        wave.className = "wave-circle wave-active";
+        
+        startBtn.classList.add('btn-inactive');
+        stopBtn.classList.add('btn-active');
 
-            if (recognition) recognition.start();
-        }
-
-        // Simule la réflexion de l'IA quand l'utilisateur s'arrête de parler
         if (recognition) {
-            recognition.onspeechend = () => {
-                statusText.innerText = "Je réfléchis...";
-                statusText.style.color = "var(--thinking-blue)";
-                wave.className = "wave-circle wave-thinking";
-            };
+            recognition.start();
         }
+    }
 
-        function handleStop() {
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            playSound(329, 0.2);
+    if (recognition) {
+        recognition.onspeechend = () => {
+            statusText.innerText = "Je réfléchis...";
+            statusText.style.color = "var(--thinking-blue)";
+            wave.className = "wave-circle wave-thinking";
+        };
+    }
 
-            statusText.innerText = "Appel terminé.";
-            statusText.style.color = "var(--primary-navy)";
-            wave.className = "wave-circle";
-            
-            stopBtn.classList.remove('btn-active');
-            startBtn.classList.remove('btn-inactive');
+    function handleStop() {
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        playSound(329, 0.2);
 
-            if (recognition) recognition.stop();
-            
-            alert("Récit sécurisé. Ton "miroir" est prêt.");
+        statusText.innerText = "Appel terminé.";
+        statusText.style.color = "var(--primary-navy)";
+        wave.className = "wave-circle";
+        
+        stopBtn.classList.remove('btn-active');
+        startBtn.classList.remove('btn-inactive');
+
+        if (recognition) {
+            recognition.stop();
         }
+        
+        alert("Récit sécurisé. Ton miroir est prêt.");
+    }
+</script>
+ 
     </script>
 </body>
 </html>
