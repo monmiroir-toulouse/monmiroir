@@ -385,7 +385,7 @@
     if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = srLangs[selectedLang] || 'fr-FR';
 
@@ -508,6 +508,8 @@
 
   // ── TTS ──
   async function speak(text) {
+    // Stopper le micro pendant que le Miroir parle
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
     try {
       const res = await fetch(API_SPEAK, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
