@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mon Miroir</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Nunito:wght@400;600;800&family=Noto+Sans+Tifinagh&family=Noto+Sans+Ethiopic&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0F1923;
@@ -16,7 +16,6 @@
       --red-stop: #E53935;
       --text: #F0EDE6;
       --text-soft: #7A8FA6;
-      --wave-color: #4ECDC4;
     }
 
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
@@ -28,12 +27,75 @@
       color: var(--text);
     }
 
-    /* ── LAYOUT ── */
-    .app {
-      height: 100%; display: flex; flex-direction: column;
+    /* ══════════════════════════════
+       ÉCRAN DE CHOIX DE LANGUE
+    ══════════════════════════════ */
+    #langScreen {
+      position: fixed; inset: 0; z-index: 100;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 30px 24px;
+      transition: opacity 0.5s ease;
     }
 
-    /* ── HEADER ── */
+    .lang-title {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 15px; color: var(--text-soft);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 40px; text-align: center;
+    }
+
+    .lang-list {
+      width: 100%; max-width: 340px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .lang-btn {
+      background: var(--bubble-mirror);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px;
+      padding: 18px 24px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lang-btn:active {
+      transform: scale(0.97);
+      background: rgba(201,168,76,0.15);
+      border-color: var(--gold);
+    }
+
+    .lang-script {
+      font-size: 22px; font-weight: 700;
+      color: var(--text);
+    }
+    .lang-btn[data-lang="ar"] .lang-script,
+    .lang-btn[data-lang="ar-ber"] .lang-script {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .lang-btn[data-lang="ti"] .lang-script {
+      font-family: 'Noto Sans Ethiopic', sans-serif;
+    }
+    .lang-btn[data-lang="ber"] .lang-script {
+      font-family: 'Noto Sans Tifinagh', sans-serif;
+    }
+
+    .lang-arrow {
+      color: var(--gold); font-size: 18px; opacity: 0.6;
+    }
+
+    /* ══════════════════════════════
+       INTERFACE CHAT
+    ══════════════════════════════ */
+    .app {
+      height: 100%; display: flex; flex-direction: column;
+      opacity: 0; transition: opacity 0.5s ease;
+    }
+    .app.visible { opacity: 1; }
+
+    /* HEADER */
     .header {
       background: var(--bubble-mirror);
       padding: 14px 20px;
@@ -63,7 +125,7 @@
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ── ZONE CHAT ── */
+    /* CHAT */
     .chat-zone {
       flex: 1; overflow-y: auto; overflow-x: hidden;
       padding: 20px 14px;
@@ -73,7 +135,7 @@
     }
     .chat-zone::-webkit-scrollbar { display: none; }
 
-    /* ── BULLES ── */
+    /* BULLES */
     .bubble-wrap {
       display: flex; flex-direction: column;
       animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
@@ -89,76 +151,49 @@
     .bubble {
       max-width: 80%; padding: 10px 14px;
       border-radius: 18px; font-size: 15px; line-height: 1.5;
-      position: relative;
     }
     .bubble.mirror {
       background: var(--bubble-mirror);
-      border-bottom-left-radius: 4px;
-      color: var(--text);
+      border-bottom-left-radius: 4px; color: var(--text);
     }
     .bubble.user {
       background: var(--bubble-user);
-      border-bottom-right-radius: 4px;
-      color: var(--text);
+      border-bottom-right-radius: 4px; color: var(--text);
     }
-    .bubble.arabic {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 18px; direction: rtl;
-      color: var(--gold);
-    }
+    .bubble.rtl { font-family: 'Tajawal', sans-serif; font-size: 18px; direction: rtl; }
+    .bubble.gold { color: var(--gold); }
 
-    /* Bulle vocale style WhatsApp */
     .bubble-voice {
-      display: flex; align-items: center; gap: 10px;
-      min-width: 180px;
+      display: flex; align-items: center; gap: 10px; min-width: 180px;
     }
     .voice-play-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: none; cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
       transition: transform 0.15s ease;
     }
     .voice-play-btn:active { transform: scale(0.9); }
     .bubble.mirror .voice-play-btn { background: var(--gold); color: #0F1923; }
     .bubble.user   .voice-play-btn { background: #25D366; color: white; }
 
-    /* Onde vocale */
     .waveform {
-      flex: 1; height: 28px;
-      display: flex; align-items: center; gap: 2px;
+      flex: 1; height: 28px; display: flex; align-items: center; gap: 2px;
     }
     .wave-bar {
-      width: 3px; border-radius: 2px; background: rgba(255,255,255,0.25);
-      flex-shrink: 0;
-      transition: background 0.2s;
+      width: 3px; border-radius: 2px; background: rgba(255,255,255,0.2); flex-shrink: 0;
     }
-    .wave-bar.active { background: var(--gold); }
-    .bubble.user .wave-bar.active { background: #25D366; }
+    .voice-duration { font-size: 11px; color: var(--text-soft); flex-shrink: 0; }
 
-    .voice-duration {
-      font-size: 11px; color: var(--text-soft); flex-shrink: 0;
-    }
+    .timestamp { font-size: 11px; color: var(--text-soft); margin-top: 3px; padding: 0 4px; }
 
-    /* Timestamp */
-    .timestamp {
-      font-size: 11px; color: var(--text-soft);
-      margin-top: 3px; padding: 0 4px;
-    }
-
-    /* ── INDICATEUR "EN TRAIN D'ÉCRIRE" ── */
-    .typing-bubble {
-      display: flex; align-items: flex-start; gap: 8px;
-    }
+    /* TYPING */
     .typing-dots {
       background: var(--bubble-mirror);
       border-radius: 18px; border-bottom-left-radius: 4px;
-      padding: 12px 16px;
-      display: flex; gap: 5px; align-items: center;
+      padding: 12px 16px; display: flex; gap: 5px; align-items: center;
     }
     .typing-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--text-soft);
+      width: 7px; height: 7px; border-radius: 50%; background: var(--text-soft);
       animation: typingBounce 1.2s ease-in-out infinite;
     }
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
@@ -168,83 +203,83 @@
       30% { transform: translateY(-6px); background: var(--gold); }
     }
 
-    /* ── BARRE D'ENREGISTREMENT ── */
+    /* BARRE MICRO */
     .record-bar {
-      flex-shrink: 0;
-      background: var(--bubble-mirror);
+      flex-shrink: 0; background: var(--bubble-mirror);
       border-top: 1px solid rgba(201,168,76,0.15);
-      padding: 14px 16px;
-      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; display: flex; align-items: center; gap: 12px;
     }
-
-    /* Bouton micro principal */
     .btn-mic {
       width: 54px; height: 54px; border-radius: 50%; border: none;
-      background: var(--green-record);
-      color: white; font-size: 22px;
+      background: var(--green-record); color: white; font-size: 22px;
       cursor: pointer; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 15px rgba(37,211,102,0.35);
       transition: all 0.2s ease;
-      position: relative;
     }
     .btn-mic.recording {
       background: var(--red-stop);
       box-shadow: 0 4px 20px rgba(229,57,53,0.5);
       animation: record-pulse 1s ease-in-out infinite;
     }
+    .btn-mic:disabled { opacity: 0.4; pointer-events: none; }
     @keyframes record-pulse {
-      0%,100% { transform: scale(1); box-shadow: 0 4px 20px rgba(229,57,53,0.4); }
-      50%      { transform: scale(1.08); box-shadow: 0 4px 28px rgba(229,57,53,0.7); }
-    }
-    .btn-mic:disabled {
-      opacity: 0.4; pointer-events: none;
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.08); }
     }
 
-    /* Zone live d'enregistrement */
-    .record-live {
-      flex: 1; display: flex; flex-direction: column; gap: 5px;
-    }
+    .record-live { flex: 1; display: flex; flex-direction: column; gap: 5px; }
     .record-label {
       font-size: 13px; color: var(--text-soft);
       display: flex; align-items: center; gap: 6px;
     }
     .record-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: var(--red-stop);
-      opacity: 0;
-      transition: opacity 0.3s;
+      background: var(--red-stop); opacity: 0; transition: opacity 0.3s;
     }
     .record-dot.active { opacity: 1; animation: blink 0.8s ease-in-out infinite; }
 
-    .live-wave {
-      height: 24px; display: flex; align-items: center; gap: 2px;
-    }
-    .live-bar {
-      width: 3px; border-radius: 2px;
-      background: var(--green-record);
-      height: 4px;
-      transition: height 0.1s ease;
-    }
+    .live-wave { height: 24px; display: flex; align-items: center; gap: 2px; }
+    .live-bar { width: 3px; border-radius: 2px; background: var(--green-record); height: 4px; transition: height 0.1s ease; }
 
-    .record-timer {
-      font-size: 13px; color: var(--text-soft);
-      font-variant-numeric: tabular-nums;
-      min-width: 36px;
-    }
-
-    /* Hint bas */
-    .record-hint {
-      font-size: 12px; color: var(--text-soft);
-      text-align: center; padding: 6px 0 0;
-      flex-basis: 100%;
-    }
+    .record-timer { font-size: 13px; color: var(--text-soft); font-variant-numeric: tabular-nums; min-width: 36px; }
   </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- HEADER -->
+<!-- ── ÉCRAN LANGUE ── -->
+<div id="langScreen">
+  <div class="lang-title">Choisis ta langue</div>
+  <div class="lang-list">
+    <button class="lang-btn" data-lang="fr" data-greeting="Je suis là. Tu peux parler." onclick="chooseLang(this)">
+      <span class="lang-script">Français</span>
+      <span class="lang-arrow">›</span>
+    </button>
+    <button class="lang-btn" data-lang="ar" data-greeting="أنا هنا. تكلم معي." onclick="chooseLang(this)">
+      <span class="lang-script">العربية</span>
+      <span class="lang-arrow">›</span>
+    </button>
+    <button class="lang-btn" data-lang="ber" data-greeting="ⴰⵣⵓⵍ. ⴷⴰⵡ ⵏⵙⵙⵎⵎⴻⵍ." onclick="chooseLang(this)">
+      <span class="lang-script">ⴰⵎⴰⵣⵉⵖ</span>
+      <span class="lang-arrow">›</span>
+    </button>
+    <button class="lang-btn" data-lang="en" data-greeting="I'm here. You can talk to me." onclick="chooseLang(this)">
+      <span class="lang-script">English</span>
+      <span class="lang-arrow">›</span>
+    </button>
+    <button class="lang-btn" data-lang="bm" data-greeting="Ne b'a here. Kuma n'ma." onclick="chooseLang(this)">
+      <span class="lang-script">Bambara</span>
+      <span class="lang-arrow">›</span>
+    </button>
+    <button class="lang-btn" data-lang="ti" data-greeting="ሰላም። ክሰምዓካ ኣለኹ።" onclick="chooseLang(this)">
+      <span class="lang-script">ትግርኛ</span>
+      <span class="lang-arrow">›</span>
+    </button>
+  </div>
+</div>
+
+<!-- ── INTERFACE CHAT ── -->
+<div class="app" id="chatApp">
   <div class="header">
     <div class="avatar">🪞</div>
     <div class="header-info">
@@ -256,50 +291,64 @@
     </div>
   </div>
 
-  <!-- CHAT -->
   <div class="chat-zone" id="chatZone"></div>
 
-  <!-- BARRE MICRO -->
   <div class="record-bar">
     <button class="btn-mic" id="btnMic" onclick="toggleRecord()">🎙️</button>
     <div class="record-live">
       <div class="record-label">
         <div class="record-dot" id="recDot"></div>
-        <span id="recLabel">Appuie pour parler</span>
+        <span id="recLabel">...</span>
       </div>
       <div class="live-wave" id="liveWave"></div>
     </div>
     <div class="record-timer" id="recTimer"></div>
   </div>
-
 </div>
 
 <script>
-  // ── CONFIG ──
   const VOICE_ID  = 'IKRnTow9UDgZBDEXp4Gq';
   const API_SPEAK = '/api/speak';
   const API_CHAT  = '/api/chat';
 
-  // ── STATE ──
-  let isRecording   = false;
-  let isProcessing  = false;
+  let selectedLang = 'fr';
+  let isRecording  = false;
+  let isProcessing = false;
   let recognition;
   let finalTranscript = '';
-  let timerInterval;
-  let timerSecs = 0;
-  let animFrame;
+  let timerInterval, timerSecs = 0, animFrame;
   let conversationHistory = [];
   let currentAudio = null;
 
-  const chatZone    = document.getElementById('chatZone');
-  const btnMic      = document.getElementById('btnMic');
-  const recDot      = document.getElementById('recDot');
-  const recLabel    = document.getElementById('recLabel');
-  const recTimer    = document.getElementById('recTimer');
-  const headerSt    = document.getElementById('headerStatus');
-  const liveWave    = document.getElementById('liveWave');
+  const chatZone  = document.getElementById('chatZone');
+  const btnMic    = document.getElementById('btnMic');
+  const recDot    = document.getElementById('recDot');
+  const recLabel  = document.getElementById('recLabel');
+  const recTimer  = document.getElementById('recTimer');
+  const headerSt  = document.getElementById('headerStatus');
+  const liveWave  = document.getElementById('liveWave');
 
-  // ── LIVE WAVE BARS ──
+  // Hint par langue
+  const hints = {
+    fr: 'Appuie pour parler',
+    ar: 'اضغط للتحدث',
+    ber: 'ⴾⴾⵙ ⴰⴷ ⵜⵙⴰⵡⵍⴷ',
+    en: 'Tap to speak',
+    bm: 'Digi ka kuma',
+    ti: 'ንምዝራብ ጠውቕ'
+  };
+
+  const listeningLabels = {
+    fr: 'Je t\'écoute...', ar: 'أنا أسمعك...', ber: 'ⴷⴰⵡ ⴽ ⵙⵙⵎⵎⴻⵍⵖ...',
+    en: 'Listening...', bm: 'N b\'i kalan...', ti: 'ይሰምዓካ ኣሎ...'
+  };
+
+  const srLangs = {
+    fr: 'fr-FR', ar: 'ar-MA', ber: 'fr-FR',
+    en: 'en-US', bm: 'fr-FR', ti: 'fr-FR'
+  };
+
+  // Live wave bars
   for (let i = 0; i < 20; i++) {
     const b = document.createElement('div');
     b.className = 'live-bar';
@@ -308,21 +357,37 @@
   const liveBars = liveWave.querySelectorAll('.live-bar');
 
   function animateLiveWave() {
-    liveBars.forEach(b => {
-      const h = isRecording ? (4 + Math.random() * 18) : 4;
-      b.style.height = h + 'px';
-    });
+    liveBars.forEach(b => { b.style.height = (isRecording ? 4 + Math.random() * 18 : 4) + 'px'; });
     if (isRecording) animFrame = requestAnimationFrame(animateLiveWave);
     else liveBars.forEach(b => b.style.height = '4px');
   }
 
+  // ── CHOIX LANGUE ──
+  function chooseLang(btn) {
+    selectedLang = btn.dataset.lang;
+    const greeting = btn.dataset.greeting;
+
+    // Transition
+    const langScreen = document.getElementById('langScreen');
+    langScreen.style.opacity = '0';
+    setTimeout(() => {
+      langScreen.style.display = 'none';
+      const app = document.getElementById('chatApp');
+      app.classList.add('visible');
+      recLabel.textContent = hints[selectedLang] || 'Appuie pour parler';
+      initSpeechRecognition();
+      openingGreeting(greeting);
+    }, 500);
+  }
+
   // ── SPEECH RECOGNITION ──
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  function initSpeechRecognition() {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = 'fr-FR';
+    recognition.lang = srLangs[selectedLang] || 'fr-FR';
 
     recognition.onresult = (e) => {
       finalTranscript = '';
@@ -331,46 +396,31 @@
         if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
         else interim += e.results[i][0].transcript;
       }
-      recLabel.textContent = finalTranscript || interim || 'Je t\'écoute...';
+      recLabel.textContent = finalTranscript || interim || listeningLabels[selectedLang];
     };
-
-    recognition.onend = () => {
-      if (isRecording) stopRecording(true);
-    };
-
-    recognition.onerror = (e) => {
-      if (e.error !== 'aborted') stopRecording(false);
-    };
+    recognition.onend = () => { if (isRecording) stopRecording(true); };
+    recognition.onerror = (e) => { if (e.error !== 'aborted') stopRecording(false); };
   }
 
-  // ── TOGGLE MICRO ──
+  // ── MICRO ──
   function toggleRecord() {
     if (isProcessing) return;
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
     if (!isRecording) startRecording();
     else stopRecording(true);
   }
 
   function startRecording() {
-    isRecording = true;
-    finalTranscript = '';
-
-    btnMic.classList.add('recording');
-    btnMic.textContent = '⏹';
+    isRecording = true; finalTranscript = '';
+    btnMic.classList.add('recording'); btnMic.textContent = '⏹';
     recDot.classList.add('active');
-    recLabel.textContent = 'Je t\'écoute...';
+    recLabel.textContent = listeningLabels[selectedLang];
     recTimer.textContent = '0:00';
-    headerSt.textContent = 'En écoute...';
-
     timerSecs = 0;
     timerInterval = setInterval(() => {
       timerSecs++;
-      const m = Math.floor(timerSecs / 60);
-      const s = String(timerSecs % 60).padStart(2, '0');
-      recTimer.textContent = `${m}:${s}`;
+      recTimer.textContent = `${Math.floor(timerSecs/60)}:${String(timerSecs%60).padStart(2,'0')}`;
     }, 1000);
-
     animateLiveWave();
     if (recognition) { try { recognition.start(); } catch(e) {} }
   }
@@ -380,143 +430,79 @@
     clearInterval(timerInterval);
     cancelAnimationFrame(animFrame);
     liveBars.forEach(b => b.style.height = '4px');
-
-    btnMic.classList.remove('recording');
-    btnMic.textContent = '🎙️';
-    recDot.classList.remove('active');
-    recTimer.textContent = '';
-    headerSt.textContent = 'En ligne';
-
+    btnMic.classList.remove('recording'); btnMic.textContent = '🎙️';
+    recDot.classList.remove('active'); recTimer.textContent = '';
     if (recognition) { try { recognition.stop(); } catch(e) {} }
-
     const text = finalTranscript.trim();
     if (withText && text) {
-      recLabel.textContent = 'Appuie pour parler';
+      recLabel.textContent = hints[selectedLang];
       addUserBubble(text, timerSecs);
       sendToMirror(text);
     } else {
-      recLabel.textContent = 'Appuie pour parler';
+      recLabel.textContent = hints[selectedLang];
     }
   }
 
   // ── BULLES ──
-  function now() {
-    return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  }
+  function now() { return new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); }
 
-  function randomWaveBars(count = 24) {
-    const heights = [];
-    for (let i = 0; i < count; i++) heights.push(3 + Math.floor(Math.random() * 18));
-    return heights;
-  }
-
-  function addUserBubble(text, durationSecs) {
+  function addUserBubble(text, dur) {
     const wrap = document.createElement('div');
     wrap.className = 'bubble-wrap user';
-
-    const m = Math.floor(durationSecs / 60);
-    const s = String(durationSecs % 60).padStart(2, '0');
-    const dur = durationSecs > 0 ? `${m}:${s}` : '0:01';
-
-    const bars = randomWaveBars();
-    const barsHtml = bars.map(h => `<div class="wave-bar" style="height:${h}px"></div>`).join('');
-
+    const d = `${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}`;
+    const bars = Array.from({length:24}, () => `<div class="wave-bar" style="height:${3+Math.floor(Math.random()*18)}px"></div>`).join('');
     wrap.innerHTML = `
       <div class="bubble user">
         <div class="bubble-voice">
-          <button class="voice-play-btn" onclick="playUserVoice(this, '${encodeURIComponent(text)}')">▶</button>
-          <div class="waveform">${barsHtml}</div>
-          <span class="voice-duration">${dur}</span>
+          <button class="voice-play-btn">▶</button>
+          <div class="waveform">${bars}</div>
+          <span class="voice-duration">${d}</span>
         </div>
       </div>
       <div class="timestamp">${now()}</div>`;
-    chatZone.appendChild(wrap);
-    scrollDown();
+    chatZone.appendChild(wrap); scrollDown();
   }
 
   function addMirrorBubble(text) {
     const wrap = document.createElement('div');
     wrap.className = 'bubble-wrap mirror';
-    const isAr = /[\u0600-\u06FF]/.test(text);
+    const isRtl = /[\u0600-\u06FF\u2D30-\u2D7F]/.test(text);
     wrap.innerHTML = `
-      <div class="bubble mirror ${isAr ? 'arabic' : ''}">${text}</div>
+      <div class="bubble mirror ${isRtl ? 'rtl' : ''}">${text}</div>
       <div class="timestamp">${now()}</div>`;
-    chatZone.appendChild(wrap);
-    scrollDown();
-    return wrap;
+    chatZone.appendChild(wrap); scrollDown();
   }
 
   function addTyping() {
     const wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap mirror';
-    wrap.id = 'typingIndicator';
-    wrap.innerHTML = `
-      <div class="typing-bubble">
-        <div class="typing-dots">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      </div>`;
-    chatZone.appendChild(wrap);
-    scrollDown();
-    return wrap;
+    wrap.className = 'bubble-wrap mirror'; wrap.id = 'typingIndicator';
+    wrap.innerHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    chatZone.appendChild(wrap); scrollDown();
   }
+  function removeTyping() { const t = document.getElementById('typingIndicator'); if(t) t.remove(); }
+  function scrollDown() { setTimeout(() => { chatZone.scrollTop = chatZone.scrollHeight; }, 50); }
 
-  function removeTyping() {
-    const t = document.getElementById('typingIndicator');
-    if (t) t.remove();
-  }
-
-  function scrollDown() {
-    setTimeout(() => { chatZone.scrollTop = chatZone.scrollHeight; }, 50);
-  }
-
-  // ── PLAY USER VOICE (TTS de ce qu'il a dit) ──
-  async function playUserVoice(btn, encodedText) {
-    // Simple replay via TTS si on veut — optionnel
-  }
-
-  // ── ENVOI À CLAUDE ──
+  // ── CLAUDE ──
   async function sendToMirror(userText) {
-    isProcessing = true;
-    btnMic.disabled = true;
-    headerSt.textContent = 'En réflexion...';
-    recLabel.textContent = 'Le Miroir réfléchit...';
-
+    isProcessing = true; btnMic.disabled = true;
     conversationHistory.push({ role: 'user', content: userText });
-
-    const typing = addTyping();
+    addTyping();
     await delay(800);
-
     try {
       const res = await fetch(API_CHAT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: conversationHistory })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: conversationHistory, language: selectedLang })
       });
       const data = await res.json();
       const reply = data.reply || 'Je suis là.';
-
       conversationHistory.push({ role: 'assistant', content: reply });
-
-      removeTyping();
-      addMirrorBubble(reply);
-
-      // TTS
-      headerSt.textContent = 'Parle...';
-      recLabel.textContent = 'Le Miroir parle...';
+      removeTyping(); addMirrorBubble(reply);
       await speak(reply);
-
     } catch(err) {
-      removeTyping();
-      addMirrorBubble('Je suis là.');
-      console.error(err);
+      removeTyping(); addMirrorBubble('Je suis là.'); console.error(err);
     } finally {
-      isProcessing = false;
-      btnMic.disabled = false;
-      headerSt.textContent = 'En ligne';
-      recLabel.textContent = 'Appuie pour parler';
+      isProcessing = false; btnMic.disabled = false;
+      recLabel.textContent = hints[selectedLang];
     }
   }
 
@@ -524,8 +510,7 @@
   async function speak(text) {
     try {
       const res = await fetch(API_SPEAK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, voice_id: VOICE_ID })
       });
       if (!res.ok) return;
@@ -538,35 +523,23 @@
         currentAudio.play();
       });
       currentAudio = null;
-    } catch(e) {
-      console.error('TTS:', e);
-    }
+    } catch(e) { console.error('TTS:', e); }
   }
 
   function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   // ── OUVERTURE ──
-  async function openingGreeting() {
-    await delay(800);
-
-    const typing = addTyping();
-    await delay(1500);
+  async function openingGreeting(greeting) {
+    btnMic.disabled = true;
+    addTyping();
+    await delay(1200);
     removeTyping();
-
-    const greeting = 'Salam. Rak bkhir ?';
     conversationHistory.push({ role: 'assistant', content: greeting });
     addMirrorBubble(greeting);
-
-    headerSt.textContent = 'Parle...';
-    recLabel.textContent = 'Le Miroir parle...';
-    btnMic.disabled = true;
     await speak(greeting);
     btnMic.disabled = false;
-    headerSt.textContent = 'En ligne';
-    recLabel.textContent = 'Appuie pour parler';
+    recLabel.textContent = hints[selectedLang];
   }
-
-  window.addEventListener('load', openingGreeting);
 </script>
 </body>
 </html>
