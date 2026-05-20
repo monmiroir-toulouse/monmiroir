@@ -31,9 +31,10 @@ module.exports = async function handler(req, res) {
           text,
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
-            stability: 0.75,
-            similarity_boost: 0.75,
-          },
+  stability: 0.75,
+  similarity_boost: 0.75,
+  speed: 0.85,
+},
         }),
       }
     );
