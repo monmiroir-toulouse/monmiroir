@@ -1,186 +1,572 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mon Miroir - Prototype V2.1</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-warm: #FDFBF7;
-            --card-white: #FFFFFF;
-            --primary-navy: #1A3A5C;
-            --success-green: #2E7D32;
-            --danger-red: #C0392B;
-            --gold-soft: #C9A84C;
-            --thinking-blue: #5D6D7E;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mon Miroir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1923;
+      --chat-bg: #0A1520;
+      --bubble-mirror: #1A3A5C;
+      --bubble-user: #1E5C3A;
+      --gold: #C9A84C;
+      --green-record: #25D366;
+      --red-stop: #E53935;
+      --text: #F0EDE6;
+      --text-soft: #7A8FA6;
+      --wave-color: #4ECDC4;
+    }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background-color: var(--bg-warm);
-            font-family: 'Lato', sans-serif;
-            overflow: hidden;
-            display: flex; flex-direction: column;
-        }
+    html, body {
+      height: 100%; overflow: hidden;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+    }
 
-        /* --- ACCUEIL --- */
-        #onboarding {
-            position: fixed; inset: 0; z-index: 1000;
-            background-color: var(--bg-warm);
-            display: flex; align-items: center; justify-content: center; padding: 20px;
-            transition: opacity 0.5s ease;
-        }
+    /* ── LAYOUT ── */
+    .app {
+      height: 100%; display: flex; flex-direction: column;
+    }
 
-        .intro-card {
-            background: var(--card-white); padding: 40px 30px; border-radius: 30px;
-            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            max-width: 400px; border: 1px solid rgba(201, 168, 76, 0.2);
-        }
+    /* ── HEADER ── */
+    .header {
+      background: var(--bubble-mirror);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      flex-shrink: 0;
+    }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--gold), #7A5C1E);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(201,168,76,0.3);
+    }
+    .header-info h1 {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 17px; font-weight: 700; color: var(--gold);
+    }
+    .header-status {
+      font-size: 12px; color: var(--text-soft);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .dot-online {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green-record);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-        .btn-ready {
-            background: var(--primary-navy); color: white; border: none;
-            padding: 18px 45px; border-radius: 50px; font-weight: bold; cursor: pointer;
-        }
+    /* ── ZONE CHAT ── */
+    .chat-zone {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 20px 14px;
+      background: var(--chat-bg);
+      display: flex; flex-direction: column; gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .chat-zone::-webkit-scrollbar { display: none; }
 
-        /* --- ZONE VISUELLE --- */
-        .main-display {
-            flex-grow: 1; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; position: relative;
-        }
+    /* ── BULLES ── */
+    .bubble-wrap {
+      display: flex; flex-direction: column;
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .bubble-wrap.mirror { align-items: flex-start; }
+    .bubble-wrap.user   { align-items: flex-end; }
 
-        .wave-circle {
-            width: 260px; height: 260px;
-            background: radial-gradient(circle, var(--gold-soft) 0%, transparent 75%);
-            border-radius: 50%; opacity: 0; transition: all 0.5s ease;
-        }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
 
-        .wave-active { opacity: 0.4; animation: pulse-wave 1.5s infinite ease-in-out; }
-        .wave-thinking { background: radial-gradient(circle, var(--thinking-blue) 0%, transparent 75%); opacity: 0.3; animation: pulse-slow 3s infinite ease-in-out; }
+    .bubble {
+      max-width: 80%; padding: 10px 14px;
+      border-radius: 18px; font-size: 15px; line-height: 1.5;
+      position: relative;
+    }
+    .bubble.mirror {
+      background: var(--bubble-mirror);
+      border-bottom-left-radius: 4px;
+      color: var(--text);
+    }
+    .bubble.user {
+      background: var(--bubble-user);
+      border-bottom-right-radius: 4px;
+      color: var(--text);
+    }
+    .bubble.arabic {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 18px; direction: rtl;
+      color: var(--gold);
+    }
 
-        @keyframes pulse-wave { 0% { transform: scale(0.9); } 50% { transform: scale(1.2); } 100% { transform: scale(0.9); } }
-        @keyframes pulse-slow { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    /* Bulle vocale style WhatsApp */
+    .bubble-voice {
+      display: flex; align-items: center; gap: 10px;
+      min-width: 180px;
+    }
+    .voice-play-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      transition: transform 0.15s ease;
+    }
+    .voice-play-btn:active { transform: scale(0.9); }
+    .bubble.mirror .voice-play-btn { background: var(--gold); color: #0F1923; }
+    .bubble.user   .voice-play-btn { background: #25D366; color: white; }
 
-        .status-indicator { margin-top: 30px; font-weight: 700; font-size: 20px; color: var(--primary-navy); text-align: center; padding: 0 20px; }
+    /* Onde vocale */
+    .waveform {
+      flex: 1; height: 28px;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .wave-bar {
+      width: 3px; border-radius: 2px; background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .wave-bar.active { background: var(--gold); }
+    .bubble.user .wave-bar.active { background: #25D366; }
 
-        /* --- CONTRÔLES --- */
-        .controls { padding-bottom: 60px; display: flex; justify-content: space-evenly; align-items: center; width: 100%; }
+    .voice-duration {
+      font-size: 11px; color: var(--text-soft); flex-shrink: 0;
+    }
 
-        .btn-call {
-            width: 110px; height: 110px; border-radius: 50%; border: none;
-            color: white; font-size: 45px; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
+    /* Timestamp */
+    .timestamp {
+      font-size: 11px; color: var(--text-soft);
+      margin-top: 3px; padding: 0 4px;
+    }
 
-        .btn-start { background-color: var(--success-green); }
-        .btn-stop { background-color: var(--danger-red); opacity: 0.3; pointer-events: none; }
-        
-        .btn-active { opacity: 1 !important; pointer-events: auto !important; }
-        .btn-inactive { opacity: 0.3 !important; pointer-events: none !important; }
-    </style>
+    /* ── INDICATEUR "EN TRAIN D'ÉCRIRE" ── */
+    .typing-bubble {
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .typing-dots {
+      background: var(--bubble-mirror);
+      border-radius: 18px; border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex; gap: 5px; align-items: center;
+    }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--text-soft);
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%,60%,100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); background: var(--gold); }
+    }
+
+    /* ── BARRE D'ENREGISTREMENT ── */
+    .record-bar {
+      flex-shrink: 0;
+      background: var(--bubble-mirror);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    /* Bouton micro principal */
+    .btn-mic {
+      width: 54px; height: 54px; border-radius: 50%; border: none;
+      background: var(--green-record);
+      color: white; font-size: 22px;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(37,211,102,0.35);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .btn-mic.recording {
+      background: var(--red-stop);
+      box-shadow: 0 4px 20px rgba(229,57,53,0.5);
+      animation: record-pulse 1s ease-in-out infinite;
+    }
+    @keyframes record-pulse {
+      0%,100% { transform: scale(1); box-shadow: 0 4px 20px rgba(229,57,53,0.4); }
+      50%      { transform: scale(1.08); box-shadow: 0 4px 28px rgba(229,57,53,0.7); }
+    }
+    .btn-mic:disabled {
+      opacity: 0.4; pointer-events: none;
+    }
+
+    /* Zone live d'enregistrement */
+    .record-live {
+      flex: 1; display: flex; flex-direction: column; gap: 5px;
+    }
+    .record-label {
+      font-size: 13px; color: var(--text-soft);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .record-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red-stop);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .record-dot.active { opacity: 1; animation: blink 0.8s ease-in-out infinite; }
+
+    .live-wave {
+      height: 24px; display: flex; align-items: center; gap: 2px;
+    }
+    .live-bar {
+      width: 3px; border-radius: 2px;
+      background: var(--green-record);
+      height: 4px;
+      transition: height 0.1s ease;
+    }
+
+    .record-timer {
+      font-size: 13px; color: var(--text-soft);
+      font-variant-numeric: tabular-nums;
+      min-width: 36px;
+    }
+
+    /* Hint bas */
+    .record-hint {
+      font-size: 12px; color: var(--text-soft);
+      text-align: center; padding: 6px 0 0;
+      flex-basis: 100%;
+    }
+  </style>
 </head>
 <body>
+<div class="app">
 
-    <div id="onboarding">
-        <div class="intro-card">
-            <h1 style="font-family:'Poppins'; color:var(--primary-navy);">Prêt ?</h1>
-            <p style="font-size:18px; color:#5D6D7E;">Appuie sur le bouton vert pour parler.<br>Je vais t'écouter sans te juger.</p>
-            <button class="btn-ready" onclick="closeOnboarding()">Commencer l'appel</button>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="avatar">🪞</div>
+    <div class="header-info">
+      <h1>Mon Miroir</h1>
+      <div class="header-status">
+        <div class="dot-online"></div>
+        <span id="headerStatus">En ligne</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-zone" id="chatZone"></div>
+
+  <!-- BARRE MICRO -->
+  <div class="record-bar">
+    <button class="btn-mic" id="btnMic" onclick="toggleRecord()">🎙️</button>
+    <div class="record-live">
+      <div class="record-label">
+        <div class="record-dot" id="recDot"></div>
+        <span id="recLabel">Appuie pour parler</span>
+      </div>
+      <div class="live-wave" id="liveWave"></div>
+    </div>
+    <div class="record-timer" id="recTimer"></div>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIG ──
+  const VOICE_ID  = 'IKRnTow9UDgZBDEXp4Gq';
+  const API_SPEAK = '/api/speak';
+  const API_CHAT  = '/api/chat';
+
+  // ── STATE ──
+  let isRecording   = false;
+  let isProcessing  = false;
+  let recognition;
+  let finalTranscript = '';
+  let timerInterval;
+  let timerSecs = 0;
+  let animFrame;
+  let conversationHistory = [];
+  let currentAudio = null;
+
+  const chatZone    = document.getElementById('chatZone');
+  const btnMic      = document.getElementById('btnMic');
+  const recDot      = document.getElementById('recDot');
+  const recLabel    = document.getElementById('recLabel');
+  const recTimer    = document.getElementById('recTimer');
+  const headerSt    = document.getElementById('headerStatus');
+  const liveWave    = document.getElementById('liveWave');
+
+  // ── LIVE WAVE BARS ──
+  for (let i = 0; i < 20; i++) {
+    const b = document.createElement('div');
+    b.className = 'live-bar';
+    liveWave.appendChild(b);
+  }
+  const liveBars = liveWave.querySelectorAll('.live-bar');
+
+  function animateLiveWave() {
+    liveBars.forEach(b => {
+      const h = isRecording ? (4 + Math.random() * 18) : 4;
+      b.style.height = h + 'px';
+    });
+    if (isRecording) animFrame = requestAnimationFrame(animateLiveWave);
+    else liveBars.forEach(b => b.style.height = '4px');
+  }
+
+  // ── SPEECH RECOGNITION ──
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'fr-FR';
+
+    recognition.onresult = (e) => {
+      finalTranscript = '';
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      recLabel.textContent = finalTranscript || interim || 'Je t\'écoute...';
+    };
+
+    recognition.onend = () => {
+      if (isRecording) stopRecording(true);
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error !== 'aborted') stopRecording(false);
+    };
+  }
+
+  // ── TOGGLE MICRO ──
+  function toggleRecord() {
+    if (isProcessing) return;
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+    if (!isRecording) startRecording();
+    else stopRecording(true);
+  }
+
+  function startRecording() {
+    isRecording = true;
+    finalTranscript = '';
+
+    btnMic.classList.add('recording');
+    btnMic.textContent = '⏹';
+    recDot.classList.add('active');
+    recLabel.textContent = 'Je t\'écoute...';
+    recTimer.textContent = '0:00';
+    headerSt.textContent = 'En écoute...';
+
+    timerSecs = 0;
+    timerInterval = setInterval(() => {
+      timerSecs++;
+      const m = Math.floor(timerSecs / 60);
+      const s = String(timerSecs % 60).padStart(2, '0');
+      recTimer.textContent = `${m}:${s}`;
+    }, 1000);
+
+    animateLiveWave();
+    if (recognition) { try { recognition.start(); } catch(e) {} }
+  }
+
+  function stopRecording(withText) {
+    isRecording = false;
+    clearInterval(timerInterval);
+    cancelAnimationFrame(animFrame);
+    liveBars.forEach(b => b.style.height = '4px');
+
+    btnMic.classList.remove('recording');
+    btnMic.textContent = '🎙️';
+    recDot.classList.remove('active');
+    recTimer.textContent = '';
+    headerSt.textContent = 'En ligne';
+
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+
+    const text = finalTranscript.trim();
+    if (withText && text) {
+      recLabel.textContent = 'Appuie pour parler';
+      addUserBubble(text, timerSecs);
+      sendToMirror(text);
+    } else {
+      recLabel.textContent = 'Appuie pour parler';
+    }
+  }
+
+  // ── BULLES ──
+  function now() {
+    return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function randomWaveBars(count = 24) {
+    const heights = [];
+    for (let i = 0; i < count; i++) heights.push(3 + Math.floor(Math.random() * 18));
+    return heights;
+  }
+
+  function addUserBubble(text, durationSecs) {
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap user';
+
+    const m = Math.floor(durationSecs / 60);
+    const s = String(durationSecs % 60).padStart(2, '0');
+    const dur = durationSecs > 0 ? `${m}:${s}` : '0:01';
+
+    const bars = randomWaveBars();
+    const barsHtml = bars.map(h => `<div class="wave-bar" style="height:${h}px"></div>`).join('');
+
+    wrap.innerHTML = `
+      <div class="bubble user">
+        <div class="bubble-voice">
+          <button class="voice-play-btn" onclick="playUserVoice(this, '${encodeURIComponent(text)}')">▶</button>
+          <div class="waveform">${barsHtml}</div>
+          <span class="voice-duration">${dur}</span>
         </div>
-    </div>
+      </div>
+      <div class="timestamp">${now()}</div>`;
+    chatZone.appendChild(wrap);
+    scrollDown();
+  }
 
-    <div class="main-display">
-        <div id="wave" class="wave-circle"></div>
-        <div id="status" class="status-indicator">En attente...</div>
-    </div>
+  function addMirrorBubble(text) {
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap mirror';
+    const isAr = /[\u0600-\u06FF]/.test(text);
+    wrap.innerHTML = `
+      <div class="bubble mirror ${isAr ? 'arabic' : ''}">${text}</div>
+      <div class="timestamp">${now()}</div>`;
+    chatZone.appendChild(wrap);
+    scrollDown();
+    return wrap;
+  }
 
-    <div class="controls">
-        <button id="startBtn" class="btn-call btn-start" onclick="handleStart()">📞</button>
-        <button id="stopBtn" class="btn-call btn-stop" onclick="handleStop()">🛑</button>
-    </div>
+  function addTyping() {
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap mirror';
+    wrap.id = 'typingIndicator';
+    wrap.innerHTML = `
+      <div class="typing-bubble">
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>`;
+    chatZone.appendChild(wrap);
+    scrollDown();
+    return wrap;
+  }
 
-  <script>
-    const statusText = document.getElementById('status');
-    const wave = document.getElementById('wave');
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
+  function removeTyping() {
+    const t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
 
-    let recognition;
-    if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'fr-FR';
+  function scrollDown() {
+    setTimeout(() => { chatZone.scrollTop = chatZone.scrollHeight; }, 50);
+  }
+
+  // ── PLAY USER VOICE (TTS de ce qu'il a dit) ──
+  async function playUserVoice(btn, encodedText) {
+    // Simple replay via TTS si on veut — optionnel
+  }
+
+  // ── ENVOI À CLAUDE ──
+  async function sendToMirror(userText) {
+    isProcessing = true;
+    btnMic.disabled = true;
+    headerSt.textContent = 'En réflexion...';
+    recLabel.textContent = 'Le Miroir réfléchit...';
+
+    conversationHistory.push({ role: 'user', content: userText });
+
+    const typing = addTyping();
+    await delay(800);
+
+    try {
+      const res = await fetch(API_CHAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: conversationHistory })
+      });
+      const data = await res.json();
+      const reply = data.reply || 'Je suis là.';
+
+      conversationHistory.push({ role: 'assistant', content: reply });
+
+      removeTyping();
+      addMirrorBubble(reply);
+
+      // TTS
+      headerSt.textContent = 'Parle...';
+      recLabel.textContent = 'Le Miroir parle...';
+      await speak(reply);
+
+    } catch(err) {
+      removeTyping();
+      addMirrorBubble('Je suis là.');
+      console.error(err);
+    } finally {
+      isProcessing = false;
+      btnMic.disabled = false;
+      headerSt.textContent = 'En ligne';
+      recLabel.textContent = 'Appuie pour parler';
     }
+  }
 
-    function playSound(freq, duration) {
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain); 
-            gain.connect(ctx.destination);
-            osc.frequency.value = freq;
-            osc.start(); 
-            osc.stop(ctx.currentTime + duration);
-        } catch (e) {
-            console.log("Audio non supporté");
-        }
+  // ── TTS ──
+  async function speak(text) {
+    try {
+      const res = await fetch(API_SPEAK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice_id: VOICE_ID })
+      });
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      currentAudio = new Audio(url);
+      await new Promise(resolve => {
+        currentAudio.onended = () => { URL.revokeObjectURL(url); resolve(); };
+        currentAudio.onerror = resolve;
+        currentAudio.play();
+      });
+      currentAudio = null;
+    } catch(e) {
+      console.error('TTS:', e);
     }
+  }
 
-    function closeOnboarding() {
-        const ob = document.getElementById('onboarding');
-        ob.style.opacity = '0';
-        setTimeout(() => {
-            ob.style.display = 'none';
-        }, 500);
-    }
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    function handleStart() {
-        if (navigator.vibrate) navigator.vibrate(60);
-        playSound(523, 0.1);
+  // ── OUVERTURE ──
+  async function openingGreeting() {
+    await delay(800);
 
-        statusText.innerText = "Je t'écoute...";
-        statusText.style.color = "var(--success-green)";
-        wave.className = "wave-circle wave-active";
-        
-        startBtn.classList.add('btn-inactive');
-        stopBtn.classList.add('btn-active');
+    const typing = addTyping();
+    await delay(1500);
+    removeTyping();
 
-        if (recognition) {
-            recognition.start();
-        }
-    }
+    const greeting = 'Salam. Rak bkhir ?';
+    conversationHistory.push({ role: 'assistant', content: greeting });
+    addMirrorBubble(greeting);
 
-    if (recognition) {
-        recognition.onspeechend = () => {
-            statusText.innerText = "Je réfléchis...";
-            statusText.style.color = "var(--thinking-blue)";
-            wave.className = "wave-circle wave-thinking";
-        };
-    }
+    headerSt.textContent = 'Parle...';
+    recLabel.textContent = 'Le Miroir parle...';
+    btnMic.disabled = true;
+    await speak(greeting);
+    btnMic.disabled = false;
+    headerSt.textContent = 'En ligne';
+    recLabel.textContent = 'Appuie pour parler';
+  }
 
-    function handleStop() {
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-        playSound(329, 0.2);
-
-        statusText.innerText = "Appel terminé.";
-        statusText.style.color = "var(--primary-navy)";
-        wave.className = "wave-circle";
-        
-        stopBtn.classList.remove('btn-active');
-        startBtn.classList.remove('btn-inactive');
-
-        if (recognition) {
-            recognition.stop();
-        }
-        
-        alert("Récit sécurisé. Ton miroir est prêt.");
-    }
+  window.addEventListener('load', openingGreeting);
 </script>
- 
-    </script>
 </body>
 </html>
