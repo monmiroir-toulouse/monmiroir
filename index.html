@@ -164,12 +164,15 @@
 </div>
 
 <script>
-  const VOICE_ID  = 'IKRnTow9UDgZBDEXp4Gq';
+  const VOICE_ID_FR = '499WxIBFdyR15retMRLV'; // Estelle - Français
+  const VOICE_ID_AR = 'IKRnTow9UDgZBDEXp4Gq'; // Mohamed - Arabe et autres
+  const VOICE_ID = VOICE_ID_FR; // sera mis à jour selon la langue choisie
   const API_SPEAK = '/api/speak';
   const API_CHAT  = '/api/chat';
   const SILENCE_DELAY = 2000; // 2 secondes de silence → envoi
 
   let selectedLang = 'fr';
+  let currentVoiceId = VOICE_ID_FR;
   let appState = 'idle'; // idle | listening | thinking | speaking
   let recognition;
   let finalTranscript = '';
@@ -231,6 +234,7 @@
   // ── CHOIX LANGUE ──
   function chooseLang(btn) {
     selectedLang = btn.dataset.lang;
+    currentVoiceId = (selectedLang === 'fr') ? VOICE_ID_FR : VOICE_ID_AR;
     const greeting = btn.dataset.greeting;
     const langScreen = document.getElementById('langScreen');
     langScreen.style.opacity = '0';
@@ -422,7 +426,7 @@
     try {
       const res = await fetch(API_SPEAK, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice_id: VOICE_ID })
+        body: JSON.stringify({ text, voice_id: currentVoiceId })
       });
       if (!res.ok) throw new Error('TTS error');
       const blob = await res.blob();
