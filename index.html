@@ -293,6 +293,7 @@
     langScreen.style.opacity = '0';
     setTimeout(() => {
       langScreen.style.display = 'none';
+langScreen.style.pointerEvents = 'none';
       document.getElementById('chatApp').classList.add('visible');
       recLabel.textContent = hints[selectedLang];
       initRecognition();
