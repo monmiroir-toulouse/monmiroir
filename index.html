@@ -259,9 +259,19 @@
 
   // ── BASCULE MODE ──
   function toggleMode() {
-    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
-    if (appState === 'listening') stopListening();
+    // Stopper tout ce qui tourne avant de basculer
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+    appState = 'idle';
+    clearTimeout(silenceTimer);
+    resetSilenceBar();
+    cancelAnimationFrame(animFrame);
+    liveWave.classList.remove('visible');
+    liveBars.forEach(b => b.style.height = '4px');
+    btnMic.textContent = '🎙️';
+    btnMic.classList.remove('listening', 'translating', 'speaking');
+
+    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
 
     if (appMode === 'translator') {
       btnMode.classList.add('active');
