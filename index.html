@@ -21,7 +21,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     html, body { height: 100%; width: 100%; max-width: 100vw; overflow: hidden; background: var(--bg); font-family: 'Nunito', sans-serif; color: var(--text); }
-.app { height: 100%; width: 100%; max-width: 100vw; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.5s ease; }
+
     /* ── ÉCRAN LANGUE ── */
     #langScreen {
       position: fixed; inset: 0; z-index: 100; background: var(--bg);
@@ -39,14 +39,14 @@
     .lang-arrow { color: var(--gold); font-size: 18px; opacity: 0.6; }
 
     /* ── APP ── */
-    .app { height: 100%; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.5s ease; }
+    .app { height: 100%; width: 100%; max-width: 100vw; overflow: hidden; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.5s ease; }
     .app.visible { opacity: 1; }
 
     /* ── HEADER ── */
-    .header { background: var(--bubble-mirror); padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(201,168,76,0.15); flex-shrink: 0; }
+    .header { background: var(--bubble-mirror); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(201,168,76,0.15); flex-shrink: 0; min-width: 0; overflow: hidden; }
     .avatar { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--gold), #7A5C1E); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 0 14px rgba(201,168,76,0.3); }
-    .header-info { flex: 1; }
-    .header-info h1 { font-family: 'Tajawal', sans-serif; font-size: 17px; font-weight: 700; color: var(--gold); }
+    .header-info { flex: 1; min-width: 0; overflow: hidden; }
+    .header-info h1 { font-family: 'Tajawal', sans-serif; font-size: 17px; font-weight: 700; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .header-status { font-size: 12px; color: var(--text-soft); display: flex; align-items: center; gap: 5px; }
     .dot-online { width: 7px; height: 7px; border-radius: 50%; background: var(--green-record); animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -62,7 +62,7 @@
     .btn-mode:active { transform: scale(0.9); }
 
     /* ── CHAT ZONE ── */
-    .chat-zone { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 14px; background: var(--chat-bg); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+    .chat-zone { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 14px; background: var(--chat-bg); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; width: 100%; max-width: 100vw; }
     .chat-zone::-webkit-scrollbar { display: none; }
 
     /* ── BULLES ── */
@@ -98,7 +98,7 @@
     @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); background: var(--gold); } }
 
     /* ── BARRE MICRO ── */
-    .record-bar { flex-shrink: 0; background: var(--bubble-mirror); border-top: 1px solid rgba(201,168,76,0.15); padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+    .record-bar { flex-shrink: 0; background: var(--bubble-mirror); border-top: 1px solid rgba(201,168,76,0.15); padding: 16px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 100vw; }
     .btn-mic { width: 60px; height: 60px; border-radius: 50%; border: none; background: var(--green-record); color: white; font-size: 26px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37,211,102,0.35); transition: all 0.2s ease; }
     .btn-mic.listening { background: var(--red-stop); box-shadow: 0 4px 20px rgba(229,57,53,0.5); animation: record-pulse 1s ease-in-out infinite; }
     .btn-mic.speaking { background: var(--gold); box-shadow: 0 4px 20px rgba(201,168,76,0.4); animation: none; }
@@ -172,7 +172,8 @@
       </div>
     </div>
     <!-- Bouton bascule mode -->
-   <button class="btn-mode" id="btnMode" onclick="toggleMode()" ontouchend="toggleMode()" title="Mode Traducteur Darija">🔤</button>
+    <button class="btn-mode" id="btnMode" onclick="toggleMode()" title="Mode Traducteur Darija">🔤</button>
+  </div>
 
   <!-- Bandeau traducteur -->
   <div class="trad-banner" id="tradBanner">
@@ -293,7 +294,6 @@
     langScreen.style.opacity = '0';
     setTimeout(() => {
       langScreen.style.display = 'none';
-langScreen.style.pointerEvents = 'none';
       document.getElementById('chatApp').classList.add('visible');
       recLabel.textContent = hints[selectedLang];
       initRecognition();
