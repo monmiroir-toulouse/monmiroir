@@ -131,6 +131,52 @@
 
     /* Bouton effacer traductions */
     .btn-clear { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; text-decoration: underline; margin-left: 8px; }
+
+    /* ── ZONE SAISIE TEXTE ── */
+    .text-input-overlay {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      background: var(--bubble-mirror);
+      border-top: 1px solid rgba(201,168,76,0.3);
+      padding: 12px 16px;
+      display: none; align-items: center; gap: 10px;
+      animation: slideUp 0.2s ease;
+    }
+    .text-input-overlay.visible { display: flex; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .text-input-field {
+      flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px; padding: 10px 16px;
+      color: var(--text); font-size: 15px; font-family: 'Nunito', sans-serif;
+      outline: none;
+    }
+    .text-input-field:focus { border-color: var(--gold); }
+    .text-input-field::placeholder { color: var(--text-soft); }
+
+    .btn-send {
+      width: 44px; height: 44px; border-radius: 50%; border: none;
+      background: var(--gold); color: #0F1923; font-size: 18px;
+      cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s ease;
+    }
+    .btn-send:active { transform: scale(0.9); }
+
+    .btn-close-text {
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      background: rgba(229,57,53,0.2); color: #E07B7B; font-size: 16px;
+      cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Bouton écriture dans header */
+    .btn-write {
+      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
+      background: transparent; color: var(--text-soft); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease; flex-shrink: 0;
+    }
+    .btn-write.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
+    .btn-write:active { transform: scale(0.9); }
+
   </style>
 </head>
 <body>
@@ -173,6 +219,7 @@
     </div>
     <!-- Bouton bascule mode -->
     <button class="btn-mode" id="btnMode" title="Mode Traducteur Darija">🔤</button>
+    <button class="btn-write" id="btnWrite" title="Écrire">✏️</button>
   </div>
 
   <!-- Bandeau traducteur -->
@@ -193,6 +240,15 @@
       </div>
     </div>
   </div>
+</div>
+
+  <!-- ZONE SAISIE TEXTE -->
+  <div class="text-input-overlay" id="textInputOverlay">
+    <button class="btn-close-text" onclick="toggleTextInput()">✕</button>
+    <input class="text-input-field" id="textField" type="text" placeholder="Écris ton message..." />
+    <button class="btn-send" onclick="sendTextMessage()">➤</button>
+  </div>
+
 </div>
 
 <script>
