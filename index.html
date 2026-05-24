@@ -109,17 +109,17 @@
     .live-wave { height: 22px; display: flex; align-items: center; gap: 2px; opacity: 0; transition: opacity 0.3s; }
     .live-wave.visible { opacity: 1; }
     .live-bar { width: 3px; border-radius: 2px; background: var(--green-record); height: 4px; transition: height 0.08s ease; }
-
+  
     .btn-mode {
       width: 38px; height: 38px; border-radius: 50%;
       border: 1px solid rgba(201,168,76,0.3);
       background: transparent; color: var(--text-soft);
       font-size: 17px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: all 0.2s ease;
+      flex-shrink: 0;
     }
     .btn-mode.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
-  </style>
+</style>
 </head>
 <body>
 
@@ -150,7 +150,7 @@
 <div class="app" id="chatApp">
   <div class="header">
     <div class="avatar">🪞</div>
-    <div class="header-info">
+    <div class="header-info" style="flex:1;">
       <h1>Mon Miroir</h1>
       <div class="header-status">
         <div class="dot-online"></div>
@@ -465,6 +465,30 @@
     await speak(greeting);
     btnMic.disabled = false;
   }
+
+  // ── MODE TRADUCTEUR ──
+  var appMode = 'mirror';
+
+  function toggleMode() {
+    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
+    var btn = document.getElementById('btnMode');
+    var status = document.getElementById('headerStatus');
+    if (appMode === 'translator') {
+      btn.classList.add('active');
+      if (status) status.textContent = 'Mode Traducteur';
+    } else {
+      btn.classList.remove('active');
+      if (status) status.textContent = 'En ligne';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('btnMode');
+    if (btn) {
+      btn.addEventListener('click', toggleMode);
+      btn.addEventListener('touchend', function(e) { e.preventDefault(); toggleMode(); });
+    }
+  });
 </script>
 </body>
 </html>
