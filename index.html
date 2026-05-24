@@ -109,55 +109,7 @@
     .live-wave { height: 22px; display: flex; align-items: center; gap: 2px; opacity: 0; transition: opacity 0.3s; }
     .live-wave.visible { opacity: 1; }
     .live-bar { width: 3px; border-radius: 2px; background: var(--green-record); height: 4px; transition: height 0.08s ease; }
-  
-    .btn-mode {
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.3);
-      background: transparent; color: var(--text-soft);
-      font-size: 17px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .btn-mode.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
-
-    .btn-write {
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.3);
-      background: transparent; color: var(--text-soft);
-      font-size: 17px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .btn-write.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
-
-    .text-bar {
-      display: none; flex-shrink: 0;
-      background: var(--bubble-mirror);
-      border-top: 1px solid rgba(201,168,76,0.2);
-      padding: 12px 16px; gap: 10px; align-items: center;
-    }
-    .text-bar.visible { display: flex; }
-
-    .text-field {
-      flex: 1; background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(201,168,76,0.2); border-radius: 24px;
-      padding: 10px 16px; color: var(--text);
-      font-size: 15px; font-family: 'Nunito', sans-serif; outline: none;
-    }
-    .text-field:focus { border-color: var(--gold); }
-    .text-field::placeholder { color: var(--text-soft); }
-
-    .btn-send {
-      width: 44px; height: 44px; border-radius: 50%; border: none;
-      background: var(--gold); color: #0F1923;
-      font-size: 18px; cursor: pointer; flex-shrink: 0;
-    }
-    .btn-close-text {
-      width: 36px; height: 36px; border-radius: 50%; border: none;
-      background: rgba(229,57,53,0.15); color: #E07B7B;
-      font-size: 15px; cursor: pointer; flex-shrink: 0;
-    }
-</style>
+  </style>
 </head>
 <body>
 
@@ -188,15 +140,13 @@
 <div class="app" id="chatApp">
   <div class="header">
     <div class="avatar">🪞</div>
-    <div class="header-info" style="flex:1;">
+    <div class="header-info">
       <h1>Mon Miroir</h1>
       <div class="header-status">
         <div class="dot-online"></div>
         <span id="headerStatus">En ligne</span>
       </div>
     </div>
-    <button class="btn-mode" id="btnMode">🔤</button>
-    <button class="btn-write" id="btnWrite">✏️</button>
   </div>
 
   <div class="chat-zone" id="chatZone"></div>
@@ -211,13 +161,6 @@
       </div>
     </div>
   </div>
-  <!-- BARRE TEXTE -->
-  <div class="text-bar" id="textBar">
-    <button class="btn-close-text" id="btnCloseText">✕</button>
-    <input class="text-field" id="textField" type="text" placeholder="Écris ton message..." />
-    <button class="btn-send" id="btnSend">➤</button>
-  </div>
-
 </div>
 
 <script>
@@ -511,119 +454,6 @@
     await speak(greeting);
     btnMic.disabled = false;
   }
-
-  // ── MODE TRADUCTEUR ──
- 
-const API_SPEAK = '/api/speak';
-const API_CHAT  = '/api/chat';
-const SILENCE_DELAY = 2000;
-   var appMode = 'mirror';
-  function toggleMode() {
-    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
-    var btn = document.getElementById('btnMode');
-    var status = document.getElementById('headerStatus');
-    if (appMode === 'translator') {
-      btn.classList.add('active');
-      if (status) status.textContent = 'Mode Traducteur';
-    } else {
-      btn.classList.remove('active');
-      if (status) status.textContent = 'En ligne';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('btnMode');
-    if (btn) {
-      btn.addEventListener('click', toggleMode);
-      btn.addEventListener('touchend', function(e) { e.preventDefault(); toggleMode(); });
-    }
-  });
-
-  // ── SAISIE TEXTE ──
-  function toggleTextInput() {
-    var bar = document.getElementById('textBar');
-    var btn = document.getElementById('btnWrite');
-    var isVisible = bar.classList.contains('visible');
-    if (isVisible) {
-      bar.classList.remove('visible');
-      btn.classList.remove('active');
-    } else {
-      bar.classList.add('visible');
-      btn.classList.add('active');
-      setTimeout(function() { document.getElementById('textField').focus(); }, 100);
-    }
-  }
-
-  function sendTextMessage() {
-    var field = document.getElementById('textField');
-    var text = field.value.trim();
-    if (!text) return;
-    field.value = '';
-    if (appMode === 'translator') {
-      translateText(text);
-    } else {
-      addUserBubble(text);
-      sendToMirror(text);
-    }
-  }
-
-  // ── TRADUCTION DARIJA → FRANÇAIS ──
-  async function translateText(text) {
-    // Bulle du texte original
-    addTradBubble(text, 'darija');
-    // Appel API
-    try {
-      const res = await fetch(API_CHAT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: text }],
-          language: 'ar',
-          mode: 'translate'
-        })
-      });
-      const data = await res.json();
-      addTradBubble(data.reply || '...', 'french');
-    } catch(e) {
-      addTradBubble('Erreur de traduction', 'french');
-    }
-  }
-
-  function addTradBubble(text, type) {
-    var wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap ' + (type === 'darija' ? 'user' : 'mirror');
-    var label = type === 'darija' ? '🗣 Darija' : '🇫🇷 Français';
-    var bgColor = type === 'darija' ? '#2C1F14' : '#1F3A14';
-    var textDir = type === 'darija' ? 'direction:rtl; font-family:Tajawal,sans-serif; font-size:17px;' : '';
-    var color = type === 'darija' ? '#E8C99A' : '#C8E6C9';
-    wrap.innerHTML = '<div style="font-size:11px;color:#7A8FA6;padding:2px 4px;">' + label + '</div>' +
-      '<div style="max-width:85%;padding:10px 14px;border-radius:18px;background:' + bgColor + ';color:' + color + ';' + textDir + '">' + text + '</div>' +
-      '<div style="font-size:11px;color:#7A8FA6;margin-top:3px;padding:0 4px;">' + now() + '</div>';
-    chatZone.appendChild(wrap);
-    scrollDown();
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var btnW = document.getElementById('btnWrite');
-    if (btnW) {
-      btnW.addEventListener('click', toggleTextInput);
-      btnW.addEventListener('touchend', function(e) { e.preventDefault(); toggleTextInput(); });
-    }
-    var btnClose = document.getElementById('btnCloseText');
-    if (btnClose) {
-      btnClose.addEventListener('click', toggleTextInput);
-      btnClose.addEventListener('touchend', function(e) { e.preventDefault(); toggleTextInput(); });
-    }
-    var btnSend = document.getElementById('btnSend');
-    if (btnSend) {
-      btnSend.addEventListener('click', sendTextMessage);
-      btnSend.addEventListener('touchend', function(e) { e.preventDefault(); sendTextMessage(); });
-    }
-    var field = document.getElementById('textField');
-    if (field) {
-      field.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendTextMessage(); });
-    }
-  });
 </script>
 </body>
 </html>
