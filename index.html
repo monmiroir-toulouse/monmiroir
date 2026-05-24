@@ -109,6 +109,16 @@
     .live-wave { height: 22px; display: flex; align-items: center; gap: 2px; opacity: 0; transition: opacity 0.3s; }
     .live-wave.visible { opacity: 1; }
     .live-bar { width: 3px; border-radius: 2px; background: var(--green-record); height: 4px; transition: height 0.08s ease; }
+
+    .btn-mode {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: transparent; color: var(--text-soft);
+      font-size: 17px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s ease;
+    }
+    .btn-mode.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
   </style>
 </head>
 <body>
@@ -147,6 +157,7 @@
         <span id="headerStatus">En ligne</span>
       </div>
     </div>
+    <button class="btn-mode" id="btnMode">🔤</button>
   </div>
 
   <div class="chat-zone" id="chatZone"></div>
