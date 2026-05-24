@@ -556,8 +556,48 @@
     var text = field.value.trim();
     if (!text) return;
     field.value = '';
-    addUserBubble(text);
-    sendToMirror(text);
+    if (appMode === 'translator') {
+      translateText(text);
+    } else {
+      addUserBubble(text);
+      sendToMirror(text);
+    }
+  }
+
+  // ── TRADUCTION DARIJA → FRANÇAIS ──
+  async function translateText(text) {
+    // Bulle du texte original
+    addTradBubble(text, 'darija');
+    // Appel API
+    try {
+      const res = await fetch(API_CHAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: text }],
+          language: 'ar',
+          mode: 'translate'
+        })
+      });
+      const data = await res.json();
+      addTradBubble(data.reply || '...', 'french');
+    } catch(e) {
+      addTradBubble('Erreur de traduction', 'french');
+    }
+  }
+
+  function addTradBubble(text, type) {
+    var wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap ' + (type === 'darija' ? 'user' : 'mirror');
+    var label = type === 'darija' ? '🗣 Darija' : '🇫🇷 Français';
+    var bgColor = type === 'darija' ? '#2C1F14' : '#1F3A14';
+    var textDir = type === 'darija' ? 'direction:rtl; font-family:Tajawal,sans-serif; font-size:17px;' : '';
+    var color = type === 'darija' ? '#E8C99A' : '#C8E6C9';
+    wrap.innerHTML = '<div style="font-size:11px;color:#7A8FA6;padding:2px 4px;">' + label + '</div>' +
+      '<div style="max-width:85%;padding:10px 14px;border-radius:18px;background:' + bgColor + ';color:' + color + ';' + textDir + '">' + text + '</div>' +
+      '<div style="font-size:11px;color:#7A8FA6;margin-top:3px;padding:0 4px;">' + now() + '</div>';
+    chatZone.appendChild(wrap);
+    scrollDown();
   }
 
   document.addEventListener('DOMContentLoaded', function() {
