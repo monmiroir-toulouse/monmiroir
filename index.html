@@ -11,8 +11,6 @@
       --chat-bg: #0A1520;
       --bubble-mirror: #1A3A5C;
       --bubble-user: #1E5C3A;
-      --bubble-trad-in: #2C1F14;
-      --bubble-trad-out: #1F3A14;
       --gold: #C9A84C;
       --green-record: #25D366;
       --red-stop: #E53935;
@@ -20,9 +18,8 @@
       --text-soft: #7A8FA6;
     }
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-    html, body { height: 100%; width: 100%; max-width: 100vw; overflow: hidden; background: var(--bg); font-family: 'Nunito', sans-serif; color: var(--text); }
+    html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: 'Nunito', sans-serif; color: var(--text); }
 
-    /* ── ÉCRAN LANGUE ── */
     #langScreen {
       position: fixed; inset: 0; z-index: 100; background: var(--bg);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -30,7 +27,11 @@
     }
     .lang-title { font-family: 'Tajawal', sans-serif; font-size: 15px; color: var(--text-soft); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; text-align: center; }
     .lang-list { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 14px; }
-    .lang-btn { background: var(--bubble-mirror); border: 1px solid rgba(201,168,76,0.2); border-radius: 16px; padding: 18px 24px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s ease; }
+    .lang-btn {
+      background: var(--bubble-mirror); border: 1px solid rgba(201,168,76,0.2); border-radius: 16px;
+      padding: 18px 24px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.2s ease; -webkit-tap-highlight-color: transparent;
+    }
     .lang-btn:active { transform: scale(0.97); background: rgba(201,168,76,0.15); border-color: var(--gold); }
     .lang-script { font-size: 22px; font-weight: 700; color: var(--text); }
     .lang-btn[data-lang="ar"] .lang-script { font-family: 'Tajawal', sans-serif; }
@@ -38,150 +39,80 @@
     .lang-btn[data-lang="ti"] .lang-script { font-family: 'Noto Sans Ethiopic', sans-serif; }
     .lang-arrow { color: var(--gold); font-size: 18px; opacity: 0.6; }
 
-    /* ── APP ── */
-    .app { height: 100%; width: 100%; max-width: 100vw; overflow: hidden; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.5s ease; }
+    .app { height: 100%; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.5s ease; }
     .app.visible { opacity: 1; }
 
-    /* ── HEADER ── */
-    .header { background: var(--bubble-mirror); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(201,168,76,0.15); flex-shrink: 0; min-width: 0; overflow: hidden; }
+    .header { background: var(--bubble-mirror); padding: 14px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(201,168,76,0.15); flex-shrink: 0; }
     .avatar { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--gold), #7A5C1E); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 0 14px rgba(201,168,76,0.3); }
-    .header-info { flex: 1; min-width: 0; overflow: hidden; }
-    .header-info h1 { font-family: 'Tajawal', sans-serif; font-size: 17px; font-weight: 700; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-info h1 { font-family: 'Tajawal', sans-serif; font-size: 17px; font-weight: 700; color: var(--gold); }
     .header-status { font-size: 12px; color: var(--text-soft); display: flex; align-items: center; gap: 5px; }
     .dot-online { width: 7px; height: 7px; border-radius: 50%; background: var(--green-record); animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* Bouton bascule mode */
-    .btn-mode {
-      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
-      background: transparent; color: var(--text-soft); font-size: 18px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s ease; flex-shrink: 0;
-    }
-    .btn-mode.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
-    .btn-mode:active { transform: scale(0.9); }
-
-    /* ── CHAT ZONE ── */
-    .chat-zone { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 14px; background: var(--chat-bg); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; width: 100%; max-width: 100vw; }
+    .chat-zone { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 14px; background: var(--chat-bg); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
     .chat-zone::-webkit-scrollbar { display: none; }
 
-    /* ── BULLES ── */
     .bubble-wrap { display: flex; flex-direction: column; animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    .bubble-wrap.mirror, .bubble-wrap.trad-out { align-items: flex-start; }
-    .bubble-wrap.user, .bubble-wrap.trad-in { align-items: flex-end; }
+    .bubble-wrap.mirror { align-items: flex-start; }
+    .bubble-wrap.user { align-items: flex-end; }
     @keyframes popIn { from { opacity: 0; transform: scale(0.85) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-    .bubble { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
+    .bubble { max-width: 80%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
     .bubble.mirror { background: var(--bubble-mirror); border-bottom-left-radius: 4px; color: var(--text); }
     .bubble.user { background: var(--bubble-user); border-bottom-right-radius: 4px; color: var(--text); }
     .bubble.rtl { font-family: 'Tajawal', sans-serif; font-size: 18px; direction: rtl; }
 
-    /* Bulles traducteur */
-    .bubble.trad-in { background: var(--bubble-trad-in); border-bottom-right-radius: 4px; color: #E8C99A; font-family: 'Tajawal', sans-serif; font-size: 17px; direction: rtl; }
-    .bubble.trad-out { background: var(--bubble-trad-out); border-bottom-left-radius: 4px; color: #C8E6C9; font-size: 15px; }
-    .bubble.trad-label { font-size: 11px; color: var(--text-soft); background: transparent; padding: 2px 4px; }
-
-    /* Bulles vocales */
     .bubble-voice { display: flex; align-items: center; gap: 10px; min-width: 180px; }
     .voice-play-btn { width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: transform 0.15s ease; }
     .voice-play-btn:active { transform: scale(0.9); }
     .bubble.user .voice-play-btn { background: #25D366; color: white; }
     .waveform { flex: 1; height: 28px; display: flex; align-items: center; gap: 2px; }
     .wave-bar { width: 3px; border-radius: 2px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+    .voice-duration { font-size: 11px; color: var(--text-soft); flex-shrink: 0; }
     .timestamp { font-size: 11px; color: var(--text-soft); margin-top: 3px; padding: 0 4px; }
 
-    /* Typing */
     .typing-dots { background: var(--bubble-mirror); border-radius: 18px; border-bottom-left-radius: 4px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; }
     .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-soft); animation: typingBounce 1.2s ease-in-out infinite; }
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); background: var(--gold); } }
 
-    /* ── BARRE MICRO ── */
-    .record-bar { flex-shrink: 0; background: var(--bubble-mirror); border-top: 1px solid rgba(201,168,76,0.15); padding: 16px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 100vw; }
-    .btn-mic { width: 60px; height: 60px; border-radius: 50%; border: none; background: var(--green-record); color: white; font-size: 26px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37,211,102,0.35); transition: all 0.2s ease; }
-    .btn-mic.listening { background: var(--red-stop); box-shadow: 0 4px 20px rgba(229,57,53,0.5); animation: record-pulse 1s ease-in-out infinite; }
+    /* BARRE BAS — micro unique, pas de bouton stop séparé */
+    .record-bar { flex-shrink: 0; background: var(--bubble-mirror); border-top: 1px solid rgba(201,168,76,0.15); padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+
+    .btn-mic {
+      width: 60px; height: 60px; border-radius: 50%; border: none;
+      background: var(--green-record); color: white; font-size: 26px;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(37,211,102,0.35);
+      transition: all 0.2s ease;
+    }
+    .btn-mic.listening {
+      background: var(--red-stop);
+      box-shadow: 0 4px 20px rgba(229,57,53,0.5);
+      animation: record-pulse 1s ease-in-out infinite;
+    }
     .btn-mic.speaking { background: var(--gold); box-shadow: 0 4px 20px rgba(201,168,76,0.4); animation: none; }
-    .btn-mic.translating { background: #8B5A2B; box-shadow: 0 4px 20px rgba(139,90,43,0.5); animation: record-pulse 1s ease-in-out infinite; }
     .btn-mic:disabled { opacity: 0.35; pointer-events: none; }
     @keyframes record-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
     .record-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
     .record-label { font-size: 14px; color: var(--text-soft); }
+    .record-label span { color: var(--text); font-weight: 600; }
+
+    /* Barre de silence : montre combien de temps avant envoi */
     .silence-bar-wrap { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity 0.3s; }
     .silence-bar-wrap.visible { opacity: 1; }
     .silence-bar { height: 100%; background: var(--gold); width: 100%; transform-origin: left; transition: transform 0.1s linear; }
+
     .live-wave { height: 22px; display: flex; align-items: center; gap: 2px; opacity: 0; transition: opacity 0.3s; }
     .live-wave.visible { opacity: 1; }
     .live-bar { width: 3px; border-radius: 2px; background: var(--green-record); height: 4px; transition: height 0.08s ease; }
-
-    /* Mode traducteur — live bar orange */
-    .mode-trad .live-bar { background: #C9A84C; }
-    .mode-trad .silence-bar { background: #C9A84C; }
-
-    /* Bandeau mode traducteur */
-    .trad-banner {
-      display: none; background: rgba(139,90,43,0.2);
-      border-bottom: 1px solid rgba(201,168,76,0.2);
-      padding: 8px 20px; text-align: center;
-      font-size: 12px; color: var(--gold); letter-spacing: 1px;
-      flex-shrink: 0;
-    }
-    .trad-banner.visible { display: block; }
-
-    /* Bouton effacer traductions */
-    .btn-clear { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; text-decoration: underline; margin-left: 8px; }
-
-    /* ── ZONE SAISIE TEXTE ── */
-    .text-input-overlay {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
-      background: var(--bubble-mirror);
-      border-top: 1px solid rgba(201,168,76,0.3);
-      padding: 12px 16px;
-      display: none; align-items: center; gap: 10px;
-      animation: slideUp 0.2s ease;
-    }
-    .text-input-overlay.visible { display: flex; }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    .text-input-field {
-      flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 24px; padding: 10px 16px;
-      color: var(--text); font-size: 15px; font-family: 'Nunito', sans-serif;
-      outline: none;
-    }
-    .text-input-field:focus { border-color: var(--gold); }
-    .text-input-field::placeholder { color: var(--text-soft); }
-
-    .btn-send {
-      width: 44px; height: 44px; border-radius: 50%; border: none;
-      background: var(--gold); color: #0F1923; font-size: 18px;
-      cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-      transition: transform 0.15s ease;
-    }
-    .btn-send:active { transform: scale(0.9); }
-
-    .btn-close-text {
-      width: 36px; height: 36px; border-radius: 50%; border: none;
-      background: rgba(229,57,53,0.2); color: #E07B7B; font-size: 16px;
-      cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    }
-
-    /* Bouton écriture dans header */
-    .btn-write {
-      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
-      background: transparent; color: var(--text-soft); font-size: 18px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s ease; flex-shrink: 0;
-    }
-    .btn-write.active { background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold); }
-    .btn-write:active { transform: scale(0.9); }
-
   </style>
 </head>
 <body>
 
-<!-- ÉCRAN LANGUE -->
 <div id="langScreen">
   <div class="lang-title">Choisis ta langue</div>
   <div class="lang-list">
@@ -200,37 +131,27 @@
     <button class="lang-btn" data-lang="bm" data-greeting="Ne b'a here. Kuma n'ma." onclick="chooseLang(this)">
       <span class="lang-script">Bambara</span><span class="lang-arrow">›</span>
     </button>
-    <button class="lang-btn" data-lang="ti" data-greeting="ሰላም። ክሰምዓካ ኣለኹ།" onclick="chooseLang(this)">
+    <button class="lang-btn" data-lang="ti" data-greeting="ሰላም። ክሰምዓካ ኣለኹ።" onclick="chooseLang(this)">
       <span class="lang-script">ትግርኛ</span><span class="lang-arrow">›</span>
     </button>
   </div>
 </div>
 
-<!-- APP -->
 <div class="app" id="chatApp">
   <div class="header">
     <div class="avatar">🪞</div>
     <div class="header-info">
-      <h1 id="headerTitle">Mon Miroir</h1>
+      <h1>Mon Miroir</h1>
       <div class="header-status">
         <div class="dot-online"></div>
         <span id="headerStatus">En ligne</span>
       </div>
     </div>
-    <!-- Bouton bascule mode -->
-    <button class="btn-mode" id="btnMode" title="Mode Traducteur Darija">🔤</button>
-    <button class="btn-write" id="btnWrite" title="Écrire">✏️</button>
-  </div>
-
-  <!-- Bandeau traducteur -->
-  <div class="trad-banner" id="tradBanner">
-    MODE TRADUCTEUR — Darija → Français
-    <button class="btn-clear" onclick="clearTrad()">Effacer</button>
   </div>
 
   <div class="chat-zone" id="chatZone"></div>
 
-  <div class="record-bar" id="recordBar">
+  <div class="record-bar">
     <button class="btn-mic" id="btnMic" onclick="handleMicTap()">🎙️</button>
     <div class="record-info">
       <div class="record-label" id="recLabel">...</div>
@@ -242,52 +163,47 @@
   </div>
 </div>
 
-  <!-- ZONE SAISIE TEXTE -->
-  <div class="text-input-overlay" id="textInputOverlay">
-    <button class="btn-close-text" onclick="toggleTextInput()">✕</button>
-    <input class="text-input-field" id="textField" type="text" placeholder="Écris ton message..." />
-    <button class="btn-send" onclick="sendTextMessage()">➤</button>
-  </div>
-
-</div>
-
 <script>
-  const VOICE_ID_FR = '499WxIBFdyR15retMRLV'; // Estelle
-  const VOICE_ID_AR = 'IKRnTow9UDgZBDEXp4Gq'; // Mohamed
-  const API_SPEAK   = '/api/speak';
-  const API_CHAT    = '/api/chat';
-  const SILENCE_DELAY = 2000;
+  const VOICE_ID_FR = '499WxIBFdyR15retMRLV'; // Estelle - Français
+  const VOICE_ID_AR = 'IKRnTow9UDgZBDEXp4Gq'; // Mohamed - Arabe et autres
+  const VOICE_ID = VOICE_ID_FR; // sera mis à jour selon la langue choisie
+  const API_SPEAK = '/api/speak';
+  const API_CHAT  = '/api/chat';
+  const SILENCE_DELAY = 2000; // 2 secondes de silence → envoi
 
-  let selectedLang    = 'fr';
-  let currentVoiceId  = VOICE_ID_FR;
-  let appState        = 'idle';
-  let appMode         = 'mirror'; // 'mirror' | 'translator'
+  let selectedLang = 'fr';
+  let currentVoiceId = VOICE_ID_FR;
+  let appState = 'idle'; // idle | listening | thinking | speaking
   let recognition;
   let finalTranscript = '';
-  let silenceTimer    = null;
-  let silenceStart    = null;
+  let silenceTimer = null;
+  let silenceStart = null;
   let animFrame;
   let conversationHistory = [];
-  let currentAudio    = null;
+  let currentAudio = null;
 
-  const chatZone    = document.getElementById('chatZone');
-  const btnMic      = document.getElementById('btnMic');
-  const recLabel    = document.getElementById('recLabel');
-  const headerSt    = document.getElementById('headerStatus');
-  const headerTitle = document.getElementById('headerTitle');
-  const liveWave    = document.getElementById('liveWave');
+  const chatZone  = document.getElementById('chatZone');
+  const btnMic    = document.getElementById('btnMic');
+  const recLabel  = document.getElementById('recLabel');
+  const headerSt  = document.getElementById('headerStatus');
+  const liveWave  = document.getElementById('liveWave');
   const silenceWrap = document.getElementById('silenceWrap');
   const silenceBar  = document.getElementById('silenceBar');
-  const btnMode     = document.getElementById('btnMode');
-  const tradBanner  = document.getElementById('tradBanner');
-  const recordBar   = document.getElementById('recordBar');
 
-  const hints = { fr:'Appuie pour parler', ar:'اضغط للتحدث', ber:'ⴾⴾⵙ ⴰⴷ ⵜⵙⴰⵡⵍⴷ', en:'Tap to speak', bm:'Digi ka kuma', ti:'ንምዝራብ ጠውቕ' };
-  const listeningHints = { fr:"Je t'écoute...", ar:'أنا أسمعك...', ber:'ⴷⴰⵡ ⴽ ⵙⵙⵎⵎⴻⵍⵖ...', en:'Listening...', bm:"N b'i kalan...", ti:'ይሰምዓካ ኣሎ...' };
+  const hints = {
+    fr: 'Appuie pour parler', ar: 'اضغط للتحدث', ber: 'ⴾⴾⵙ ⴰⴷ ⵜⵙⴰⵡⵍⴷ',
+    en: 'Tap to speak', bm: 'Digi ka kuma', ti: 'ንምዝራብ ጠውቕ'
+  };
+  const listeningHints = {
+    fr: 'Je t\'écoute...', ar: 'أنا أسمعك...', ber: 'ⴷⴰⵡ ⴽ ⵙⵙⵎⵎⴻⵍⵖ...',
+    en: 'Listening...', bm: 'N b\'i kalan...', ti: 'ይሰምዓካ ኣሎ...'
+  };
   const srLangs = { fr:'fr-FR', ar:'ar-MA', ber:'fr-FR', en:'en-US', bm:'fr-FR', ti:'fr-FR' };
 
   // Live wave bars
-  for (let i = 0; i < 20; i++) { const b = document.createElement('div'); b.className = 'live-bar'; liveWave.appendChild(b); }
+  for (let i = 0; i < 20; i++) {
+    const b = document.createElement('div'); b.className = 'live-bar'; liveWave.appendChild(b);
+  }
   const liveBars = liveWave.querySelectorAll('.live-bar');
 
   function animateWave() {
@@ -296,6 +212,7 @@
     else liveBars.forEach(b => b.style.height = '4px');
   }
 
+  // ── SILENCE BAR ANIMATION ──
   function startSilenceBar() {
     silenceWrap.classList.add('visible');
     silenceStart = Date.now();
@@ -303,7 +220,8 @@
   }
   function animateSilenceBar() {
     if (!silenceStart) return;
-    const progress = Math.min((Date.now() - silenceStart) / SILENCE_DELAY, 1);
+    const elapsed = Date.now() - silenceStart;
+    const progress = Math.min(elapsed / SILENCE_DELAY, 1);
     silenceBar.style.transform = `scaleX(${1 - progress})`;
     if (progress < 1 && appState === 'listening') requestAnimationFrame(animateSilenceBar);
   }
@@ -311,44 +229,6 @@
     silenceStart = null;
     silenceBar.style.transform = 'scaleX(1)';
     silenceWrap.classList.remove('visible');
-  }
-
-  // ── BASCULE MODE ──
-  function toggleMode() {
-    // Stopper tout ce qui tourne avant de basculer
-    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-    if (recognition) { try { recognition.stop(); } catch(e) {} }
-    appState = 'idle';
-    clearTimeout(silenceTimer);
-    resetSilenceBar();
-    cancelAnimationFrame(animFrame);
-    liveWave.classList.remove('visible');
-    liveBars.forEach(b => b.style.height = '4px');
-    btnMic.textContent = '🎙️';
-    btnMic.classList.remove('listening', 'translating', 'speaking');
-
-    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
-
-    if (appMode === 'translator') {
-      btnMode.classList.add('active');
-      tradBanner.classList.add('visible');
-      headerTitle.textContent = 'Traducteur Darija';
-      headerSt.textContent = 'Parle en Darija';
-      recLabel.textContent = 'Appuie — parle en Darija';
-      recordBar.classList.add('mode-trad');
-    } else {
-      btnMode.classList.remove('active');
-      tradBanner.classList.remove('visible');
-      headerTitle.textContent = 'Mon Miroir';
-      headerSt.textContent = 'En ligne';
-      recLabel.textContent = hints[selectedLang];
-      recordBar.classList.remove('mode-trad');
-    }
-  }
-
-  function clearTrad() {
-    // Effacer uniquement les bulles de traduction
-    chatZone.querySelectorAll('.trad-wrap').forEach(el => el.remove());
   }
 
   // ── CHOIX LANGUE ──
@@ -361,7 +241,7 @@
     setTimeout(() => {
       langScreen.style.display = 'none';
       document.getElementById('chatApp').classList.add('visible');
-      recLabel.textContent = hints[selectedLang];
+      setLabel(hints[selectedLang]);
       initRecognition();
       openingGreeting(greeting);
     }, 500);
@@ -382,115 +262,90 @@
         if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
         else interim += e.results[i][0].transcript;
       }
+      // Parole détectée → reset du timer de silence
       clearTimeout(silenceTimer);
       resetSilenceBar();
       if (finalTranscript || interim) {
+        // Nouveau silence → on repart le timer
         silenceTimer = setTimeout(() => {
           if (appState === 'listening' && finalTranscript.trim()) {
-            if (appMode === 'translator') translateAuto();
-            else sendAuto();
+            sendAuto();
           }
         }, SILENCE_DELAY);
         startSilenceBar();
       }
     };
 
-    recognition.onend = () => { if (appState === 'listening') { try { recognition.start(); } catch(e) {} } };
-    recognition.onerror = (e) => { if (e.error === 'no-speech') return; if (appState === 'listening') { try { recognition.start(); } catch(e) {} } };
+    recognition.onend = () => {
+      // Relancer si on est toujours en écoute
+      if (appState === 'listening') {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error === 'no-speech') return;
+      if (appState === 'listening') {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
   }
 
-  // ── ENVOI AUTO (mode Miroir) ──
+  // ── ENVOI AUTOMATIQUE après silence ──
   function sendAuto() {
-    const text = finalTranscript.trim(); finalTranscript = '';
+    const text = finalTranscript.trim();
+    finalTranscript = '';
     if (!text) return;
     stopListening();
     addUserBubble(text);
     sendToMirror(text);
   }
 
-  // ── TRADUCTION AUTO (mode Traducteur) ──
-  async function translateAuto() {
-    const text = finalTranscript.trim(); finalTranscript = '';
-    if (!text) return;
-    stopListening();
-
-    // Bulle Darija (ce qui a été dit)
-    addTradBubble(text, 'in');
-
-    // Traduction via Claude
-    appState = 'thinking';
-    btnMic.disabled = true;
-    recLabel.textContent = 'Traduction en cours...';
-
-    try {
-      const res = await fetch(API_CHAT, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: text }],
-          language: 'ar',
-          mode: 'translate'
-        })
-      });
-      const data = await res.json();
-      const translation = data.reply || '...';
-      addTradBubble(translation, 'out');
-    } catch(err) {
-      addTradBubble('Erreur de traduction', 'out');
-    } finally {
-      appState = 'idle';
-      btnMic.disabled = false;
-      recLabel.textContent = 'Appuie — parle en Darija';
-    }
-  }
-
-  // ── BOUTON MIC ──
+  // ── BOUTON MIC : démarrer / interrompre ──
   function handleMicTap() {
     if (appState === 'thinking') return;
     if (appState === 'speaking') {
+      // Interrompre la voix
       if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-      startListening(); return;
+      startListening();
+      return;
     }
     if (appState === 'listening') {
-      if (appMode === 'translator' && finalTranscript.trim()) translateAuto();
-      else if (appMode === 'mirror' && finalTranscript.trim()) sendAuto();
+      // Envoi manuel si déjà du texte
+      if (finalTranscript.trim()) sendAuto();
       else stopListening();
       return;
     }
+    // idle → démarrer
     startListening();
   }
 
   function startListening() {
-    appState = 'listening'; finalTranscript = '';
-    clearTimeout(silenceTimer); resetSilenceBar();
-
-    if (appMode === 'translator') {
-      btnMic.textContent = '🔴';
-      btnMic.classList.add('listening', 'translating');
-      recLabel.textContent = 'Parle en Darija...';
-      // Utiliser reconnaissance arabe en mode traducteur
-      if (recognition) { recognition.lang = 'ar-MA'; try { recognition.stop(); } catch(e) {} setTimeout(() => { try { recognition.start(); } catch(e) {} }, 200); return; }
-    } else {
-      btnMic.textContent = '🔴';
-      btnMic.classList.add('listening');
-      btnMic.classList.remove('translating');
-      recLabel.textContent = listeningHints[selectedLang];
-    }
-
+    appState = 'listening';
+    finalTranscript = '';
+    clearTimeout(silenceTimer);
+    resetSilenceBar();
+    btnMic.textContent = '🔴';
+    btnMic.classList.add('listening');
+    btnMic.classList.remove('speaking');
     liveWave.classList.add('visible');
+    setLabel(listeningHints[selectedLang]);
+    headerSt.textContent = selectedLang === 'ar' ? 'يستمع...' : 'Écoute...';
     animateWave();
     if (recognition) { try { recognition.start(); } catch(e) {} }
   }
 
   function stopListening() {
     appState = 'idle';
-    clearTimeout(silenceTimer); resetSilenceBar();
+    clearTimeout(silenceTimer);
+    resetSilenceBar();
     cancelAnimationFrame(animFrame);
     liveWave.classList.remove('visible');
     liveBars.forEach(b => b.style.height = '4px');
     btnMic.textContent = '🎙️';
-    btnMic.classList.remove('listening', 'translating', 'speaking');
-    recLabel.textContent = appMode === 'translator' ? 'Appuie — parle en Darija' : hints[selectedLang];
-    headerSt.textContent = appMode === 'translator' ? 'Parle en Darija' : 'En ligne';
+    btnMic.classList.remove('listening', 'speaking');
+    setLabel(hints[selectedLang]);
+    headerSt.textContent = 'En ligne';
     if (recognition) { try { recognition.stop(); } catch(e) {} }
   }
 
@@ -498,40 +353,49 @@
   function now() { return new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); }
 
   function addUserBubble(text) {
-    const wrap = document.createElement('div'); wrap.className = 'bubble-wrap user';
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap user';
     const bars = Array.from({length:24}, () => `<div class="wave-bar" style="height:${3+Math.floor(Math.random()*18)}px"></div>`).join('');
-    wrap.innerHTML = `<div class="bubble user"><div class="bubble-voice"><button class="voice-play-btn">▶</button><div class="waveform">${bars}</div></div></div><div class="timestamp">${now()}</div>`;
+    wrap.innerHTML = `
+      <div class="bubble user">
+        <div class="bubble-voice">
+          <button class="voice-play-btn">▶</button>
+          <div class="waveform">${bars}</div>
+        </div>
+      </div>
+      <div class="timestamp">${now()}</div>`;
     chatZone.appendChild(wrap); scrollDown();
   }
 
   function addMirrorBubble(text) {
-    const wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror';
-    const isRtl = /[\u0600-\u06FF]/.test(text);
-    wrap.innerHTML = `<div class="bubble mirror ${isRtl ? 'rtl' : ''}">${text}</div><div class="timestamp">${now()}</div>`;
-    chatZone.appendChild(wrap); scrollDown();
-  }
-
-  function addTradBubble(text, direction) {
     const wrap = document.createElement('div');
-    wrap.className = `bubble-wrap trad-${direction} trad-wrap`;
-    const label = direction === 'in' ? '🗣 Darija' : '🇫🇷 Français';
-    wrap.innerHTML = `<div class="bubble trad-label">${label}</div><div class="bubble trad-${direction}">${text}</div><div class="timestamp">${now()}</div>`;
+    wrap.className = 'bubble-wrap mirror';
+    const isRtl = /[\u0600-\u06FF]/.test(text);
+    wrap.innerHTML = `
+      <div class="bubble mirror ${isRtl ? 'rtl' : ''}">${text}</div>
+      <div class="timestamp">${now()}</div>`;
     chatZone.appendChild(wrap); scrollDown();
   }
 
   function addTyping() {
-    const wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror'; wrap.id = 'typingIndicator';
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap mirror'; wrap.id = 'typingIndicator';
     wrap.innerHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
     chatZone.appendChild(wrap); scrollDown();
   }
   function removeTyping() { const t = document.getElementById('typingIndicator'); if(t) t.remove(); }
   function scrollDown() { setTimeout(() => { chatZone.scrollTop = chatZone.scrollHeight; }, 50); }
+  function setLabel(text) { recLabel.innerHTML = text; }
 
-  // ── CLAUDE (mode Miroir) ──
+  // ── CLAUDE ──
   async function sendToMirror(userText) {
-    appState = 'thinking'; btnMic.disabled = true;
+    appState = 'thinking';
+    btnMic.disabled = true;
+    headerSt.textContent = '...';
+    setLabel('Le Miroir réfléchit...');
     conversationHistory.push({ role: 'user', content: userText });
-    addTyping(); await delay(600);
+    addTyping();
+    await delay(600);
     try {
       const res = await fetch(API_CHAT, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -542,26 +406,40 @@
       conversationHistory.push({ role: 'assistant', content: reply });
       removeTyping(); addMirrorBubble(reply);
       await speak(reply);
-    } catch(err) { removeTyping(); addMirrorBubble('Je suis là.'); startListening(); }
-    finally { btnMic.disabled = false; }
+    } catch(err) {
+      removeTyping(); addMirrorBubble('Je suis là.'); console.error(err);
+      startListening();
+    } finally {
+      btnMic.disabled = false;
+    }
   }
 
   // ── TTS ──
   async function speak(text) {
     appState = 'speaking';
-    btnMic.textContent = '⏸'; btnMic.classList.remove('listening'); btnMic.classList.add('speaking');
-    recLabel.textContent = 'Le Miroir parle...';
+    btnMic.textContent = '⏸';
+    btnMic.classList.remove('listening'); btnMic.classList.add('speaking');
+    setLabel('Le Miroir parle...');
+    headerSt.textContent = '...';
+    // Stopper micro pendant la parole
     if (recognition) { try { recognition.stop(); } catch(e) {} }
     try {
-      const res = await fetch(API_SPEAK, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice_id: currentVoiceId }) });
+      const res = await fetch(API_SPEAK, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice_id: currentVoiceId })
+      });
       if (!res.ok) throw new Error('TTS error');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       currentAudio = new Audio(url);
-      await new Promise(resolve => { currentAudio.onended = () => { URL.revokeObjectURL(url); resolve(); }; currentAudio.onerror = resolve; currentAudio.play(); });
+      await new Promise(resolve => {
+        currentAudio.onended = () => { URL.revokeObjectURL(url); resolve(); };
+        currentAudio.onerror = resolve;
+        currentAudio.play();
+      });
       currentAudio = null;
     } catch(e) { console.error('TTS:', e); }
+    // Fin de parole → relancer l'écoute automatiquement
     startListening();
   }
 
@@ -575,7 +453,6 @@
     addMirrorBubble(greeting);
     await speak(greeting);
     btnMic.disabled = false;
-    recLabel.textContent = hints[selectedLang];
   }
 </script>
 </body>
