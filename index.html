@@ -514,7 +514,9 @@
 
   // ── MODE TRADUCTEUR ──
   var appMode = 'mirror';
-
+const API_SPEAK = '/api/speak';
+const API_CHAT  = '/api/chat';
+const SILENCE_DELAY = 2000;
   function toggleMode() {
     appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
     var btn = document.getElementById('btnMode');
