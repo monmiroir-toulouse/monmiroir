@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Miroir — Kit de survie judiciaire</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1923;
+      --bloc: #1A3A5C;
+      --gold: #C9A84C;
+      --text: #F0EDE6;
+      --text-soft: #7A8FA6;
+      --rouge: #E53935;
+      --vert: #25D366;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      color: var(--gold);
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+    .bloc {
+      background: var(--bloc);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .bloc h2 {
+      color: var(--gold);
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+    .darija {
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+      text-align: right;
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .francais {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      font-style: italic;
+      border-left: 3px solid var(--gold);
+      padding-left: 12px;
+    }
+    .bouton {
+      display: block;
+      background: var(--gold);
+      color: var(--bg);
+      text-decoration: none;
+      text-align: center;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    .bouton:hover { background: #D9B85C; }
+    .alerte {
+      background: #2A1515;
+      border-left: 4px solid var(--rouge);
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    .alerte strong { color: var(--rouge); }
+    footer {
+      text-align: center;
+      color: var(--text-soft);
+      font-size: 12px;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mon Miroir</h1>
+    <p>Kit de survie judiciaire</p>
+  </header>
+
+  <!-- BLOC 1 — TA SITUATION -->
+  <div class="bloc">
+    <h2>1. Ta situation</h2>
+    <div class="darija">
+      راك في contrôle judiciaire.<br>
+      هاد المعنى ديالو بسيط : خاصك تحترم شروط حتى يجي الحكم ديالك.
+    </div>
+    <div class="francais">
+      Tu es en contrôle judiciaire.<br>
+      Ça veut dire que tu dois respecter des règles en attendant ton jugement.
+    </div>
+  </div>
+
+  <!-- BLOC 2 — TES OBLIGATIONS -->
+  <div class="bloc">
+    <h2>2. Tes obligations</h2>
+    <div class="darija">
+      — خاصك تجي كل مرة كيعطيوك موعد. ماتفوتش.<br>
+      — خاصك تبقى في تولوز. ماتخرجش بلا إذن.<br>
+      — إلى بدلتي السكن، خبر المسؤول ديالك.<br>
+      — ماتشدكش مع البوليس مرة أخرى.
+    </div>
+    <div class="francais">
+      — Tu dois te présenter à chaque convocation. Ne rate aucun rendez-vous.<br>
+      — Tu dois rester à Toulouse. Tu ne peux pas quitter la ville sans autorisation.<br>
+      — Si tu changes d'adresse, préviens ton éducateur.<br>
+      — Ne te fais plus arrêter par la police.
+    </div>
+  </div>
+
+  <!-- BLOC 3 — SI TU RATES -->
+  <div class="bloc">
+    <h2>3. Si tu rates un rendez-vous</h2>
+    <div class="darija">
+      إلى ما جيتيش للموعد — كيحكمو عليك غيابيا.<br>
+      إلى ما حترمتيش الشروط — كيشدوك.
+    </div>
+    <div class="francais">
+      Si tu rates un rendez-vous : tu peux être jugé en ton absence.<br>
+      Si tu ne respectes pas les règles : tu peux être placé en détention.
+    </div>
+    <div class="alerte">
+      <strong>مافيهاش لا خوف ولا تخبية</strong> — غير حتر راسك.<br>
+      <em>Ce n'est ni une menace, ni un secret. C'est juste une question de respect de toi-même.</em>
+    </div>
+  </div>
+
+  <!-- BLOC 4 — COMMENT Y ALLER -->
+  <div class="bloc">
+    <h2>4. Comment y aller</h2>
+    <div class="darija">
+      كليكي على الرابط باش تعرف الطريق.
+    </div>
+    <div class="francais">
+      Clique sur le lien pour connaître l'itinéraire.
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=PJJ+Toulouse" 
+       target="_blank">
+      📍 Itinéraire vers la PJJ
+    </a>
+  </div>
+
+  <footer>
+    Mon Miroir · Toulouse · 2026
+  </footer>
+
+</body>
+</html>
