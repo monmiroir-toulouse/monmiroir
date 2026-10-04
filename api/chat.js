@@ -9,22 +9,7 @@ module.exports = async function handler(req, res) {
   if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'Missing messages' });
 
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  // ── UEMO TOULOUSE — ADRESSES ET LIENS ──
-  const uemoToulouse = `
-  UEMO TOULOUSE — À restituer si le jeune demande où se trouve un UEMO.
 
-  Quand tu donnes une adresse, donne toujours :
-  - Le nom de l'UEMO
-  - L'adresse complète
-  - Un repère (métro, bus, quartier)
-  - La fonction de l'UEMO (suivi éducatif, aide administrative, logement, formation, santé)
-
-  UEMO Nord : Immeuble Le Siréna, 174 avenue des Minimes, 31200 Toulouse. Métro B, arrêt Barrière de Paris.
-  UEMO Riquet : 60 rue Riquet, 31000 Toulouse. Métro B, arrêt François Verdier.
-  UEMO La Gare : 7 boulevard de la Gare, 31000 Toulouse. Métro A, arrêt Marengo-SNCF.
-  UEMO Ouest : 145 avenue de Muret, 31300 Toulouse. Métro A, arrêt Arènes.
-  UEMO Sud : 109 avenue de Lespinet, 31400 Toulouse. Métro B, terminus Ramonville.
-  `;
   if (!ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key not configured' });
 
   // ── MODE TRADUCTEUR ──
