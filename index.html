@@ -418,11 +418,8 @@
     finally { btnMic.disabled = false; }
   }
 
- // ── BARRE THÉMATIQUE ──
-
+  // ── BARRE THÉMATIQUE ──
   function envoyerThematique(theme) {
-   
-  }
     if (theme === 'penal') {
       addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
       sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
@@ -430,6 +427,7 @@
       addUserBubble('🎯 Je veux découvrir des métiers');
       sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
     }
+  }
  
   // ── TTS ──
   async function speak(text) {
