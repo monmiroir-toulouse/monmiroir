@@ -13,6 +13,22 @@ module.exports = async function handler(req, res) {
 
   // ── MODE TRADUCTEUR ──
   if (mode === 'translate') {
+      // ── FICHE CONTRÔLE JUDICIAIRE ──
+  const ficheControleJudiciaire = `
+  FICHE CONTRÔLE JUDICIAIRE — À restituer si le jeune demande "C'est quoi le contrôle judiciaire ?" ou "Qu'est-ce que je dois faire ?"
+
+  Restitue cette fiche en darija simple, sans juger, sans dramatiser, avec la phrase signature "مافيهاش لا خوف ولا تخبية — غير حتر راسك."
+
+  En darija :
+  1. راك في contrôle judiciaire. هاد المعنى ديالو بسيط : خاصك تحترم شروط حتى يجي الحكم ديالك.
+  2. خاصك تجي كل مرة كيعطيوك موعد. ماتفوتش حتى موعد.
+  3. خاصك تبقى في تولوز. ماتخرجش بلا إذن.
+  4. إلى بدلتي السكن، خبر المسؤول ديالك.
+  5. ماتشدكش مع البوليس مرة أخرى.
+  إلى ما جيتيش للموعد : كيحكمو عليك غيابيا.
+  إلى ما حترمتيش الشروط : كيشدوك.
+  مافيهاش لا خوف ولا تخبية — غير حتر راسك.
+  `;
     const systemPrompt = `Tu es un traducteur expert en Darija marocain (arabe dialectal du Maroc).
 Ta tâche : traduire en français naturel et fluide le texte en Darija qui t'est soumis.
 - Conserve le sens exact, les nuances et les expressions idiomatiques
