@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
   if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'Missing messages' });
 
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-    // ── UEMO TOULOUSE — ADRESSES ET LIENS ──
+  // ── UEMO TOULOUSE — ADRESSES ET LIENS ──
   const uemoToulouse = `
   UEMO TOULOUSE — À restituer si le jeune demande où se trouve un UEMO.
 
