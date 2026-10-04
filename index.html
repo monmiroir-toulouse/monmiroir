@@ -135,7 +135,17 @@
     <button class="btn-header" id="btnMode">🔤</button>
     <button class="btn-header" id="btnWrite">✏️</button>
   </div>
-
+  <!-- Barre thématique Pénal / Orientation -->
+  <nav class="barre-thematique" style="display: flex; gap: 12px; justify-content: center; padding: 12px; background: #0A1520; border-bottom: 1px solid #1A3A5C; flex-shrink: 0;">
+    <button onclick="envoyerThematique('penal')" 
+            style="background: #1A3A5C; color: #F0EDE6; padding: 10px 20px; border-radius: 10px; border: 1px solid #C9A84C; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Nunito', sans-serif;">
+      ⚖️ Pénal
+    </button>
+    <button onclick="envoyerThematique('orientation')" 
+            style="background: #1A3A5C; color: #F0EDE6; padding: 10px 20px; border-radius: 10px; border: 1px solid #C9A84C; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Nunito', sans-serif;">
+      🎯 Orientation
+    </button>
+  </nav>
   <div class="trad-banner" id="tradBanner">MODE TRADUCTEUR — Darija → Français</div>
 
   <div class="chat-zone" id="chatZone"></div>
