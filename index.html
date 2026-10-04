@@ -471,7 +471,19 @@
   // ── EVENT LISTENERS ──
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnMode').addEventListener('click', function(e){ e.preventDefault(); toggleMode(); });
-    document.getElementById('btnWrite').addEventListener('click', function(e){ e.preventDefault(); toggleTextInput(); });
+    document.getElementById('btnWrite').addEventListener('click', function(e){ e.preventDefault(); toggleTextInput();
+  function sendTextMessage() {
+    var field = document.getElementById('textField');
+    var text = field.value.trim();
+    if (!text) return;
+    field.value = '';
+    if (appMode === 'translator') {
+      translateText(text);
+    } else {
+      addUserBubble(text);
+      sendToMirror(text);
+    }
+  } });
     document.getElementById('btnCloseText').addEventListener('click', toggleTextInput);
     document.getElementById('btnSend').addEventListener('click', sendTextMessage);
     document.getElementById('textField').addEventListener('keydown', function(e){ if(e.key==='Enter') sendTextMessage(); });
