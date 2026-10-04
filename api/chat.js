@@ -38,29 +38,7 @@ Ta tâche : traduire en français naturel et fluide le texte en Darija qui t'est
 - Tiens compte du registre oral et familier du Darija
 - Réponds UNIQUEMENT avec la traduction — aucun commentaire, aucune explication
 - Si tu ne comprends pas un mot, laisse-le tel quel entre parenthèses`;
-  // ── UEMO TOULOUSE — ADRESSES ET LIENS ──
-    ${uemoToulouse}
-  const uemoToulouse = `
-  UEMO TOULOUSE — À restituer si le jeune demande où se trouve un UEMO.
-
-  Quand tu donnes une adresse, ajoute TOUJOURS un lien Google Maps au format :
-  [📍 Ouvrir dans Google Maps](https://www.google.com/maps/dir/?api=1&destination=ADRESSE+ENCODEE)
-
-  UEMO Nord : Immeuble Le Siréna, 174 avenue des Minimes, 31200 Toulouse.
-  Lien : https://www.google.com/maps/dir/?api=1&destination=174+avenue+des+Minimes+31200+Toulouse
-
-  UEMO Riquet : 60 rue Riquet, 31000 Toulouse.
-  Lien : https://www.google.com/maps/dir/?api=1&destination=60+rue+Riquet+31000+Toulouse
-
-  UEMO La Gare : 7 boulevard de la Gare, 31000 Toulouse.
-  Lien : https://www.google.com/maps/dir/?api=1&destination=7+boulevard+de+la+Gare+31000+Toulouse
-
-  UEMO Ouest : 145 avenue de Muret, 31300 Toulouse.
-  Lien : https://www.google.com/maps/dir/?api=1&destination=145+avenue+de+Muret+31300+Toulouse
-
-  UEMO Sud : 109 avenue de Lespinet, 31400 Toulouse.
-  Lien : https://www.google.com/maps/dir/?api=1&destination=109+avenue+de+Lespinet+31400+Toulouse
-  `;
+  
     try {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
