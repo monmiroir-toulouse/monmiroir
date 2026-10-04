@@ -436,7 +436,59 @@ function envoyerThematique(theme) {
       sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
     }
   }
+  // ── BARRE THÉMATIQUE ──
+  function envoyerThematique(theme) {
+    if (theme === 'penal') {
+      addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
+      sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
+    } else if (theme === 'orientation') {
+      addUserBubble('🎯 Je veux découvrir des métiers');
+      sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
+    }
+  }
 
+  // ── TTS ──
+  async function speak(text) {
+    appState = 'speaking';
+    btnMic.textContent = '⏸'; btnMic.classList.remove('listening'); btnMic.classList.add('speaking');
+    recLabel.textContent = 'Le Miroir parle...';
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+    try {
+      var res = await fetch(API_SPEAK, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text:text, voice_id:currentVoiceId}) });
+      if (!res.ok) throw new Error('TTS error');
+      var blob = await res.blob();
+      var url = URL.createObjectURL(blob);
+      currentAudio = new Audio(url);
+      await new Promise(function(resolve) { currentAudio.onended = function(){ URL.revokeObjectURL(url); resolve(); }; currentAudio.onerror = resolve; currentAudio.play(); });
+      currentAudio = null;
+    } catch(e) { console.error('TTS:', e); }
+    startListening();
+  }
+
+  function delay(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  // ── OUVERTURE ──
+  async function openingGreeting(greeting) {
+    btnMic.disabled = true;
+    addTyping(); await delay(1200); removeTyping();
+    conversationHistory.push({ role: 'assistant', content: greeting });
+    addMirrorBubble(greeting);
+    await speak(greeting);
+    btnMic.disabled = false;
+    recLabel.textContent = hints[selectedLang];
+  }
+
+  // ── EVENT LISTENERS ──
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('btnMode').addEventListener('click', function(e){ e.preventDefault(); toggleMode(); });
+    document.getElementById('btnWrite').addEventListener('click', function(e){ e.preventDefault(); toggleTextInput(); });
+    document.getElementById('btnCloseText').addEventListener('click', toggleTextInput);
+    document.getElementById('btnSend').addEventListener('click', sendTextMessage);
+    document.getElementById('textField').addEventListener('keydown', function(e){ if(e.key==='Enter') sendTextMessage(); });
+  });
+</script>
+</body>
+</html>
   // ── TTS ──
   async function speak(text) {
     appState = 'speaking';
