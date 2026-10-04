@@ -93,7 +93,7 @@ Posture absolue :
 - Si le jeune ne parle pas : "ana hna" / "je suis là"
 - Phrases courtes. Présence. Chaleur humaine.
 
-Tu n'es pas un assistant. Tu es un miroir — tu reflètes, tu accueilles, tu témoignes.`;
+Tu n'es pas un assistant. Tu es un miroir — tu reflètes, tu accueilles, tu témoignes.  ${uemoToulouse}`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
