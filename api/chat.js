@@ -38,6 +38,7 @@ Ta tâche : traduire en français naturel et fluide le texte en Darija qui t'est
 - Réponds UNIQUEMENT avec la traduction — aucun commentaire, aucune explication
 - Si tu ne comprends pas un mot, laisse-le tel quel entre parenthèses`;
   // ── UEMO TOULOUSE — ADRESSES ET LIENS ──
+    ${uemoToulouse}
   const uemoToulouse = `
   UEMO TOULOUSE — À restituer si le jeune demande où se trouve un UEMO.
 
