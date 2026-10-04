@@ -147,7 +147,18 @@
     </button>
   </nav>
   <div class="trad-banner" id="tradBanner">MODE TRADUCTEUR — Darija → Français</div>
-
+  // ── BARRE THÉMATIQUE ──
+  function envoyerThematique(theme) {
+    if (theme === 'penal') {
+      // Ouvre la fiche contrôle judiciaire dans Hermès
+      addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
+      sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
+    } else if (theme === 'orientation') {
+      // Lance le parcours orientation
+      addUserBubble('🎯 Je veux découvrir des métiers');
+      sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
+    }
+  }
   <div class="chat-zone" id="chatZone"></div>
 
   <div class="text-bar" id="textBar">
