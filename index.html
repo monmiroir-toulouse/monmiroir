@@ -418,8 +418,16 @@
     finally { btnMic.disabled = false; }
   }
 
-  // ── BARRE THÉMATIQUE ──
-  function envoyerThematique(theme) {
+ // ── BARRE THÉMATIQUE ──
+function envoyerThematique(theme) {
+  if (theme === 'penal') {
+    addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
+    sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
+  } else if (theme === 'orientation') {
+    addUserBubble('🎯 Je veux découvrir des métiers');
+    sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
+  }
+}
     if (theme === 'penal') {
       addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
       sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
