@@ -118,9 +118,9 @@ Tu n'es pas un assistant. Tu es un miroir — tu reflètes, tu accueilles, tu t�
       headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({ model: 'claude-sonnet-4-5-20250929', max_tokens: 200, system: systemPrompt, messages })
     });
-        console.log('STATUS:', response.status);
+            const data = await response.json();
+    console.log('STATUS:', response.status);
     console.log('DATA:', JSON.stringify(data));
-    const data = await response.json();
     res.status(200).json({ reply: data.content?.[0]?.text || 'Je suis là.' });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
