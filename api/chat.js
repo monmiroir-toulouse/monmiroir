@@ -116,7 +116,7 @@ Tu n'es pas un assistant. Tu es un miroir — tu reflètes, tu accueilles, tu t�
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-opus-4-5', max_tokens: 200, system: systemPrompt, messages })
+      body: JSON.stringify({ model: 'claude-sonnet-4-5-20250929', max_tokens: 200, system: systemPrompt, messages })
     });
     const data = await response.json();
     res.status(200).json({ reply: data.content?.[0]?.text || 'Je suis là.' });
