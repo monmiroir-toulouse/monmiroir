@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Miroir — Post-audience</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1923;
+      --bloc: #1A3A5C;
+      --gold: #C9A84C;
+      --text: #F0EDE6;
+      --text-soft: #7A8FA6;
+      --rouge: #E53935;
+      --jaune: #FFC107;
+      --vert: #25D366;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      color: var(--gold);
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    header p {
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+    .bloc {
+      background: var(--bloc);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .bloc h2 {
+      color: var(--gold);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+    .darija {
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+      text-align: right;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .francais {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      font-style: italic;
+      border-left: 3px solid var(--gold);
+      padding-left: 10px;
+    }
+
+    /* Tableau 3 colonnes */
+    .tableau {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 8px;
+    }
+    .tableau th {
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .tableau td {
+      padding: 12px;
+      border-radius: 10px;
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .col-rouge { background: var(--rouge); color: white; }
+    .col-jaune { background: var(--jaune); color: #0F1923; }
+    .col-vert { background: var(--vert); color: white; }
+    .cell-rouge { background: rgba(229,57,53,0.15); }
+    .cell-jaune { background: rgba(255,193,7,0.15); }
+    .cell-vert { background: rgba(37,211,102,0.15); }
+    .tableau ul { list-style: none; padding: 0; margin: 0; }
+    .tableau li { margin-bottom: 8px; }
+
+    .bouton {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--bg);
+      text-decoration: none;
+      text-align: center;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 10px;
+      font-family: 'Nunito', sans-serif;
+    }
+    .bouton:hover { background: #D9B85C; }
+
+    .alerte {
+      background: rgba(229,57,53,0.15);
+      border-left: 4px solid var(--rouge);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-soft);
+      font-size: 11px;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 600px) {
+      .tableau th, .tableau td { font-size: 11px; padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mon Miroir</h1>
+    <p>Post-audience · Ce que tu dois savoir</p>
+  </header>
+
+  <!-- BLOC 1 — TABLEAU 3 COLONNES -->
+  <div class="bloc">
+    <h2>Ce que tu dois savoir</h2>
+    <table class="tableau">
+      <thead>
+        <tr>
+          <th class="col-rouge">🔴 Interdictions</th>
+          <th class="col-jaune">🟡 Obligations</th>
+          <th class="col-vert">🟢 À faire</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="cell-rouge">
+            <ul>
+              <li>🚫 Ne pas aller à Bagatelle, Bellefontaine, Reynerie, La Faourette</li>
+              <li>🚫 Ne pas fréquenter [personne]</li>
+              <li>🚫 Ne pas consommer [substance]</li>
+              <li>🚫 Ne pas commettre de nouvelles infractions</li>
+            </ul>
+          </td>
+          <td class="cell-jaune">
+            <ul>
+              <li>⏰ Pointer à l'UEMO</li>
+              <li>💊 Suivre les soins</li>
+              <li>📅 Se présenter aux audiences</li>
+              <li>🌙 Respecter le couvre-feu (21h-7h)</li>
+              <li>🏠 Rester au lieu de placement</li>
+            </ul>
+          </td>
+          <td class="cell-vert">
+            <ul>
+              <li>✅ Aller au RDV UEMO</li>
+              <li>✅ Prendre RDV médecin</li>
+              <li>✅ Appeler l'éducateur</li>
+              <li>✅ Garder les papiers sur soi</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOC 2 — TES 2 AUDIENCES -->
+  <div class="bloc">
+    <h2>📅 Tes 2 audiences</h2>
+    <div class="darija">
+      عندك جوج جلسات : الأولى للحكم واش راك مذنب، والثانية للعقوبة.
+      بين الجوج، المحكمة كتشوف واش راك محترم الشروط.
+    </div>
+    <div class="francais">
+      Tu as deux audiences : la première pour décider si tu es coupable, la seconde pour décider de la sanction.
+      Entre les deux, le tribunal regarde si tu respectes tes obligations.
+    </div>
+
+    <div style="margin-top: 14px;">
+      <strong style="color: var(--gold);">1. Audience de culpabilité</strong><br>
+      <span style="color: var(--text-soft); font-size: 13px;">Date : [à compléter] · Salle 6, 2ème étage</span>
+    </div>
+
+    <div class="alerte">
+      <strong>⚠️ Entre les deux, le tribunal regarde :</strong>
+      <ul style="margin-top: 6px; padding-left: 18px;">
+        <li>Est-ce que tu vas à l'UEMO ?</li>
+        <li>Est-ce que tu suis les soins ?</li>
+        <li>Est-ce que tu respectes les interdictions ?</li>
+        <li>Est-ce que tu vas aux audiences ?</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 14px;">
+      <strong style="color: var(--gold);">2. Audience de sanctions</strong><br>
+      <span style="color: var(--text-soft); font-size: 13px;">Date : [à compléter] · Salle 6, 2ème étage</span>
+    </div>
+  </div>
+
+  <!-- BLOC 3 — OÙ ALLER AU TRIBUNAL -->
+  <div class="bloc">
+    <h2>🏛️ Où aller au tribunal</h2>
+    <div class="francais">
+      Tribunal pour Enfants · 2 Allée Jules Guesde, 31000 Toulouse<br>
+      Métro B, station Palais de Justice
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=2+All%C3%A9e+Jules+Guesde+31000+Toulouse" 
+       target="_blank">
+      📍 Ouvrir dans Google Maps
+    </a>
+
+    <div style="margin-top: 14px; font-size: 13px; line-height: 1.7;">
+      <strong style="color: var(--gold);">Dans le tribunal :</strong><br>
+      • <strong>Greffe</strong> — 2ème étage<br>
+      • <strong>Salle 6</strong> (Cabinet des juges) — 2ème étage<br>
+      • <strong>PJJ</strong> — Bâtiment C, 2ème étage
+    </div>
+  </div>
+
+  <!-- BLOC 4 — TA CONVOCATION PJJ -->
+  <div class="bloc">
+    <h2>👤 Ta convocation PJJ</h2>
+    <div class="darija">
+      ممكن يتعيطو ليك باش تمشي للـ PJJ فالمحكمة. هادي هي البلاصة.
+    </div>
+    <div class="francais">
+      Tu peux être convoqué à la PJJ du tribunal. Voici où c'est.
+    </div>
+    <div style="margin-top: 10px; font-size: 13px;">
+      <strong style="color: var(--gold);">PJJ — Bâtiment C, 2ème étage</strong><br>
+      Tribunal pour Enfants · 2 Allée Jules Guesde, 31000 Toulouse
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=2+All%C3%A9e+Jules+Guesde+31000+Toulouse" 
+       target="_blank">
+      📍 Ouvrir dans Google Maps
+    </a>
+  </div>
+
+  <!-- BLOC 5 — TON UEMO -->
+  <div class="bloc">
+    <h2>📍 Ton UEMO</h2>
+    <div class="darija">
+      الـ UEMO هي البلاصة فين غادي يتبعوك. كيعاونوك فالأوراق، السكن، التكوين، الصحة.
+    </div>
+    <div class="francais">
+      L'UEMO est le lieu de ton suivi éducatif. Ils t'aident pour les papiers, le logement, la formation, la santé.
+    </div>
+
+    <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px;">
+      <a class="bouton" href="https://www.google.com/maps/dir/?api=1&destination=174+avenue+des+Minimes+31200+Toulouse" target="_blank">📍 UEMO Nord</a>
+      <a class="bouton" href="https://www.google.com/maps/dir/?api=1&destination=60+rue+Riquet+31000+Toulouse" target="_blank">📍 UEMO Riquet</a>
+      <a class="bouton" href="https://www.google.com/maps/dir/?api=1&destination=7+boulevard+de+la+Gare+31000+Toulouse" target="_blank">📍 UEMO La Gare</a>
+      <a class="bouton" href="https://www.google.com/maps/dir/?api=1&destination=145+avenue+de+Muret+31300+Toulouse" target="_blank">📍 UEMO Ouest</a>
+      <a class="bouton" href="https://www.google.com/maps/dir/?api=1&destination=109+avenue+de+Lespinet+31400+Toulouse" target="_blank">📍 UEMO Sud</a>
+    </div>
+  </div>
+
+  <!-- BLOC 6 — TON OBLIGATION DE SOIN -->
+  <div class="bloc">
+    <h2>💊 Ton obligation de soin</h2>
+    <div class="darija">
+      إلى كان عندك مشكل مع المخدرات ولا ليريكا، خاصك تمشي لهاد البلاصة. ماكاينش مشكل إلا ما عندكش الأوراق.
+    </div>
+    <div class="francais">
+      Si tu as un problème avec les substances ou le Lyrica, tu dois aller dans ce lieu. Pas besoin de papiers ni de sécurité sociale.
+    </div>
+
+    <div style="margin-top: 14px;">
+      <strong style="color: var(--gold);">🏥 La Case de Santé</strong><br>
+      <span style="font-size: 13px;">17 place Arnaud Bernard, 31000 Toulouse</span><br>
+      <span style="font-size: 13px;">Métro B, Compans Caffarelli</span><br>
+      <span style="font-size: 13px;">📞 05 61 23 01 37</span>
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=17+place+Arnaud+Bernard+31000+Toulouse" 
+       target="_blank">
+      📍 Ouvrir dans Google Maps
+    </a>
+
+    <div class="alerte" style="margin-top: 14px;">
+      <strong>⚠️ Si La Case de Santé est fermée :</strong><br>
+      <span style="font-size: 13px;">PASS Hôpital Joseph Ducuing<br>15 rue de Varsovie, 31027 Toulouse</span>
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=15+rue+de+Varsovie+31027+Toulouse" 
+       target="_blank">
+      📍 Ouvrir dans Google Maps
+    </a>
+  </div>
+
+  <!-- BLOC 7 — TON COUVRE-FEU -->
+  <div class="bloc">
+    <h2>🌙 Ton couvre-feu</h2>
+    <div class="darija">
+      خاصك تبقى في الدار ما بين 21h و 7h. ما تخرجش فالليل.
+    </div>
+    <div class="francais">
+      Tu dois rester chez toi entre 21h et 7h. Tu ne peux pas sortir la nuit.
+    </div>
+    <div class="alerte" style="margin-top: 12px;">
+      Si tu sors, tu risques :<br>
+      • Retour en détention<br>
+      • Aggravation de la sanction
+    </div>
+    <div style="margin-top: 12px; font-size: 13px;">
+      <strong style="color: var(--gold);">Ton domicile :</strong><br>
+      [Adresse à compléter]
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=31000+Toulouse" 
+       target="_blank">
+      📍 Ouvrir dans Google Maps
+    </a>
+  </div>
+
+  <!-- BLOC 8 — QUARTIERS INTERDITS -->
+  <div class="bloc">
+    <h2>🚫 Quartiers interdits</h2>
+    <div class="darija">
+      ممنوع تمشي لهاد الكارتيات : باغاتيل، بيلفونتين، الرينري، الفوّرة.
+    </div>
+    <div class="francais">
+      Tu ne dois pas aller dans ces quartiers : Bagatelle, Bellefontaine, Reynerie, La Faourette.
+    </div>
+
+    <div style="margin-top: 14px; font-size: 14px; line-height: 1.8;">
+      • Bagatelle (31100)<br>
+      • Bellefontaine (31100)<br>
+      • Reynerie (31100)<br>
+      • La Faourette (31100)
+    </div>
+    <a class="bouton" 
+       href="https://www.google.com/maps/dir/?api=1&destination=Grand+Mirail+31100+Toulouse" 
+       target="_blank">
+      📍 Voir sur Google Maps
+    </a>
+  </div>
+
+  <!-- BLOC 9 — PARLER À HERMÈS -->
+  <div class="bloc" style="text-align: center;">
+    <h2>💬 Tu as une question ?</h2>
+    <div class="darija">
+      إلى عندك سؤال، هضر معايا.
+    </div>
+    <div class="francais">
+      Si tu as une question, parle-moi.
+    </div>
+    <a class="bouton" href="/" style="margin-top: 14px;">
+      💬 Parler à Hermès
+    </a>
+  </div>
+
+  <footer>
+    Mon Miroir · Toulouse · 2026
+  </footer>
+
+</body>
+</html>
