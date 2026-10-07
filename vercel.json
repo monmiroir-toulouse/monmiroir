@@ -3,5 +3,11 @@
     { "src": "/api/chat", "dest": "/api/chat.js" },
     { "src": "/api/whisper", "dest": "/api/whisper.js" },
     { "src": "/api/tts", "dest": "/api/tts.js" }
+  ],
+  "crons": [
+    {
+      "path": "/api/check-rdv",
+      "schedule": "0 * * * *"
+    }
   ]
 }
