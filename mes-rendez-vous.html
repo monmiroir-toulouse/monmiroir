@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Miroir — Mes rendez-vous</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1923;
+      --bloc: #1A3A5C;
+      --gold: #C9A84C;
+      --text: #F0EDE6;
+      --text-soft: #7A8FA6;
+      --rouge: #E53935;
+      --vert: #25D366;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      color: var(--gold);
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    header p {
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+    .bloc {
+      background: var(--bloc);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .bloc h2 {
+      color: var(--gold);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 14px;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+    }
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+    }
+    .bouton {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      text-decoration: none;
+      text-align: center;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .bouton:hover { background: #D9B85C; }
+    .bouton-full { width: 100%; }
+    .bouton-suppr {
+      background: var(--rouge);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .rdv-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--gold);
+    }
+    .rdv-card.urgent {
+      border-left-color: var(--rouge);
+    }
+    .rdv-card.proche {
+      border-left-color: #FFC107;
+    }
+    .rdv-type {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .rdv-titre {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .rdv-date {
+      font-size: 14px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+    .rdv-compte {
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .rdv-compte.urgent { color: var(--rouge); }
+    .rdv-compte.proche { color: #FFC107; }
+    .rdv-compte.ok { color: var(--vert); }
+    .rdv-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .rdv-actions .bouton {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    .vide {
+      text-align: center;
+      color: var(--text-soft);
+      font-size: 14px;
+      padding: 20px;
+      font-style: italic;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-soft);
+      font-size: 11px;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mon Miroir</h1>
+    <p>Mes rendez-vous</p>
+  </header>
+
+  <!-- FORMULAIRE D'AJOUT -->
+  <div class="bloc">
+    <h2>➕ Ajouter un rendez-vous</h2>
+    <div class="form-group">
+      <label>Type de rendez-vous</label>
+      <select id="type" onchange="preRemplirLieu()">
+        <option value="UEMO">📍 UEMO</option>
+        <option value="Soin">💊 Soin (La Case de Santé, PASS)</option>
+        <option value="Audience culpabilité">⚖️ Audience de culpabilité (Salle 6)</option>
+        <option value="Audience sanctions">⚖️ Audience de sanctions (Salle 6)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Lieu</label>
+      <input type="text" id="lieu" placeholder="Ex: UEMO Nord, Salle 6, La Case de Santé...">
+    </div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" id="date">
+    </div>
+    <div class="form-group">
+      <label>Heure</label>
+      <input type="time" id="heure">
+    </div>
+    <div class="form-group">
+      <label>Notes (optionnel)</label>
+      <textarea id="notes" rows="2" placeholder="Ex: apporter la convocation"></textarea>
+    </div>
+    <button class="bouton bouton-full" onclick="ajouterRdv()">Ajouter le rendez-vous</button>
+  </div>
+
+  <!-- LISTE DES RENDEZ-VOUS -->
+  <div class="bloc">
+    <h2>📅 Tes rendez-vous à venir</h2>
+    <div id="listeRdv">
+      <div class="vide">Aucun rendez-vous pour l'instant.</div>
+    </div>
+  </div>
+
+  <!-- RETOUR -->
+  <div class="bloc" style="text-align: center;">
+    <a class="bouton" href="/">← Retour à Mon Miroir</a>
+  </div>
+
+  <footer>
+    Mon Miroir · Toulouse · 2026
+  </footer>
+
+  <script>
+    // ── LIENS GOOGLE MAPS PAR LIEU ──
+    var liensMaps = {
+      'UEMO Nord': 'https://www.google.com/maps/dir/?api=1&destination=174+avenue+des+Minimes+31200+Toulouse',
+      'UEMO Sud': 'https://www.google.com/maps/dir/?api=1&destination=109+avenue+de+Lespinet+31400+Toulouse',
+      'UEMO Riquet': 'https://www.google.com/maps/dir/?api=1&destination=60+rue+Riquet+31000+Toulouse',
+      'UEMO La Gare': 'https://www.google.com/maps/dir/?api=1&destination=7+boulevard+de+la+Gare+31000+Toulouse',
+      'UEMO Ouest': 'https://www.google.com/maps/dir/?api=1&destination=145+avenue+de+Muret+31300+Toulouse',
+      'La Case de Santé': 'https://www.google.com/maps/dir/?api=1&destination=17+place+Arnaud+Bernard+31000+Toulouse',
+      'PASS': 'https://www.google.com/maps/dir/?api=1&destination=15+rue+de+Varsovie+31027+Toulouse',
+      'Salle 6': 'https://www.google.com/maps/dir/?api=1&destination=2+All%C3%A9e+Jules+Guesde+31000+Toulouse'
+    };
+
+    // ── PRÉ-REMPLIR LE LIEU ──
+    function preRemplirLieu() {
+      var type = document.getElementById('type').value;
+      var lieu = document.getElementById('lieu');
+      
+      if (type === 'Audience culpabilité' || type === 'Audience sanctions') {
+        lieu.value = 'Salle 6, 2ème étage — Tribunal pour Enfants';
+      } else {
+        lieu.value = '';
+      }
+    }
+
+    // ── RÉCUPÉRER LES RENDEZ-VOUS ──
+    function getRdv() {
+      var data = localStorage.getItem('monmiroir_rdv');
+      return data ? JSON.parse(data) : [];
+    }
+
+    // ── SAUVEGARDER ──
+    function saveRdv(rdv) {
+      localStorage.setItem('monmiroir_rdv', JSON.stringify(rdv));
+    }
+
+    // ── AJOUTER UN RENDEZ-VOUS ──
+    function ajouterRdv() {
+      var type = document.getElementById('type').value;
+      var lieu = document.getElementById('lieu').value.trim();
+      var date = document.getElementById('date').value;
+      var heure = document.getElementById('heure').value;
+      var notes = document.getElementById('notes').value.trim();
+
+      if (!date || !heure) {
+        alert('Remplis la date et l\'heure.');
+        return;
+      }
+
+      var rdv = getRdv();
+      rdv.push({
+        id: Date.now(),
+        type: type,
+        lieu: lieu || type,
+        date: date,
+        heure: heure,
+        notes: notes
+      });
+
+      saveRdv(rdv);
+      document.getElementById('lieu').value = '';
+      document.getElementById('date').value = '';
+      document.getElementById('heure').value = '';
+      document.getElementById('notes').value = '';
+      afficherRdv();
+    }
+
+    // ── SUPPRIMER UN RENDEZ-VOUS ──
+    function supprimerRdv(id) {
+      if (!confirm('Supprimer ce rendez-vous ?')) return;
+      var rdv = getRdv().filter(function(r) { return r.id !== id; });
+      saveRdv(rdv);
+      afficherRdv();
+    }
+
+    // ── CALCULER LE TEMPS RESTANT ──
+    function tempsRestant(dateStr, heureStr) {
+      var rdvDate = new Date(dateStr + 'T' + heureStr);
+      var maintenant = new Date();
+      var diff = rdvDate - maintenant;
+      var jours = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+      if (diff < 0) return { texte: 'Passé', classe: 'urgent' };
+      if (jours === 0) return { texte: "Aujourd'hui", classe: 'urgent' };
+      if (jours === 1) return { texte: 'Demain', classe: 'urgent' };
+      if (jours <= 3) return { texte: 'Dans ' + jours + ' jours', classe: 'proche' };
+      return { texte: 'Dans ' + jours + ' jours', classe: 'ok' };
+    }
+
+    // ── TROUVER LE LIEN MAPS ──
+    function trouverMaps(lieu) {
+      for (var cle in liensMaps) {
+        if (lieu.indexOf(cle) !== -1) return liensMaps[cle];
+      }
+      return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(lieu + ' Toulouse');
+    }
+
+    // ── AFFICHER LES RENDEZ-VOUS ──
+    function afficherRdv() {
+      var rdv = getRdv();
+      var liste = document.getElementById('listeRdv');
+
+      rdv.sort(function(a, b) {
+        return new Date(a.date + 'T' + a.heure) - new Date(b.date + 'T' + b.heure);
+      });
+
+      if (rdv.length === 0) {
+        liste.innerHTML = '<div class="vide">Aucun rendez-vous pour l\'instant.</div>';
+        return;
+      }
+
+      var html = '';
+      rdv.forEach(function(r) {
+        var temps = tempsRestant(r.date, r.heure);
+        var maps = trouverMaps(r.lieu);
+        var dateAffichee = new Date(r.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+        html += '<div class="rdv-card ' + temps.classe + '">';
+        html += '<div class="rdv-type">' + r.type + '</div>';
+        html += '<div class="rdv-titre">' + r.lieu + '</div>';
+        html += '<div class="rdv-date">📅 ' + dateAffichee + ' à ' + r.heure + '</div>';
+        if (r.notes) html += '<div class="rdv-date">📝 ' + r.notes + '</div>';
+        html += '<div class="rdv-compte ' + temps.classe + '">⏳ ' + temps.texte + '</div>';
+        html += '<div class="rdv-actions">';
+        html += '<a class="bouton" href="' + maps + '" target="_blank">📍 Google Maps</a>';
+        html += '<button class="bouton-suppr" onclick="supprimerRdv(' + r.id + ')">🗑 Supprimer</button>';
+        html += '</div>';
+        html += '</div>';
+      });
+
+      liste.innerHTML = html;
+    }
+
+    // ── AFFICHER À L'OUVERTURE ──
+    afficherRdv();
+  </script>
+
+</body>
+</html>
