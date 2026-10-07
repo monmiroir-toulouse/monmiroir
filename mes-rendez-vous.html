@@ -268,7 +268,7 @@
     }
 
     // ── AJOUTER UN RENDEZ-VOUS ──
-    function ajouterRdv() {
+        async function ajouterRdv() {
       var type = document.getElementById('type').value;
       var lieu = document.getElementById('lieu').value.trim();
       var date = document.getElementById('date').value;
@@ -281,23 +281,42 @@
       }
 
       var rdv = getRdv();
-      rdv.push({
+      var nouveauRdv = {
         id: Date.now(),
         type: type,
         lieu: lieu || type,
         date: date,
         heure: heure,
         notes: notes
-      });
-
+      };
+      
+      rdv.push(nouveauRdv);
       saveRdv(rdv);
+
+      // ── ENVOYER AU SERVEUR ──
+      var subscription = localStorage.getItem('monmiroir_push_subscription');
+      if (subscription) {
+        try {
+          await fetch('/api/save-rdv', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subscription: JSON.parse(subscription),
+              rdv: nouveauRdv
+            })
+          });
+          console.log('RDV envoyé au serveur');
+        } catch(err) {
+          console.error('Erreur envoi RDV:', err);
+        }
+      }
+
       document.getElementById('lieu').value = '';
       document.getElementById('date').value = '';
       document.getElementById('heure').value = '';
       document.getElementById('notes').value = '';
       afficherRdv();
     }
-
     // ── SUPPRIMER UN RENDEZ-VOUS ──
     function supprimerRdv(id) {
       if (!confirm('Supprimer ce rendez-vous ?')) return;
