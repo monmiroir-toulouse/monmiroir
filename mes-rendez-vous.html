@@ -363,7 +363,58 @@
 
       liste.innerHTML = html;
     }
+    // ── NOTIFICATIONS PUSH ──
+    function urlBase64ToUint8Array(base64String) {
+      var padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+      var base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      var rawData = window.atob(base64);
+      var outputArray = new Uint8Array(rawData.length);
+      for (var i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
 
+    async function activerNotifications() {
+      var statut = document.getElementById('statutNotif');
+      var btn = document.getElementById('btnNotif');
+      
+      // Vérifier le support
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        statut.textContent = '❌ Ton navigateur ne supporte pas les notifications.';
+        return;
+      }
+      
+      try {
+        // Demander la permission
+        var permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          statut.textContent = '❌ Permission refusée.';
+          return;
+        }
+        
+        // Enregistrer le Service Worker
+        var registration = await navigator.serviceWorker.register('/sw.js');
+        await navigator.serviceWorker.ready;
+        
+        // S'abonner aux notifications
+        var subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array('TA_CLE_PUBLIQUE_VAPID_ICI')
+        });
+        
+        // Sauvegarder l'abonnement localement
+        localStorage.setItem('monmiroir_push_subscription', JSON.stringify(subscription));
+        
+        statut.textContent = '✅ Notifications activées !';
+        btn.textContent = '🔔 Notifications activées';
+        btn.style.background = '#25D366';
+        
+      } catch(err) {
+        console.error('Erreur notifications:', err);
+        statut.textContent = '❌ Erreur : ' + err.message;
+      }
+    }
     // ── AFFICHER À L'OUVERTURE ──
     afficherRdv();
   </script>
