@@ -479,7 +479,7 @@
     btnMic.disabled = false;
     recLabel.textContent = hints[selectedLang];
   }
-  
+    function delay(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
 
     // ── EVENT LISTENERS ──
   document.addEventListener('DOMContentLoaded', function() {
