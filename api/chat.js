@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
   const { messages, language, mode } = req.body;
   if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'Missing messages' });
 
- const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
 
   if (!ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key not configured' });
   
