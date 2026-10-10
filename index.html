@@ -456,7 +456,11 @@
     await new Promise(...);
     currentAudio = null;
     ...
-    startListening();  // ← ICI : réactive le micro
+       // Attendre 1 seconde avant de réactiver le micro
+    setTimeout(function() {
+      startListening();
+    }, 1000);
+  }
   }
   }
 
