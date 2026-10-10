@@ -225,7 +225,8 @@
     setTimeout(function() {
       langScreen.style.display = 'none';
       document.getElementById('chatApp').classList.add('visible');
-      recLabel.textContent = hints[selectedLang];
+      recLabel.textContent = hints[selectedLang];}
+               
       initRecognition();
       openingGreeting(greeting);
     }, 500);
