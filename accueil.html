@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mon Miroir 2.0 — Accueil</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Nunito:wght@400;600;800&family=Noto+Sans+Tifinagh&family=Noto+Sans+Ethiopic&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1923;
+      --chat-bg: #0A1520;
+      --bubble-mirror: #1A3A5C;
+      --bubble-user: #1E5C3A;
+      --gold: #C9A84C;
+      --green-record: #25D366;
+      --red-stop: #E53935;
+      --text: #F0EDE6;
+      --text-soft: #7A8FA6;
+      --orange: #E64A19;
+      --vert: #8BC34A;
+    }
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+    }
+
+    /* ── FOND CVI ── */
+    #accueil {
+      min-height: 100vh;
+      background-image: url('/fond-cvi.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Voile sombre pour lisibilité */
+    #accueil::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 25, 35, 0.65);
+      z-index: 1;
+    }
+
+    #accueil > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── HEADER ── */
+    .header-accueil {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header-accueil h1 {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .header-accueil .sous-titre {
+      font-size: 11px;
+      color: var(--text-soft);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── MENU LANGUE ── */
+    .langue-menu {
+      position: relative;
+    }
+    .langue-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .langue-liste {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bubble-mirror);
+      border-radius: 12px;
+      padding: 8px;
+      margin-top: 8px;
+      min-width: 140px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    .langue-liste.visible {
+      display: block;
+    }
+    .langue-liste button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .langue-liste button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ── MENU PRINCIPAL ── */
+    .menu-principal {
+      width: 100%;
+      max-width: 500px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .menu-btn {
+      background: rgba(26, 58, 92, 0.9);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .menu-btn:hover {
+      background: rgba(201,168,76,0.15);
+      border-color: var(--gold);
+      transform: scale(1.02);
+    }
+    .menu-btn .icone {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    /* ── CHAT ── */
+    .chat-zone {
+      width: 100%;
+      max-width: 500px;
+      flex: 1;
+      min-height: 300px;
+      background: rgba(10, 21, 32, 0.8);
+      border-radius: 16px;
+      padding: 16px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    /* ── FOOTER ── */
+    .footer-accueil {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+    .footer-accueil img {
+      width: 80px;
+      margin-bottom: 8px;
+    }
+    .footer-accueil p {
+      font-size: 10px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ── RETOUR ── */
+    .retour-menu {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="accueil">
+
+  <!-- HEADER (SANS MIROIR) -->
+  <div class="header-accueil">
+    <div>
+      <h1>Mon Miroir 2.0</h1>
+      <div class="sous-titre">L'ÉVEIL ET LE SUIVI</div>
+    </div>
+    <!-- MENU LANGUE -->
+    <div class="langue-menu">
+      <button class="langue-btn" onclick="toggleLangue()">🌐 Langue ▼</button>
+      <div class="langue-liste" id="langueListe">
+        <button onclick="choisirLangue('fr')">Français</button>
+        <button onclick="choisirLangue('ar')">العربية</button>
+        <button onclick="choisirLangue('ber')">ⴰⵎⴰⵣⵉⵖ</button>
+        <button onclick="choisirLangue('en')">English</button>
+        <button onclick="choisirLangue('bm')">Bambara</button>
+        <button onclick="choisirLangue('ti')">ትግርኛ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU PRINCIPAL -->
+  <div class="menu-principal">
+    <a href="/accueil.html?mode=penal" class="menu-btn">
+      <span class="icone">⚖️</span> Pénal
+    </a>
+    <a href="/orientation.html" class="menu-btn">
+      <span class="icone">🎯</span> Orientation
+    </a>
+    <a href="/post-audience.html" class="menu-btn">
+      <span class="icone">📄</span> Post-audience
+    </a>
+    <a href="/mes-rendez-vous.html" class="menu-btn">
+      <span class="icone">📅</span> Mes rendez-vous
+    </a>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-zone" id="chatZone">
+    <p style="color: var(--text-soft); font-size: 13px; text-align: center;">
+      Le chat Hermès s'affichera ici.
+    </p>
+  </div>
+
+  <!-- FOOTER (LOGO ENVOL PRODUCTION) -->
+  <div class="footer-accueil">
+    <img src="/logo-envol.png" alt="Envol Production">
+    <p>Envol Production</p>
+  </div>
+
+</div>
+
+<script>
+  // ── MENU LANGUE ──
+  function toggleLangue() {
+    document.getElementById('langueListe').classList.toggle('visible');
+  }
+
+  function choisirLangue(lang) {
+    // Fermer le menu
+    document.getElementById('langueListe').classList.remove('visible');
+    // Stocker la langue
+    localStorage.setItem('monmiroir_langue', lang);
+    // Recharger la page (ou mettre à jour l'interface)
+    location.reload();
+  }
+
+  // ── CHARGER LA LANGUE ──
+  var langue = localStorage.getItem('monmiroir_langue') || 'fr';
+  // (À compléter : charger les traductions)
+</script>
+
+</body>
+</html>
