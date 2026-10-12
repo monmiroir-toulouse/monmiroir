@@ -49,7 +49,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(15, 25, 35, 0.65);
+      background: rgba(15, 25, 35, 0.5);
       z-index: 1;
     }
 
@@ -107,9 +107,7 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       z-index: 100;
     }
-    .langue-liste.visible {
-      display: block;
-    }
+    .langue-liste.visible { display: block; }
     .langue-liste button {
       display: block;
       width: 100%;
@@ -123,9 +121,7 @@
       cursor: pointer;
       font-family: 'Nunito', sans-serif;
     }
-    .langue-liste button:hover {
-      background: rgba(255,255,255,0.1);
-    }
+    .langue-liste button:hover { background: rgba(255,255,255,0.1); }
 
     /* ── MENU PRINCIPAL ── */
     .menu-principal {
@@ -167,11 +163,90 @@
       max-width: 500px;
       flex: 1;
       min-height: 300px;
-      background: rgba(10, 21, 32, 0.8);
+      max-height: 400px;
+      background: rgba(10, 21, 32, 0.9);
       border-radius: 16px;
       padding: 16px;
       overflow-y: auto;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-zone::-webkit-scrollbar { display: none; }
+
+    .bubble-wrap {
+      display: flex;
+      flex-direction: column;
+      animation: popIn 0.3s ease forwards;
+    }
+    .bubble-wrap.mirror { align-items: flex-start; }
+    .bubble-wrap.user { align-items: flex-end; }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .bubble.mirror { background: var(--bubble-mirror); border-bottom-left-radius: 4px; }
+    .bubble.user { background: var(--bubble-user); border-bottom-right-radius: 4px; }
+    .bubble.rtl { font-family: 'Tajawal', sans-serif; font-size: 18px; direction: rtl; }
+    .timestamp { font-size: 10px; color: var(--text-soft); margin-top: 3px; padding: 0 4px; }
+
+    .typing-dots {
+      background: var(--bubble-mirror);
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--text-soft);
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); background: var(--gold); } }
+
+    /* ── BARRE DE SAISIE ── */
+    .saisie-bar {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
       margin-bottom: 20px;
+    }
+    .saisie-field {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 24px;
+      padding: 12px 18px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+    }
+    .saisie-field::placeholder { color: var(--text-soft); }
+    .saisie-field:focus { border-color: var(--gold); }
+    .btn-envoyer {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 20px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ── FOOTER ── */
@@ -250,9 +325,15 @@
 
   <!-- CHAT -->
   <div class="chat-zone" id="chatZone">
-    <p style="color: var(--text-soft); font-size: 13px; text-align: center;">
-      Le chat Hermès s'affichera ici.
-    </p>
+    <div class="bubble-wrap mirror">
+      <div class="bubble mirror">Je suis là. Tu peux parler.</div>
+    </div>
+  </div>
+
+  <!-- BARRE DE SAISIE -->
+  <div class="saisie-bar">
+    <input class="saisie-field" id="saisieField" type="text" placeholder="Écris ton message...">
+    <button class="btn-envoyer" id="btnEnvoyer">➤</button>
   </div>
 
   <!-- FOOTER (LOGO ENVOL PRODUCTION) -->
@@ -264,23 +345,105 @@
 </div>
 
 <script>
+  // ── CONFIG ──
+  const API_CHAT = '/api/chat';
+  var selectedLang = localStorage.getItem('monmiroir_langue') || 'fr';
+  var conversationHistory = [];
+
+  // ── DOM ──
+  var chatZone = document.getElementById('chatZone');
+  var saisieField = document.getElementById('saisieField');
+  var btnEnvoyer = document.getElementById('btnEnvoyer');
+
   // ── MENU LANGUE ──
   function toggleLangue() {
     document.getElementById('langueListe').classList.toggle('visible');
   }
 
   function choisirLangue(lang) {
-    // Fermer le menu
-    document.getElementById('langueListe').classList.remove('visible');
-    // Stocker la langue
+    selectedLang = lang;
     localStorage.setItem('monmiroir_langue', lang);
-    // Recharger la page (ou mettre à jour l'interface)
+    document.getElementById('langueListe').classList.remove('visible');
     location.reload();
   }
 
-  // ── CHARGER LA LANGUE ──
-  var langue = localStorage.getItem('monmiroir_langue') || 'fr';
-  // (À compléter : charger les traductions)
+  // ── ENVOYER UN MESSAGE ──
+  async function envoyerMessage() {
+    var texte = saisieField.value.trim();
+    if (!texte) return;
+    saisieField.value = '';
+
+    // Ajouter la bulle utilisateur
+    ajouterBulle(texte, 'user');
+    conversationHistory.push({ role: 'user', content: texte });
+
+    // Ajouter les typing dots
+    ajouterTyping();
+
+    try {
+      var res = await fetch(API_CHAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: conversationHistory,
+          language: selectedLang,
+          mode: 'miroir'
+        })
+      });
+      var data = await res.json();
+      var reply = data.reply || 'Je suis là.';
+      conversationHistory.push({ role: 'assistant', content: reply });
+      retirerTyping();
+      ajouterBulle(reply, 'mirror');
+    } catch (err) {
+      retirerTyping();
+      ajouterBulle('Je suis là.', 'mirror');
+    }
+  }
+
+  // ── AJOUTER UNE BULLE ──
+  function ajouterBulle(texte, type) {
+    var wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap ' + type;
+    var isRtl = /[\u0600-\u06FF]/.test(texte);
+    var bubbleClass = 'bubble ' + type + (isRtl ? ' rtl' : '');
+    wrap.innerHTML = '<div class="' + bubbleClass + '">' + texte + '</div>' +
+      '<div class="timestamp">' + now() + '</div>';
+    chatZone.appendChild(wrap);
+    chatZone.scrollTop = chatZone.scrollHeight;
+  }
+
+  // ── TYPING DOTS ──
+  function ajouterTyping() {
+    var wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap mirror';
+    wrap.id = 'typingIndicator';
+    wrap.innerHTML = '<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    chatZone.appendChild(wrap);
+    chatZone.scrollTop = chatZone.scrollHeight;
+  }
+  function retirerTyping() {
+    var t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
+
+  // ── HEURE ──
+  function now() {
+    return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ── ÉVÉNEMENTS ──
+  btnEnvoyer.addEventListener('click', envoyerMessage);
+  saisieField.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') envoyerMessage();
+  });
+
+  // ── GESTION DU MODE (PENAL / ORIENTATION) ──
+  var urlParams = new URLSearchParams(window.location.search);
+  var mode = urlParams.get('mode');
+  if (mode === 'penal') {
+    saisieField.value = 'Explique-moi le contrôle judiciaire';
+  }
 </script>
 
 </body>
