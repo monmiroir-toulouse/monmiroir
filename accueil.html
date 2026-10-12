@@ -44,10 +44,9 @@
   /* ── FOND CVI ── */
   #accueil {
     min-height: 100vh;
-    background-image: url('/fond-cvi.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(210,177,91,0.05), transparent 32%),
+      linear-gradient(180deg, #102433 0%, #0d1d2a 100%);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -60,9 +59,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgba(13, 28, 40, 0.48) 0%, rgba(13, 28, 40, 0.58) 100%),
-      rgba(15, 25, 35, 0.08);
+    background: transparent;
     z-index: 1;
   }
 
