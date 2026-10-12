@@ -3,448 +3,880 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mon Miroir 2.0 — Accueil</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Mon Miroir</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Nunito:wght@400;600;800&family=Noto+Sans+Tifinagh&family=Noto+Sans+Ethiopic&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0F1923;
-      --chat-bg: #0A1520;
-      --bubble-mirror: #1A3A5C;
-      --bubble-user: #1E5C3A;
-      --gold: #C9A84C;
-      --green-record: #25D366;
-      --red-stop: #E53935;
-      --text: #F0EDE6;
-      --text-soft: #7A8FA6;
-      --orange: #E64A19;
-      --vert: #8BC34A;
-    }
-    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow-x: hidden;
-      background: var(--bg);
-      font-family: 'Nunito', sans-serif;
-      color: var(--text);
-    }
+  :root {
+    --bg: #122231;
+    --bg-deep: #0F1D2A;
+    --surface: #203D55;
+    --surface-soft: #274A67;
+    --chat-bg: #162B3D;
+    --bubble-mirror: #274A67;
+    --bubble-user: #397358;
+    --gold: #D2B15B;
+    --green-record: #4E9B70;
+    --red-stop: #D6605B;
+    --text: #F3F1EB;
+    --text-soft: #A7B5C1;
+  }
 
-    /* ── FOND CVI ── */
-    #accueil {
-      min-height: 100vh;
-      background-image: url('/fond-cvi.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+  }
 
-    /* Voile sombre pour lisibilité */
-    #accueil::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 25, 35, 0.5);
-      z-index: 1;
-    }
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-deep);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+  }
 
-    #accueil > * {
-      position: relative;
-      z-index: 2;
-    }
+  #langScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background:
+      radial-gradient(circle at top, rgba(210,177,91,0.08), transparent 35%),
+      linear-gradient(180deg, #14283A 0%, #0F1D2A 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 24px;
+    transition: opacity 0.5s ease;
+  }
 
-    /* ── HEADER ── */
-    .header-accueil {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header-accueil h1 {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .header-accueil .sous-titre {
-      font-size: 11px;
-      color: var(--text-soft);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
+  .lang-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    text-align: center;
+  }
 
-    /* ── MENU LANGUE ── */
-    .langue-menu {
-      position: relative;
-    }
-    .langue-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(201,168,76,0.3);
-      color: var(--text);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-    }
-    .langue-liste {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: var(--bubble-mirror);
-      border-radius: 12px;
-      padding: 8px;
-      margin-top: 8px;
-      min-width: 140px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      z-index: 100;
-    }
-    .langue-liste.visible { display: block; }
-    .langue-liste button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: transparent;
-      border: none;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-    }
-    .langue-liste button:hover { background: rgba(255,255,255,0.1); }
+  .lang-list {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
-    /* ── MENU PRINCIPAL ── */
-    .menu-principal {
-      width: 100%;
-      max-width: 500px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .menu-btn {
-      background: rgba(26, 58, 92, 0.9);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 700;
-      font-size: 14px;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-    }
-    .menu-btn:hover {
-      background: rgba(201,168,76,0.15);
-      border-color: var(--gold);
-      transform: scale(1.02);
-    }
-    .menu-btn .icone {
-      display: block;
-      font-size: 24px;
-      margin-bottom: 6px;
-    }
+  .lang-btn {
+    background: rgba(39,74,103,0.78);
+    border: 1px solid rgba(210,177,91,0.28);
+    border-radius: 16px;
+    padding: 18px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  }
 
-    /* ── CHAT ── */
-    .chat-zone {
-      width: 100%;
-      max-width: 500px;
-      flex: 1;
-      min-height: 300px;
-      max-height: 400px;
-      background: rgba(10, 21, 32, 0.9);
-      border-radius: 16px;
-      padding: 16px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .chat-zone::-webkit-scrollbar { display: none; }
+  .lang-btn:hover { background: rgba(45,84,113,0.92); }
+  .lang-btn:active {
+    transform: scale(0.97);
+    background: rgba(210,177,91,0.15);
+    border-color: var(--gold);
+  }
 
-    .bubble-wrap {
-      display: flex;
-      flex-direction: column;
-      animation: popIn 0.3s ease forwards;
-    }
-    .bubble-wrap.mirror { align-items: flex-start; }
-    .bubble-wrap.user { align-items: flex-end; }
-    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+  .lang-script {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
 
-    .bubble {
-      max-width: 85%;
-      padding: 10px 14px;
-      border-radius: 18px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-    .bubble.mirror { background: var(--bubble-mirror); border-bottom-left-radius: 4px; }
-    .bubble.user { background: var(--bubble-user); border-bottom-right-radius: 4px; }
-    .bubble.rtl { font-family: 'Tajawal', sans-serif; font-size: 18px; direction: rtl; }
-    .timestamp { font-size: 10px; color: var(--text-soft); margin-top: 3px; padding: 0 4px; }
+  .lang-btn[data-lang="ar"] .lang-script { font-family: 'Tajawal', sans-serif; }
+  .lang-btn[data-lang="ber"] .lang-script { font-family: 'Noto Sans Tifinagh', sans-serif; }
+  .lang-btn[data-lang="ti"] .lang-script { font-family: 'Noto Sans Ethiopic', sans-serif; }
 
-    .typing-dots {
-      background: var(--bubble-mirror);
-      border-radius: 18px;
-      border-bottom-left-radius: 4px;
-      padding: 12px 16px;
-      display: flex;
-      gap: 5px;
-      align-items: center;
-    }
-    .typing-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--text-soft);
-      animation: typingBounce 1.2s ease-in-out infinite;
-    }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); background: var(--gold); } }
+  .lang-arrow {
+    color: var(--gold);
+    font-size: 18px;
+    opacity: 0.8;
+  }
 
-    /* ── BARRE DE SAISIE ── */
-    .saisie-bar {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .saisie-field {
-      flex: 1;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: 24px;
-      padding: 12px 18px;
-      color: var(--text);
-      font-size: 15px;
-      font-family: 'Nunito', sans-serif;
-      outline: none;
-    }
-    .saisie-field::placeholder { color: var(--text-soft); }
-    .saisie-field:focus { border-color: var(--gold); }
-    .btn-envoyer {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      border: none;
-      background: var(--gold);
-      color: var(--bg);
-      font-size: 20px;
-      cursor: pointer;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  .app {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    background: var(--bg-deep);
+  }
 
-    /* ── FOOTER ── */
-    .footer-accueil {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-    }
-    .footer-accueil img {
-      width: 80px;
-      margin-bottom: 8px;
-    }
-    .footer-accueil p {
-      font-size: 10px;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
+  .app.visible { opacity: 1; }
 
-    /* ── RETOUR ── */
-    .retour-menu {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--bg);
-      padding: 10px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-  </style>
+  .header {
+    background: rgba(32,61,85,0.96);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(210,177,91,0.16);
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--gold), #7A5C1E);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(210,177,91,0.25);
+  }
+
+  .header-info { flex: 1; min-width: 0; }
+  .header-info h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .header-status {
+    font-size: 12px;
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .dot-online {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-record);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .btn-header {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(210,177,91,0.25);
+    background: transparent;
+    color: var(--text-soft);
+    font-size: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .btn-header.active {
+    background: rgba(210,177,91,0.16);
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .barre-thematique {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding: 14px 12px;
+    background: rgba(22,43,61,0.96);
+    border-bottom: 1px solid rgba(210,177,91,0.12);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .btn-thematique {
+    background: rgba(39,74,103,0.80);
+    color: var(--text);
+    padding: 10px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(210,177,91,0.32);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-thematique:hover { background: rgba(45,84,113,0.95); }
+  .btn-thematique:active {
+    transform: scale(0.97);
+    background: rgba(210,177,91,0.16);
+  }
+
+  .trad-banner {
+    display: none;
+    background: rgba(210,177,91,0.09);
+    border-bottom: 1px solid rgba(210,177,91,0.16);
+    padding: 6px 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .trad-banner.visible { display: block; }
+
+  .chat-zone {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 22px 16px;
+    background: linear-gradient(180deg, rgba(22,43,61,1) 0%, rgba(19,38,54,1) 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-zone::-webkit-scrollbar { display: none; }
+
+  .bubble-wrap {
+    display: flex;
+    flex-direction: column;
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+
+  .bubble-wrap.mirror { align-items: flex-start; }
+  .bubble-wrap.user { align-items: flex-end; }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .bubble {
+    max-width: 80%;
+    padding: 11px 15px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.55;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+  }
+
+  .bubble.mirror {
+    background: var(--bubble-mirror);
+    border-bottom-left-radius: 5px;
+    color: var(--text);
+  }
+
+  .bubble.user {
+    background: var(--bubble-user);
+    border-bottom-right-radius: 5px;
+    color: var(--text);
+  }
+
+  .bubble.rtl {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 18px;
+    direction: rtl;
+  }
+
+  .bubble-voice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+  }
+
+  .voice-play-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .bubble.user .voice-play-btn { background: var(--green-record); color: white; }
+
+  .waveform {
+    flex: 1;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .wave-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.20);
+    flex-shrink: 0;
+  }
+
+  .timestamp {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 3px;
+    padding: 0 4px;
+  }
+
+  .typing-dots {
+    background: var(--bubble-mirror);
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text-soft);
+    animation: typingBounce 1.2s ease-in-out infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%,60%,100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); background: var(--gold); }
+  }
+
+  .record-bar {
+    flex-shrink: 0;
+    background: rgba(32,61,85,0.97);
+    border-top: 1px solid rgba(210,177,91,0.14);
+    padding: 15px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-mic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: var(--green-record);
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(78,155,112,0.28);
+    transition: all 0.2s ease;
+  }
+
+  .btn-mic.listening {
+    background: var(--red-stop);
+    box-shadow: 0 4px 20px rgba(214,96,91,0.35);
+    animation: record-pulse 1s ease-in-out infinite;
+  }
+
+  .btn-mic.speaking { background: var(--gold); animation: none; }
+  .btn-mic:disabled { opacity: 0.35; pointer-events: none; }
+
+  @keyframes record-pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .record-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .record-label { font-size: 14px; color: var(--text-soft); }
+
+  .silence-bar-wrap {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .silence-bar-wrap.visible { opacity: 1; }
+  .silence-bar {
+    height: 100%;
+    background: var(--gold);
+    width: 100%;
+    transform-origin: left;
+    transition: transform 0.1s linear;
+  }
+
+  .live-wave {
+    height: 22px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .live-wave.visible { opacity: 1; }
+  .live-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: var(--green-record);
+    height: 4px;
+    transition: height 0.08s ease;
+  }
+
+  .text-bar {
+    display: none;
+    flex-shrink: 0;
+    background: rgba(32,61,85,0.97);
+    border-top: 1px solid rgba(210,177,91,0.14);
+    padding: 12px 16px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .text-bar.visible { display: flex; }
+
+  .text-field {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(210,177,91,0.20);
+    border-radius: 22px;
+    padding: 11px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+  }
+
+  .text-field:focus { border-color: var(--gold); }
+  .text-field::placeholder { color: var(--text-soft); }
+
+  .btn-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gold);
+    color: #172633;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-close-text {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(214,96,91,0.14);
+    color: #E7A09C;
+    font-size: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
 </head>
 <body>
 
-<div id="accueil">
+<div id="langScreen">
+  <div class="lang-title">Choisis ta langue</div>
+  <div class="lang-list">
+    <button class="lang-btn" data-lang="fr" data-greeting="Je suis là. Tu peux parler." onclick="chooseLang(this)"><span class="lang-script">Français</span><span class="lang-arrow">›</span></button>
+    <button class="lang-btn" data-lang="ar" data-greeting="أنا هنا. تكلم معي." onclick="chooseLang(this)"><span class="lang-script">العربية</span><span class="lang-arrow">›</span></button>
+    <button class="lang-btn" data-lang="ber" data-greeting="ⴰⵣⵓⵍ. ⴷⴰⵡ ⵏⵙⵙⵎⵎⴻⵍ." onclick="chooseLang(this)"><span class="lang-script">ⴰⵎⴰⵣⵉⵖ</span><span class="lang-arrow">›</span></button>
+    <button class="lang-btn" data-lang="en" data-greeting="I'm here. You can talk to me." onclick="chooseLang(this)"><span class="lang-script">English</span><span class="lang-arrow">›</span></button>
+    <button class="lang-btn" data-lang="bm" data-greeting="Ne b'a here. Kuma n'ma." onclick="chooseLang(this)"><span class="lang-script">Bambara</span><span class="lang-arrow">›</span></button>
+    <button class="lang-btn" data-lang="ti" data-greeting="ሰላም። ክሰምዓካ ኣለኹ།" onclick="chooseLang(this)"><span class="lang-script">ትግርኛ</span><span class="lang-arrow">›</span></button>
+  </div>
+</div>
 
-  <!-- HEADER (SANS MIROIR) -->
-  <div class="header-accueil">
-    <div>
-      <h1>Mon Miroir 2.0</h1>
-      <div class="sous-titre">L'ÉVEIL ET LE SUIVI</div>
+<div class="app" id="chatApp">
+  <div class="header">
+    <div class="avatar">🪞</div>
+    <div class="header-info">
+      <h1 id="headerTitle">Mon Miroir</h1>
+      <div class="header-status"><div class="dot-online"></div><span id="headerStatus">En ligne</span></div>
     </div>
-    <!-- MENU LANGUE -->
-    <div class="langue-menu">
-      <button class="langue-btn" onclick="toggleLangue()">🌐 Langue ▼</button>
-      <div class="langue-liste" id="langueListe">
-        <button onclick="choisirLangue('fr')">Français</button>
-        <button onclick="choisirLangue('ar')">العربية</button>
-        <button onclick="choisirLangue('ber')">ⴰⵎⴰⵣⵉⵖ</button>
-        <button onclick="choisirLangue('en')">English</button>
-        <button onclick="choisirLangue('bm')">Bambara</button>
-        <button onclick="choisirLangue('ti')">ትግርኛ</button>
-      </div>
+    <button class="btn-header" id="btnMode">🔤</button>
+    <button class="btn-header" id="btnWrite">✏️</button>
+  </div>
+
+    <!-- Barre thématique -->
+  <nav class="barre-thematique">
+    <button class="btn-thematique" onclick="envoyerThematique('penal')">⚖️ Pénal</button>
+    <button class="btn-thematique" onclick="envoyerThematique('orientation')">🎯 Orientation</button>
+    <a class="btn-thematique" href="/post-audience.html" style="text-decoration: none; display: inline-block;">📄 Post-audience</a>
+    <a class="btn-thematique" href="/mes-rendez-vous.html" style="text-decoration: none; display: inline-block;">📅 Mes rendez-vous</a>
+  </nav>
+
+  <div class="trad-banner" id="tradBanner">MODE TRADUCTEUR — Darija → Français</div>
+
+  <div class="chat-zone" id="chatZone"></div>
+
+  <div class="text-bar" id="textBar">
+    <button class="btn-close-text" id="btnCloseText">✕</button>
+    <input class="text-field" id="textField" type="text" placeholder="Écris ton message..." />
+    <button class="btn-send" id="btnSend">➤</button>
+  </div>
+
+  <div class="record-bar">
+    <button class="btn-mic" id="btnMic" onclick="handleMicTap()">🎙️</button>
+    <div class="record-info">
+      <div class="record-label" id="recLabel">...</div>
+      <div class="live-wave" id="liveWave"></div>
+      <div class="silence-bar-wrap" id="silenceWrap"><div class="silence-bar" id="silenceBar"></div></div>
     </div>
   </div>
-
-  <!-- MENU PRINCIPAL -->
-  <div class="menu-principal">
-    <a href="/accueil.html?mode=penal" class="menu-btn">
-      <span class="icone">⚖️</span> Pénal
-    </a>
-    <a href="/orientation.html" class="menu-btn">
-      <span class="icone">🎯</span> Orientation
-    </a>
-    <a href="/post-audience.html" class="menu-btn">
-      <span class="icone">📄</span> Post-audience
-    </a>
-    <a href="/mes-rendez-vous.html" class="menu-btn">
-      <span class="icone">📅</span> Mes rendez-vous
-    </a>
-  </div>
-
-  <!-- CHAT -->
-  <div class="chat-zone" id="chatZone">
-    <div class="bubble-wrap mirror">
-      <div class="bubble mirror">Je suis là. Tu peux parler.</div>
-    </div>
-  </div>
-
-  <!-- BARRE DE SAISIE -->
-  <div class="saisie-bar">
-    <input class="saisie-field" id="saisieField" type="text" placeholder="Écris ton message...">
-    <button class="btn-envoyer" id="btnEnvoyer">➤</button>
-  </div>
-
-  <!-- FOOTER (LOGO ENVOL PRODUCTION) -->
-  <div class="footer-accueil">
-    <img src="/logo-envol.jpg" alt="Envol Production">
-    <p>Envol Production</p>
-  </div>
-
 </div>
 
 <script>
   // ── CONFIG ──
-  const API_CHAT = '/api/chat';
-  var selectedLang = localStorage.getItem('monmiroir_langue') || 'fr';
+  const VOICE_ID_FR  = '499WxIBFdyR15retMRLV';
+  const VOICE_ID_AR  = 'IKRnTow9UDgZBDEXp4Gq';
+  const API_SPEAK    = '/api/speak';
+  const API_CHAT     = '/api/chat';
+  const SILENCE_DELAY = 3000;
+
+  // ── STATE ──
+  var appMode        = 'mirror';
+  var selectedLang   = 'fr';
+  var currentVoiceId = VOICE_ID_FR;
+  var appState       = 'idle';
+  var recognition;
+  var finalTranscript = '';
+  var silenceTimer   = null;
+  var silenceStart   = null;
+  var animFrame;
   var conversationHistory = [];
+  var currentAudio   = null;
 
   // ── DOM ──
-  var chatZone = document.getElementById('chatZone');
-  var saisieField = document.getElementById('saisieField');
-  var btnEnvoyer = document.getElementById('btnEnvoyer');
+  var chatZone    = document.getElementById('chatZone');
+  var btnMic      = document.getElementById('btnMic');
+  var recLabel    = document.getElementById('recLabel');
+  var headerSt    = document.getElementById('headerStatus');
+  var headerTitle = document.getElementById('headerTitle');
+  var liveWave    = document.getElementById('liveWave');
+  var silenceWrap = document.getElementById('silenceWrap');
+  var silenceBar  = document.getElementById('silenceBar');
+  var tradBanner  = document.getElementById('tradBanner');
 
-  // ── MENU LANGUE ──
-  function toggleLangue() {
-    document.getElementById('langueListe').classList.toggle('visible');
+  var liveBars;
+  for (var i = 0; i < 20; i++) { var b = document.createElement('div'); b.className = 'live-bar'; liveWave.appendChild(b); }
+  liveBars = liveWave.querySelectorAll('.live-bar');
+
+  const hints = { fr:'Appuie pour parler', ar:'اضغط للتحدث', ber:'ⴾⴾⵙ ⴰⴷ ⵜⵙⴰⵡⵍⴷ', en:'Tap to speak', bm:'Digi ka kuma', ti:'ንምዝራብ ጠውቕ' };
+  const listeningHints = { fr:"Je t'écoute...", ar:'أنا أسمعك...', ber:'ⴷⴰⵡ ⴽ ⵙⵙⵎⵎⴻⵍⵖ...', en:'Listening...', bm:"N b'i kalan...", ti:'ይሰምዓካ ኣሎ...' };
+  const srLangs = { fr:'fr-FR', ar:'ar-MA', ber:'fr-FR', en:'en-US', bm:'fr-FR', ti:'fr-FR' };
+
+  // ── SILENCE BAR ──
+  function startSilenceBar() { silenceWrap.classList.add('visible'); silenceStart = Date.now(); animateSilenceBar(); }
+  function animateSilenceBar() { if (!silenceStart) return; var p = Math.min((Date.now()-silenceStart)/SILENCE_DELAY,1); silenceBar.style.transform='scaleX('+(1-p)+')'; if(p<1&&appState==='listening') requestAnimationFrame(animateSilenceBar); }
+  function resetSilenceBar() { silenceStart=null; silenceBar.style.transform='scaleX(1)'; silenceWrap.classList.remove('visible'); }
+
+  function animateWave() { liveBars.forEach(function(b){ b.style.height=(4+Math.random()*16)+'px'; }); if(appState==='listening') animFrame=requestAnimationFrame(animateWave); else liveBars.forEach(function(b){ b.style.height='4px'; }); }
+
+  // ── CHOIX LANGUE ──
+  function chooseLang(btn) {
+    selectedLang = btn.dataset.lang;
+    currentVoiceId = (selectedLang === 'fr') ? VOICE_ID_FR : VOICE_ID_AR;
+    var greeting = btn.dataset.greeting;
+    var langScreen = document.getElementById('langScreen');
+    langScreen.style.opacity = '0';
+    langScreen.style.pointerEvents = 'none';
+    setTimeout(function() {
+      langScreen.style.display = 'none';
+      document.getElementById('chatApp').classList.add('visible');
+      recLabel.textContent = hints[selectedLang];
+      initRecognition();
+      openingGreeting(greeting);
+    }, 500);
   }
 
-  function choisirLangue(lang) {
-    selectedLang = lang;
-    localStorage.setItem('monmiroir_langue', lang);
-    document.getElementById('langueListe').classList.remove('visible');
-    location.reload();
+  // ── RECONNAISSANCE VOCALE ──
+  function initRecognition() {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = srLangs[selectedLang] || 'fr-FR';
+
+    recognition.onresult = function(e) {
+      var interim = '';
+      for (var i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      clearTimeout(silenceTimer); resetSilenceBar();
+      if (finalTranscript || interim) {
+        silenceTimer = setTimeout(function() {
+          if (appState === 'listening' && finalTranscript.trim()) sendAuto();
+        }, SILENCE_DELAY);
+        startSilenceBar();
+      }
+    };
+    recognition.onend = function() { if (appState === 'listening') { try { recognition.start(); } catch(e) {} } };
+    recognition.onerror = function(e) { if (e.error === 'no-speech') return; if (appState === 'listening') { try { recognition.start(); } catch(e) {} } };
   }
 
-  // ── ENVOYER UN MESSAGE ──
-  async function envoyerMessage() {
-    var texte = saisieField.value.trim();
-    if (!texte) return;
-    saisieField.value = '';
+  // ── ENVOI AUTO ──
+  function sendAuto() {
+    var text = finalTranscript.trim(); finalTranscript = '';
+    if (!text) return;
+    stopListening();
+    if (appMode === 'translator') {
+      translateText(text);
+    } else {
+      addUserBubble(text);
+      sendToMirror(text);
+    }
+  }
 
-    // Ajouter la bulle utilisateur
-    ajouterBulle(texte, 'user');
-    conversationHistory.push({ role: 'user', content: texte });
+  // ── BOUTON MIC ──
+  function handleMicTap() {
+    if (appState === 'thinking') return;
+    if (appState === 'speaking') { if (currentAudio) { currentAudio.pause(); currentAudio = null; } startListening(); return; }
+    if (appState === 'listening') { if (finalTranscript.trim()) sendAuto(); else stopListening(); return; }
+    startListening();
+  }
 
-    // Ajouter les typing dots
-    ajouterTyping();
+  function startListening() {
+    appState = 'listening'; finalTranscript = '';
+    clearTimeout(silenceTimer); resetSilenceBar();
+    btnMic.textContent = '🔴'; btnMic.classList.add('listening'); btnMic.classList.remove('speaking');
+    liveWave.classList.add('visible');
+    recLabel.textContent = appMode === 'translator' ? 'Parle en Darija...' : listeningHints[selectedLang];
+    headerSt.textContent = 'Écoute...';
+    animateWave();
+    if (recognition) {
+      recognition.lang = appMode === 'translator' ? 'ar-MA' : (srLangs[selectedLang] || 'fr-FR');
+      try { recognition.start(); } catch(e) {}
+    }
+  }
 
+  function stopListening() {
+    appState = 'idle'; clearTimeout(silenceTimer); resetSilenceBar();
+    cancelAnimationFrame(animFrame);
+    liveWave.classList.remove('visible'); liveBars.forEach(function(b){ b.style.height='4px'; });
+    btnMic.textContent = '🎙️'; btnMic.classList.remove('listening', 'speaking');
+    recLabel.textContent = hints[selectedLang] || 'Appuie pour parler';
+    headerSt.textContent = appMode === 'translator' ? 'Mode Traducteur' : 'En ligne';
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+  }
+
+  // ── MODE TRADUCTEUR ──
+  function toggleMode() {
+    appMode = (appMode === 'mirror') ? 'translator' : 'mirror';
+    if (appState === 'listening') stopListening();
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    var btn = document.getElementById('btnMode');
+    if (appMode === 'translator') {
+      btn.classList.add('active');
+      tradBanner.classList.add('visible');
+      headerSt.textContent = 'Mode Traducteur';
+    } else {
+      btn.classList.remove('active');
+      tradBanner.classList.remove('visible');
+      headerSt.textContent = 'En ligne';
+      recLabel.textContent = hints[selectedLang];
+    }
+  }
+
+  // ── ZONE TEXTE ──
+  function toggleTextInput() {
+    var bar = document.getElementById('textBar');
+    var btn = document.getElementById('btnWrite');
+    if (bar.classList.contains('visible')) {
+      bar.classList.remove('visible'); btn.classList.remove('active');
+    } else {
+      bar.classList.add('visible'); btn.classList.add('active');
+      setTimeout(function() { document.getElementById('textField').focus(); }, 150);
+    }
+  }
+
+  function sendTextMessage() {
+    var field = document.getElementById('textField');
+    var text = field.value.trim();
+    if (!text) return;
+    field.value = '';
+    if (appMode === 'translator') {
+      translateText(text);
+    } else {
+      addUserBubble(text);
+      sendToMirror(text);
+    }
+  }
+
+  // ── TRADUCTION DARIJA → FRANÇAIS ──
+  async function translateText(text) {
+    addTradBubble(text, 'darija');
     try {
       var res = await fetch(API_CHAT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: conversationHistory,
-          language: selectedLang,
-          mode: 'miroir'
-        })
+        body: JSON.stringify({ messages: [{ role: 'user', content: text }], language: 'ar', mode: 'translate' })
+      });
+      var data = await res.json();
+      addTradBubble(data.reply || '...', 'french');
+    } catch(e) {
+      addTradBubble('Erreur de traduction', 'french');
+    }
+  }
+
+  function addTradBubble(text, type) {
+    var wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap ' + (type === 'darija' ? 'user' : 'mirror');
+    var label = type === 'darija' ? '🗣 Darija' : '🇫🇷 Français';
+    var bg = type === 'darija' ? '#2C1F14' : '#1F3A14';
+    var color = type === 'darija' ? '#E8C99A' : '#C8E6C9';
+    var extra = type === 'darija' ? 'direction:rtl;font-family:Tajawal,sans-serif;font-size:17px;' : '';
+    var borderR = type === 'darija' ? 'border-bottom-right-radius:4px;' : 'border-bottom-left-radius:4px;';
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--text-soft);padding:2px 6px;">' + label + '</div>' +
+      '<div style="max-width:82%;padding:10px 14px;border-radius:18px;' + borderR + 'background:' + bg + ';color:' + color + ';' + extra + '">' + text + '</div>' +
+      '<div class="timestamp">' + now() + '</div>';
+    chatZone.appendChild(wrap); scrollDown();
+  }
+
+  // ── BULLES ──
+  function now() { return new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}); }
+
+  function addUserBubble(text) {
+    var wrap = document.createElement('div'); wrap.className = 'bubble-wrap user';
+    var bars = Array.from({length:24}, function(){ return '<div class="wave-bar" style="height:'+(3+Math.floor(Math.random()*18))+'px"></div>'; }).join('');
+    wrap.innerHTML = '<div class="bubble user"><div class="bubble-voice"><button class="voice-play-btn">▶</button><div class="waveform">'+bars+'</div></div></div><div class="timestamp">'+now()+'</div>';
+    chatZone.appendChild(wrap); scrollDown();
+  }
+
+   function addMirrorBubble(text) {
+    var wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror';
+    var isRtl = /[\u0600-\u06FF]/.test(text);
+    
+    // ── DÉTECTION DES UEMO ──
+    var uemoLinks = {
+      'UEMO Nord': 'https://www.google.com/maps/dir/?api=1&destination=174+avenue+des+Minimes+31200+Toulouse',
+      'UEMO Riquet': 'https://www.google.com/maps/dir/?api=1&destination=60+rue+Riquet+31000+Toulouse',
+      'UEMO La Gare': 'https://www.google.com/maps/dir/?api=1&destination=7+boulevard+de+la+Gare+31000+Toulouse',
+      'UEMO Ouest': 'https://www.google.com/maps/dir/?api=1&destination=145+avenue+de+Muret+31300+Toulouse',
+      'UEMO Sud': 'https://www.google.com/maps/dir/?api=1&destination=109+avenue+de+Lespinet+31400+Toulouse'
+    };
+    
+    var boutonMaps = '';
+    for (var uemo in uemoLinks) {
+      if (text.indexOf(uemo) !== -1) {
+        boutonMaps = '<a href="' + uemoLinks[uemo] + '" target="_blank" style="display: inline-block; margin-top: 10px; background: #C9A84C; color: #0F1923; padding: 10px 18px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; font-family: Nunito, sans-serif;">📍 Ouvrir dans Google Maps</a>';
+        break;
+      }
+    }
+    
+    wrap.innerHTML = '<div class="bubble mirror '+(isRtl?'rtl':'')+'">'+text+'</div>' + boutonMaps + '<div class="timestamp">'+now()+'</div>';
+    chatZone.appendChild(wrap); scrollDown();
+  }
+
+  function addTyping() {
+     var wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror'; wrap.id = 'typingIndicator';
+    wrap.innerHTML = '<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    chatZone.appendChild(wrap); scrollDown();
+  }
+  function removeTyping() { var t = document.getElementById('typingIndicator'); if(t) t.remove(); }
+  function scrollDown() { setTimeout(function(){ chatZone.scrollTop = chatZone.scrollHeight; }, 50); }
+
+  // ── CLAUDE ──
+  async function sendToMirror(userText) {
+    appState = 'thinking'; btnMic.disabled = true;
+    conversationHistory.push({ role: 'user', content: userText });
+    addTyping(); await delay(600);
+    try {
+      var res = await fetch(API_CHAT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: conversationHistory, language: selectedLang })
       });
       var data = await res.json();
       var reply = data.reply || 'Je suis là.';
       conversationHistory.push({ role: 'assistant', content: reply });
-      retirerTyping();
-      ajouterBulle(reply, 'mirror');
-    } catch (err) {
-      retirerTyping();
-      ajouterBulle('Je suis là.', 'mirror');
+      removeTyping(); addMirrorBubble(reply);
+      await speak(reply);
+    } catch(err) { removeTyping(); addMirrorBubble('Je suis là.'); startListening(); }
+    finally { btnMic.disabled = false; }
+  }
+
+  // ── BARRE THÉMATIQUE ──
+  function envoyerThematique(theme) {
+    if (theme === 'penal') {
+      addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
+      sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
+    } else if (theme === 'orientation') {
+      addUserBubble('🎯 Je veux découvrir des métiers');
+      sendToMirror('Je veux découvrir des métiers. Propose-moi des univers professionnels.');
     }
   }
-
-  // ── AJOUTER UNE BULLE ──
-  function ajouterBulle(texte, type) {
-    var wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap ' + type;
-    var isRtl = /[\u0600-\u06FF]/.test(texte);
-    var bubbleClass = 'bubble ' + type + (isRtl ? ' rtl' : '');
-    wrap.innerHTML = '<div class="' + bubbleClass + '">' + texte + '</div>' +
-      '<div class="timestamp">' + now() + '</div>';
-    chatZone.appendChild(wrap);
-    chatZone.scrollTop = chatZone.scrollHeight;
+ 
+  // ── TTS ──
+  async function speak(text) {
+    appState = 'speaking';
+    btnMic.textContent = '⏸'; btnMic.classList.remove('listening'); btnMic.classList.add('speaking');
+    recLabel.textContent = 'Le Miroir parle...';
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+    try {
+      var res = await fetch(API_SPEAK, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text:text, voice_id:currentVoiceId}) });
+      if (!res.ok) throw new Error('TTS error');
+      var blob = await res.blob();
+      var url = URL.createObjectURL(blob);
+      currentAudio = new Audio(url);
+      await new Promise(function(resolve) { currentAudio.onended = function(){ URL.revokeObjectURL(url); resolve(); }; currentAudio.onerror = resolve; currentAudio.play(); });
+      currentAudio = null;
+    } catch(e) { console.error('TTS:', e); }
+    setTimeout(function() {
+      startListening();
+    }, 1000);
   }
-
-  // ── TYPING DOTS ──
-  function ajouterTyping() {
-    var wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap mirror';
-    wrap.id = 'typingIndicator';
-    wrap.innerHTML = '<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-    chatZone.appendChild(wrap);
-    chatZone.scrollTop = chatZone.scrollHeight;
+  // ── OUVERTURE ──
+  async function openingGreeting(greeting) {
+    btnMic.disabled = true;
+    addTyping(); await delay(1200); removeTyping();
+    conversationHistory.push({ role: 'assistant', content: greeting });
+    addMirrorBubble(greeting);
+    await speak(greeting);
+    btnMic.disabled = false;
+    recLabel.textContent = hints[selectedLang];
   }
-  function retirerTyping() {
-    var t = document.getElementById('typingIndicator');
-    if (t) t.remove();
-  }
+    function delay(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
 
-  // ── HEURE ──
-  function now() {
-    return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  }
-
-  // ── ÉVÉNEMENTS ──
-  btnEnvoyer.addEventListener('click', envoyerMessage);
-  saisieField.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') envoyerMessage();
+    // ── EVENT LISTENERS ──
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('btnMode').addEventListener('click', function(e){ e.preventDefault(); toggleMode(); });
+    document.getElementById('btnWrite').addEventListener('click', function(e){ e.preventDefault(); toggleTextInput(); });
+    document.getElementById('btnCloseText').addEventListener('click', toggleTextInput);
+    document.getElementById('btnSend').addEventListener('click', sendTextMessage);
+    document.getElementById('textField').addEventListener('keydown', function(e){ if(e.key==='Enter') sendTextMessage(); });
   });
-
-  // ── GESTION DU MODE (PENAL / ORIENTATION) ──
-  var urlParams = new URLSearchParams(window.location.search);
-  var mode = urlParams.get('mode');
-  if (mode === 'penal') {
-    saisieField.value = 'Explique-moi le contrôle judiciaire';
-  }
 </script>
-
 </body>
 </html>
