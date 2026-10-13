@@ -13,12 +13,8 @@
       --bubble-mirror: #1A3A5C;
       --bubble-user: #1E5C3A;
       --gold: #C9A84C;
-      --green-record: #25D366;
-      --red-stop: #E53935;
       --text: #F0EDE6;
       --text-soft: #7A8FA6;
-      --orange: #E64A19;
-      --vert: #8BC34A;
     }
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     html, body {
@@ -28,11 +24,8 @@
       background: var(--bg);
       font-family: 'Nunito', sans-serif;
       color: var(--text);
-      margin: 0;
-      padding: 0;
     }
 
-    /* ── FOND CVI ── */
     #orientation {
       min-height: 100vh;
       width: 100%;
@@ -45,10 +38,8 @@
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      box-sizing: border-box;
     }
 
-    /* Voile sombre pour lisibilité */
     #orientation::before {
       content: '';
       position: absolute;
@@ -63,7 +54,6 @@
       z-index: 2;
     }
 
-    /* ── BOUTON RETOUR ── */
     .retour-menu {
       display: inline-block;
       background: var(--gold);
@@ -77,7 +67,6 @@
       align-self: flex-start;
     }
 
-    /* ── HEADER ── */
     .header-orientation {
       width: 100%;
       max-width: 500px;
@@ -101,7 +90,6 @@
       text-transform: uppercase;
     }
 
-    /* ── MENU LANGUE ── */
     .langue-menu { position: relative; }
     .langue-btn {
       background: rgba(201, 168, 76, 0.15);
@@ -113,11 +101,6 @@
       font-weight: 700;
       cursor: pointer;
       font-family: 'Nunito', sans-serif;
-      transition: all 0.2s ease;
-    }
-    .langue-btn:hover {
-      background: rgba(201, 168, 76, 0.3);
-      border-color: var(--gold);
     }
     .langue-liste {
       display: none;
@@ -134,7 +117,6 @@
       overflow-y: auto;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
       z-index: 10000;
-      backdrop-filter: blur(10px);
     }
     .langue-liste.visible { display: block; }
     .langue-liste button {
@@ -152,38 +134,14 @@
       font-weight: 600;
       cursor: pointer;
       font-family: 'Nunito', sans-serif;
-      transition: all 0.15s ease;
     }
     .langue-liste button:hover {
       background: rgba(201, 168, 76, 0.2);
-      transform: translateX(3px);
     }
 
-    /* ── SECTIONS ── */
-    .section {
-      width: 100%;
-      max-width: 500px;
-      background: rgba(10, 21, 32, 0.9);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .section h2 {
-      font-size: 18px;
-      color: var(--gold);
-      margin-bottom: 12px;
-    }
-    .section p {
-      font-size: 14px;
-      color: var(--text-soft);
-      line-height: 1.6;
-    }
-
-    /* ── CHAT ── */
     .chat-zone {
       width: 100%;
       max-width: 500px;
-      flex: 1;
       min-height: 250px;
       max-height: 350px;
       background: rgba(10, 21, 32, 0.9);
@@ -197,14 +155,9 @@
     }
     .chat-zone::-webkit-scrollbar { display: none; }
 
-    .bubble-wrap {
-      display: flex;
-      flex-direction: column;
-      animation: popIn 0.3s ease forwards;
-    }
+    .bubble-wrap { display: flex; flex-direction: column; }
     .bubble-wrap.mirror { align-items: flex-start; }
     .bubble-wrap.user { align-items: flex-end; }
-    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
     .bubble {
       max-width: 85%;
@@ -218,24 +171,6 @@
     .bubble.rtl { font-family: 'Tajawal', sans-serif; font-size: 18px; direction: rtl; }
     .timestamp { font-size: 10px; color: var(--text-soft); margin-top: 3px; padding: 0 4px; }
 
-    .typing-dots {
-      background: var(--bubble-mirror);
-      border-radius: 18px;
-      border-bottom-left-radius: 4px;
-      padding: 12px 16px;
-      display: flex;
-      gap: 5px;
-      align-items: center;
-    }
-    .typing-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--text-soft);
-      animation: typingBounce 1.2s ease-in-out infinite;
-    }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); background: var(--gold); } }
-
-    /* ── BARRE DE SAISIE ── */
     .saisie-bar {
       width: 100%;
       max-width: 500px;
@@ -271,7 +206,48 @@
       justify-content: center;
     }
 
-    /* ── FOOTER ── */
+    /* ── SECTION CLIPS ── */
+    .section-clips {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+    .section-clips h2 {
+      font-size: 18px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .grille-clips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .clip-card {
+      background: rgba(10, 21, 32, 0.9);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .clip-card iframe {
+      width: 100%;
+      height: 140px;
+      border: none;
+      display: block;
+    }
+    .clip-card .clip-titre {
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+    .clip-card .clip-sous-titre {
+      padding: 0 10px 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+      text-align: center;
+    }
+
     .footer-orientation {
       width: 100%;
       max-width: 500px;
@@ -296,16 +272,13 @@
 
 <div id="orientation">
 
-  <!-- BOUTON RETOUR -->
   <a href="/accueil.html" class="retour-menu">🏠 Menu principal</a>
 
-  <!-- HEADER -->
   <div class="header-orientation">
     <div>
       <h1>Orientation</h1>
       <div class="sous-titre">Découvre ton métier</div>
     </div>
-    <!-- MENU LANGUE -->
     <div class="langue-menu">
       <button class="langue-btn" onclick="toggleLangue()">🌐 Langue ▼</button>
       <div class="langue-liste" id="langueListe">
@@ -319,32 +292,61 @@
     </div>
   </div>
 
-  <!-- CHAT -->
   <div class="chat-zone" id="chatZone">
     <div class="bubble-wrap mirror">
       <div class="bubble mirror">Bonjour, je suis là pour t'aider à découvrir des métiers. Dis-moi ce qui t'intéresse.</div>
     </div>
   </div>
 
-  <!-- BARRE DE SAISIE -->
   <div class="saisie-bar">
     <input class="saisie-field" id="saisieField" type="text" placeholder="Écris ton message...">
     <button class="btn-envoyer" id="btnEnvoyer">➤</button>
   </div>
 
-  <!-- SECTION CV INTERACTIF -->
-  <div class="section">
-    <h2>📄 CV Interactif</h2>
-    <p>Ici, tu pourras construire ton CV vidéo et valoriser ton parcours. (Fonctionnalité à venir)</p>
+  <!-- SECTION CLIPS MÉTIERS -->
+  <div class="section-clips">
+    <h2>🎬 Clips métiers</h2>
+    <div class="grille-clips">
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/pWzWApc7pto" allowfullscreen></iframe>
+        <div class="clip-titre">Mécanique</div>
+        <div class="clip-sous-titre">Vissage moteur</div>
+      </div>
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/_uIiOTvXe9E" allowfullscreen></iframe>
+        <div class="clip-titre">Mécanique</div>
+        <div class="clip-sous-titre">Vissage moteur (variante)</div>
+      </div>
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/CljHcInDv3E" allowfullscreen></iframe>
+        <div class="clip-titre">Mécanique</div>
+        <div class="clip-sous-titre">Vissage moteur (variante)</div>
+      </div>
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/_I3y-uLIkHw" allowfullscreen></iframe>
+        <div class="clip-titre">Mécanique</div>
+        <div class="clip-sous-titre">Vissage moteur (variante)</div>
+      </div>
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/ChKOFwl6-Ac" allowfullscreen></iframe>
+        <div class="clip-titre">Peinture</div>
+        <div class="clip-sous-titre">Pistolet carrosserie</div>
+      </div>
+
+      <div class="clip-card">
+        <iframe src="https://www.youtube.com/embed/QSfKEIMOm1A" allowfullscreen></iframe>
+        <div class="clip-titre">Logistique</div>
+        <div class="clip-sous-titre">Scan code-barres</div>
+      </div>
+
+    </div>
   </div>
 
-  <!-- SECTION CLIP -->
-  <div class="section">
-    <h2>🎬 Clip métier</h2>
-    <p>Ici, tu pourras visionner des clips de métiers. (Fonctionnalité à venir)</p>
-  </div>
-
-  <!-- FOOTER -->
   <div class="footer-orientation">
     <img src="/logo-envol.jpg" alt="Envol Production">
     <p>Envol Production</p>
@@ -353,17 +355,14 @@
 </div>
 
 <script>
-  // ── CONFIG ──
   const API_CHAT = '/api/chat';
   var selectedLang = localStorage.getItem('monmiroir_langue') || 'fr';
   var conversationHistory = [];
 
-  // ── DOM ──
   var chatZone = document.getElementById('chatZone');
   var saisieField = document.getElementById('saisieField');
   var btnEnvoyer = document.getElementById('btnEnvoyer');
 
-  // ── MENU LANGUE ──
   function toggleLangue() {
     document.getElementById('langueListe').classList.toggle('visible');
   }
@@ -375,7 +374,6 @@
     location.reload();
   }
 
-  // ── ENVOYER UN MESSAGE ──
   async function envoyerMessage() {
     var texte = saisieField.value.trim();
     if (!texte) return;
@@ -407,7 +405,6 @@
     }
   }
 
-  // ── AJOUTER UNE BULLE ──
   function ajouterBulle(texte, type) {
     var wrap = document.createElement('div');
     wrap.className = 'bubble-wrap ' + type;
@@ -419,7 +416,6 @@
     chatZone.scrollTop = chatZone.scrollHeight;
   }
 
-  // ── TYPING DOTS ──
   function ajouterTyping() {
     var wrap = document.createElement('div');
     wrap.className = 'bubble-wrap mirror';
@@ -433,12 +429,10 @@
     if (t) t.remove();
   }
 
-  // ── HEURE ──
   function now() {
     return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   }
 
-  // ── ÉVÉNEMENTS ──
   btnEnvoyer.addEventListener('click', envoyerMessage);
   saisieField.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') envoyerMessage();
