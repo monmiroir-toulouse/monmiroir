@@ -119,21 +119,21 @@
     border-color: rgba(210,177,91,0.52);
   }
 
-  .langue-liste {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: rgba(27, 54, 74, 0.98);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 8px;
-    margin-top: 8px;
-    min-width: 150px;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.28);
-    z-index: 100;
-  }
-
+    }
+    .langue-liste {
+      display: none;
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: var(--bubble-mirror);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 140px;
+      max-height: 60vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 9999;
+    }
   .langue-liste.visible { display: block; }
 
   .langue-liste button {
