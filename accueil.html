@@ -157,49 +157,21 @@
     }
 
   /* ── MENU PRINCIPAL ── */
-  .menu-principal {
-    width: 100%;
-    max-width: 500px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
-  .menu-btn {
-    background: rgba(33, 66, 91, 0.84);
-    border: 1px solid rgba(210,177,91,0.22);
-    border-radius: 16px;
-    padding: 18px 14px;
-    min-height: 88px;
-    text-align: center;
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 700;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    font-family: 'Nunito', sans-serif;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-  }
-
-  .menu-btn:hover {
-    background: rgba(42, 81, 109, 0.94);
-    border-color: rgba(210,177,91,0.42);
-    transform: translateY(-1px);
-  }
-
-  .menu-btn:active {
-    transform: scale(0.985);
-  }
-
-  .menu-btn .icone {
-    display: block;
-    font-size: 23px;
-    margin-bottom: 7px;
-  }
+   <!-- MENU PRINCIPAL -->
+  <div class="menu-principal">
+    <a href="/accueil.html?mode=penal" class="menu-btn">
+      <span class="icone">⚖️</span> Pénal
+    </a>
+    <a href="/orientation.html" class="menu-btn">
+      <span class="icone">🎯</span> Orientation
+    </a>
+    <a href="/post-audience.html" class="menu-btn">
+      <span class="icone">📄</span> Post-audience
+    </a>
+    <a href="/mes-rendez-vous.html" class="menu-btn">
+      <span class="icone">📅</span> Mes rendez-vous
+    </a>
+  </div>
 
   /* ── CHAT ── */
   .chat-zone {
