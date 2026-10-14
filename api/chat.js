@@ -61,7 +61,7 @@ Ta tâche : traduire en français naturel et fluide le texte en Darija qui t'est
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5-20250929',
+          model: 'claude-sonnet-5-5',
           max_tokens: 200,
           system: systemPrompt,
           messages
