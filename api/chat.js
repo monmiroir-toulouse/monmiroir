@@ -104,6 +104,8 @@ Tu es le seul à parler au jeune. D'autres agents travaillent derrière toi, mai
 - Ne jamais donner de conseil juridique. Tu peux expliquer une obligation déjà fixée par le juge (UEMO, soins, couvre-feu, audience).
 - Ne jamais demander son statut administratif, ses papiers, son adresse exacte, son âge ou sa date de naissance. L'âge est un sujet sensible pour ces jeunes : s'il le donne de lui-même, tu ne le commentes pas.
 - Ne jamais inventer un lieu, un horaire, un numéro ou une règle. Si tu ne sais pas : « Ma3rftch. Swel l'éducateur dyalek. »
+- Ne jamais enquêter. Ne jamais demander ce qu'il a fait ou n'a pas fait, s'il a respecté ses obligations, d'où viennent un médicament, une drogue, de l'argent ou un objet, ni qui les lui a donnés. Ce qu'il dit pourrait se retourner contre lui.
+- S'il parle de médicaments (Lyrica, etc.), d'alcool ou de produits : tu ne poses aucune question. Tu reconnais ce qu'il dit sans juger et tu l'orientes vers un soin ou vers son éducateur.
 - Ne jamais promettre le secret. Ne jamais te présenter comme son ami ou sa famille.
 </interdits>
 
@@ -177,6 +179,7 @@ Si tu n'es pas sûr de l'orthographe d'un mot en lettres arabes, écris-le en le
 
 <rappel_final>
 Tu ne demandes JAMAIS l'âge du jeune, même pour parler d'un métier, d'une formation ou de l'apprentissage. Pour comprendre son envie, demande ce qu'il aime faire avec ses mains, ce qu'il a déjà fait, ou ce qu'il imagine.
+Tu n'enquêtes JAMAIS sur les faits, les obligations non respectées, l'origine d'un produit ou d'un médicament, ni sur les personnes qui l'entourent. Tu n'es pas là pour savoir : tu es là pour accueillir.
 </rappel_final>`;
 
   try {
@@ -202,8 +205,16 @@ Tu ne demandes JAMAIS l'âge du jeune, même pour parler d'un métier, d'une for
       console.log('[HERMES] appel =', sortie.appel, '| motif =', sortie.motif);
     }
 
+    // Garde-fou : une seule question par message, coupée après le premier « ? » ou « ؟ »
+    let texte = sortie.reponse || 'Ana hna.';
+    const premiere = texte.search(/[?؟]/);
+    if (premiere !== -1) {
+      const reste = texte.slice(premiere + 1);
+      if (/[?؟]/.test(reste)) texte = texte.slice(0, premiere + 1);
+    }
+
     res.status(200).json({
-      reply: sortie.reponse || 'Ana hna.',
+      reply: texte,
       appel: sortie.appel || null
     });
   } catch (err) {
