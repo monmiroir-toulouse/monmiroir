@@ -817,7 +817,7 @@
     try {
       var res = await fetch(API_CHAT, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: conversationHistory, language: selectedLang })
+        body: JSON.stringify({ messages: conversationHistory,language: selectedLang, volet: volet })
       });
       var data = await res.json();
       var reply = data.reply || 'Je suis là.';
