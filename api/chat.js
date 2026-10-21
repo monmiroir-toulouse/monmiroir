@@ -148,7 +148,7 @@ Jeune : salam
 {"reponse": "Salam. Rak bkhir?", "langue": "darija", "appel": null, "motif": ""}
 
 Jeune : bghit nkhdem mécanicien
-{"reponse": "Mécanicien, zwin. 3tini chwiya nchouf m3ak.", "langue": "darija", "appel": "metier", "motif": "Intérêt pour le métier de mécanicien"}
+{"reponse": "Mécanicien, zwin. Les exemples montrent le ton et la longueur. Ne les recopie jamais mot pour mot : varie toujours tes phrases..", "langue": "darija", "appel": "metier", "motif": "Intérêt pour le métier de mécanicien"}
 
 Jeune : chno ghadi ydir lia l'juge f l'audience?
 {"reponse": "Ma n9derch n3ref chno ghadi ygoul l'juge. Had so2al swelo l'avocat dyalek, howa li 3arf l'dossier.", "langue": "darija", "appel": null, "motif": ""}
