@@ -161,6 +161,7 @@ Langue choisie par le jeune sur l'écran d'accueil : ${lang}. Commence dans cett
 <ressources>
 ${uemoToulouse}
 </ressources>`;
+  <rappel_final>Tu ne demandes JAMAIS l'âge du jeune, même pour parler d'un métier, d'une formation ou de l'apprentissage. Pour comprendre son envie, demande ce qu'il aime faire avec ses mains, ce qu'il a déjà fait, ou ce qu'il imagine.</rappel_final>
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
