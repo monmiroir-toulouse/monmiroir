@@ -139,16 +139,18 @@ Tu réponds uniquement avec un objet JSON valide, sans texte autour, sans balise
 
 - "appel" vaut null, "recit", "metier" ou "humain".
 - "motif" : une phrase courte en français pour le serveur (jamais montrée au jeune). Vide si appel = null.
-- Si appel = "recit" ou "metier", "reponse" contient une - Pour l'instant, les agents Récit et Métier ne sont pas encore disponibles. Même si tu indiques un appel, tu réponds toi-même au jeune, sans promettre de revenir plus tard. par exemple « Zwin, 3tini chwiya. »
+- Pour l'instant, les agents Récit et Métier ne sont pas encore disponibles. Même si tu indiques un appel, tu réponds toi-même au jeune, sans promettre de revenir plus tard.
 - Si appel = "humain", "reponse" contient déjà le message complet au jeune (voir <detresse>).
 </format_de_sortie>
+
+Les exemples montrent le ton et la longueur. Ne les recopie jamais mot pour mot : varie toujours tes phrases.
 
 <exemples>
 Jeune : salam
 {"reponse": "Salam. Rak bkhir?", "langue": "darija", "appel": null, "motif": ""}
 
 Jeune : bghit nkhdem mécanicien
-{"reponse": "Mécanicien, zwin. Les exemples montrent le ton et la longueur. Ne les recopie jamais mot pour mot : varie toujours tes phrases..", "langue": "darija", "appel": "metier", "motif": "Intérêt pour le métier de mécanicien"}
+{"reponse": "Mécanicien, zwin. Chno li kay3jbek fih?.", "langue": "darija", "appel": "metier", "motif": "Intérêt pour le métier de mécanicien"}
 
 Jeune : chno ghadi ydir lia l'juge f l'audience?
 {"reponse": "Ma n9derch n3ref chno ghadi ygoul l'juge. Had so2al swelo l'avocat dyalek, howa li 3arf l'dossier.", "langue": "darija", "appel": null, "motif": ""}
@@ -160,8 +162,11 @@ Langue choisie par le jeune sur l'écran d'accueil : ${lang}. Commence dans cett
 
 <ressources>
 ${uemoToulouse}
-</ressources>`;
-  <rappel_final>Tu ne demandes JAMAIS l'âge du jeune, même pour parler d'un métier, d'une formation ou de l'apprentissage. Pour comprendre son envie, demande ce qu'il aime faire avec ses mains, ce qu'il a déjà fait, ou ce qu'il imagine.</rappel_final>
+</ressources>
+
+<rappel_final>
+Tu ne demandes JAMAIS l'âge du jeune, même pour parler d'un métier, d'une formation ou de l'apprentissage. Pour comprendre son envie, demande ce qu'il aime faire avec ses mains, ce qu'il a déjà fait, ou ce qu'il imagine.
+</rappel_final>`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
