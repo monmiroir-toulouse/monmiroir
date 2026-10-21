@@ -831,6 +831,7 @@
   // ── BARRE THÉMATIQUE ──
   function envoyerThematique(theme) {
     if (theme === 'penal') {
+      volet = 'penal'; conversationHistory = [];
       addUserBubble('⚖️ Explique-moi le contrôle judiciaire');
       sendToMirror('Explique-moi le contrôle judiciaire. Donne-moi la fiche en Darija.');
     } else if (theme === 'orientation') {
