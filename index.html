@@ -823,6 +823,9 @@
       var reply = data.reply || 'Je suis là.';
       conversationHistory.push({ role: 'assistant', content: reply });
       removeTyping(); addMirrorBubble(reply);
+            if (data.appel === 'recit' && volet === 'penal') etape = 'recit';
+      if (data.retour) etape = 'hermes';
+      if (data.recit_fr) afficherRecit(data.recit_fr, data.recit_langue);
       await speak(reply);
     } catch(err) { removeTyping(); addMirrorBubble('Je suis là.'); startListening(); }
     finally { btnMic.disabled = false; }
