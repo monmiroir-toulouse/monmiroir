@@ -273,10 +273,12 @@ Ce récit pourra un jour, s'il le veut et avec l'accord de son avocat, aider un 
 
 <brouillon>
 Après quelques échanges (en général 4 à 8), quand tu as assez de matière sur les trois temps, tu proposes un brouillon :
-- 5 à 8 phrases, à la première personne (« Je... »), simples, positives et vraies.
+- 3 à 8 phrases, à la première personne (« Je... »), simples, positives et vraies.
 - Uniquement ce qu'il a dit. Aucune invention, aucune exagération.
 - Une version en français simple (recit_fr) et, s'il parle darija ou arabe, une version dans sa langue (recit_langue).
-- Dans "reponse", tu lui demandes s'il se reconnaît dans ce texte et ce qu'il veut changer.
+- Le texte du brouillon va UNIQUEMENT dans recit_fr et recit_langue, jamais dans "reponse". Il s'affiche dans un encadré à part.
+- "reponse" contient seulement une phrase courte, par exemple « Kteb lik chwiya 3la rassek. Wach katchouf rassek fih? »
+- Chaque phrase du brouillon doit correspondre à quelque chose que le jeune a vraiment dit. Aucun sentiment, aucun but, aucun détail qu'il n'a pas exprimé (pas de « je me sens bien », pas de « pour gagner ma vie » s'il ne l'a pas dit). Mieux vaut un brouillon court et vrai qu'un brouillon long et embelli.
 S'il corrige, tu refais le brouillon avec ses corrections. S'il dit que c'est bon, tu le félicites simplement et tu mets "retour": true.
 </brouillon>
 
@@ -315,6 +317,35 @@ Langue choisie par le jeune sur l'écran d'accueil : ${lang}. Suis la langue qu'
     // On note simplement les appels dans les logs Vercel.
     if (sortie.appel) {
       console.log('[HERMES] appel =', sortie.appel, '| motif =', sortie.motif);
+    }
+
+    // Vérificateur : chaque phrase du brouillon doit venir des paroles réelles du jeune
+    if (enRecit && sortie.recit_fr) {
+      try {
+        const paroles = messages.filter(m => m.role === 'user').map(m => '- ' + m.content).join('\n');
+        const verifPrompt = `Tu es un vérificateur. Tu reçois les paroles exactes d'un jeune (seule source de vérité) et un brouillon de récit écrit à sa place.
+Ta tâche : supprimer du brouillon toute phrase, ou partie de phrase, qui affirme quelque chose que le jeune n'a pas dit : un sentiment, un but, une qualité, un lieu, un détail.
+Les paroles peuvent être en darija (lettres latines ou arabes) et le brouillon en français ou en arabe : compare le sens, pas les mots.
+Tu ne rajoutes rien. Tu ne reformules que le strict nécessaire pour que la phrase reste correcte.
+Tu fais la même chose sur les deux versions, pour qu'elles disent la même chose.
+Réponds uniquement avec un objet JSON valide : {"recit_fr": "...", "recit_langue": "..." ou null}`;
+        const v = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-5-20250929', max_tokens: 900, system: verifPrompt,
+            messages: [{ role: 'user', content: 'Paroles du jeune :\n' + paroles + '\n\nBrouillon en français :\n' + sortie.recit_fr + '\n\nBrouillon dans sa langue :\n' + (sortie.recit_langue || '(aucun)') }]
+          })
+        });
+        const vd = await v.json();
+        const vj = JSON.parse((vd.content?.[0]?.text || '').replace(/```json|```/g, '').trim());
+        if (vj.recit_fr) {
+          sortie.recit_fr = vj.recit_fr;
+          sortie.recit_langue = vj.recit_langue || null;
+        }
+      } catch (e) {
+        console.log('[VERIF] échec :', e.message);
+      }
     }
 
     // Garde-fou : une seule question par message, coupée après le premier « ? » ou « ؟ »
