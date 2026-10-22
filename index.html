@@ -830,7 +830,20 @@
     } catch(err) { removeTyping(); addMirrorBubble('Je suis là.'); startListening(); }
     finally { btnMic.disabled = false; }
   }
-
+  // ── ENCADRÉ « MON PARCOURS » ──
+  function afficherRecit(fr, langue) {
+    var wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror';
+    var html = '<div style="max-width:92%;border:1px solid var(--gold);border-radius:14px;padding:14px;background:rgba(210,177,91,0.08);">' +
+      '<div style="color:var(--gold);font-weight:800;margin-bottom:8px;">📝 Mon parcours (brouillon)</div>';
+    if (langue) {
+      var rtl = /[\u0600-\u06FF]/.test(langue);
+      html += '<div style="' + (rtl ? 'direction:rtl;font-family:Tajawal,sans-serif;font-size:17px;' : '') + 'margin-bottom:10px;">' + langue + '</div>';
+    }
+    html += '<div style="font-size:15px;line-height:1.6;">' + fr + '</div>' +
+      '<div style="font-size:12px;color:var(--text-soft);margin-top:10px;">Mon Miroir ne garde pas ce texte : il disparaît quand tu fermes la page. Personne ne le verra sans ton accord.</div></div>';
+    wrap.innerHTML = html; chatZone.appendChild(wrap); scrollDown();
+  }
+ 
   // ── BARRE THÉMATIQUE ──
   function envoyerThematique(theme) {
     if (theme === 'penal') {
