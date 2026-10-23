@@ -778,7 +778,9 @@
   function addUserBubble(text) {
     var wrap = document.createElement('div'); wrap.className = 'bubble-wrap user';
     var bars = Array.from({length:24}, function(){ return '<div class="wave-bar" style="height:'+(3+Math.floor(Math.random()*18))+'px"></div>'; }).join('');
-    wrap.innerHTML = '<div class="bubble user"><div class="bubble-voice"><button class="voice-play-btn">▶</button><div class="waveform">'+bars+'</div></div></div><div class="timestamp">'+now()+'</div>';
+       var safe = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    var isRtl = /[\u0600-\u06FF]/.test(text);
+    wrap.innerHTML = '<div class="bubble user '+(isRtl?'rtl':'')+'">'+safe+'</div><div class="timestamp">'+now()+'</div>';
     chatZone.appendChild(wrap); scrollDown();
   }
 
