@@ -853,6 +853,16 @@
     wrap.innerHTML = html; chatZone.appendChild(wrap); scrollDown();
   }
  
+   // ── FICHES MÉTIERS ONISEP ──
+  function afficherFiches(fiches) {
+    var wrap = document.createElement('div'); wrap.className = 'bubble-wrap mirror';
+    var html = '<div style="display:flex;flex-direction:column;gap:6px;max-width:92%;">';
+    fiches.forEach(function(f) {
+      html += '<a href="' + f.u + '" target="_blank" rel="noopener" style="display:block;background:rgba(210,177,91,0.12);border:1px solid var(--gold);color:var(--text);padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;">📘 ' + f.m + ' <span style="color:var(--gold);font-weight:400;">— voir la fiche</span></a>';
+    });
+    html += '<div style="font-size:11px;color:var(--text-soft);padding:0 4px;">Source : Onisep</div></div>';
+    wrap.innerHTML = html; chatZone.appendChild(wrap); scrollDown();
+  }
   // ── BARRE THÉMATIQUE ──
   function envoyerThematique(theme) {
     if (theme === 'penal') {
