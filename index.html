@@ -834,6 +834,7 @@
             if (data.appel === 'recit' && volet === 'penal') etape = 'recit';
       if (data.retour) etape = 'hermes';
       if (data.recit_fr) afficherRecit(data.recit_fr, data.recit_langue);
+            if (data.fiches && data.fiches.length) afficherFiches(data.fiches);
       await speak(reply);
     } catch(err) { removeTyping(); addMirrorBubble('Je suis là.'); startListening(); }
     finally { btnMic.disabled = false; }
